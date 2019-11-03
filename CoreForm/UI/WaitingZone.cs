@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CoreForm.UI
 {
@@ -30,14 +31,25 @@ namespace CoreForm.UI
             return 13;
         }
 
-        public void Init(int dataX, int dataY, int left, int top)
+        public void Init(int dataX, int dataY, Control viewControl)
         {
-            slots[dataX].Cards[dataY] = new WaitingCard
+            slots[dataX].Cards[dataY] = new CardView
             {
-                Left = left,
-                Top = top,
-                Card = null
+                View = viewControl,                 
+                Data = null
             };
+        }
+
+        public void Clear()
+        {
+            foreach(var slot in slots)
+            {
+                foreach(var x in slot.Cards)
+                {
+                    (x.View as System.Windows.Forms.PictureBox).Image = null;
+                    x.Data = null;
+                }
+            }            
         }
     }
     

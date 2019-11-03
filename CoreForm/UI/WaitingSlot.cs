@@ -7,11 +7,11 @@ namespace CoreForm.UI
     public class WaitingSlot
     {
         public string Name { get; set; }        
-        public WaitingCard[] Cards { get; set; }
+        public CardView[] Cards { get; set; }
 
         public WaitingSlot()
         {
-            Cards = new WaitingCard[13];
+            Cards = new CardView[13];
         }
     }
     
