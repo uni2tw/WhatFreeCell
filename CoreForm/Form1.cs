@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreForm.UI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +25,7 @@ namespace CoreForm
             deck = Deck.Create().Shuffle(1);
             game = new FreeCellGame(this);
             game.Init();
+            game.Reset(deck);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -73,6 +75,12 @@ namespace CoreForm
             game.MoveCardToTemp();
             pictureBox1.Image = card.Image;
             pictureBox1.Location = new Point(0, 0);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var card = deck.Draw();
+            
         }
     }
 }

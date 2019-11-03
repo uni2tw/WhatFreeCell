@@ -10,8 +10,8 @@ namespace CoreForm.UI
         Form form;
         List<Button> tempZones = new List<Button>();
         List<Button> completionZones = new List<Button>();
-        
-        List<List<Point>> waitingAreas = new List<List<Point>>();
+
+        WaitingZone waitingZone = new WaitingZone();
         public int cardWidth { get; set; }
         public int cardHeight { get; set; }
         public FreeCellGame(Form form)
@@ -33,27 +33,29 @@ namespace CoreForm.UI
 
             InitTempZones(cardWidth, cardHeight, 0, 0);
             InitCompletionZones(cardWidth, cardHeight, boardWidth - (4 * cardWidth) - 9, 0);
-            InitWaitingAreas(boardWidth, boardHeight, cardWidth, cardHeight);
+            InitWaitingZone(boardWidth, boardHeight, cardWidth, cardHeight);
 
         }
 
-        private void InitWaitingAreas(int boardWidth, int boardHeight, int cardWidth, int cardHeight)
+        public void Reset(Deck deck)
+        {
+            
+            throw new NotImplementedException();
+        }
+
+        private void InitWaitingZone(int boardWidth, int boardHeight, int cardWidth, int cardHeight)
         {
             int paddingWidth = (boardWidth - cardWidth * 8) / 9;
             int topBase = cardHeight + 12;
             int left = paddingWidth;
 
-            waitingAreas.Add(new List<Point>());
-            waitingAreas.Add(new List<Point>());
-            waitingAreas.Add(new List<Point>());
-            waitingAreas.Add(new List<Point>());
 
-            for (int i = 0; i < waitingAreas.Count; i++)
+            for (int i = 0; i < waitingZone.GetSlotCount(); i++)
             {
                 int top = topBase;
-                for (int j = 0; j < 12; j++)
+                for (int j = 0; j < waitingZone.GetSlotCardLimit(); j++)
                 {
-                    waitingAreas[i].Add(new Point { X = left, Y = top });
+                    waitingZone.Init(i, j, left, top);
                     top = top + 12;
                 }
                 left = left + cardWidth + paddingWidth;                
