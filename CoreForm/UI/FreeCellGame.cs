@@ -5,11 +5,6 @@ using System.Windows.Forms;
 
 namespace CoreForm.UI
 {
-    public class CardView
-    {
-        public Control View { get; set; }
-        public Card Data { get; set; }
-    }
     public class FreeCellGame
     {
         Form form;
@@ -61,18 +56,23 @@ namespace CoreForm.UI
 
 
 
+            while (waitingZone.AppendCard(deck.Draw()))
+            {
+            };
 
-
-                      
+            waitingZone.Refresh();
         }
+
+
 
         private void InitWaitingZone(int boardWidth, int boardHeight, int cardWidth, int cardHeight)
         {
             int paddingWidth = (boardWidth - cardWidth * 8) / 9;
             int topBase = cardHeight + 12;
+            int paddingTop = cardHeight / 6;
             int left = paddingWidth;
-            
 
+            int idx = 0;
             for (int i = 0; i < waitingZone.GetSlotCount(); i++)
             {
                 int top = topBase;
@@ -83,14 +83,19 @@ namespace CoreForm.UI
                         Location = new Point(left, top),
                         Width = cardWidth,
                         Height = cardHeight,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
                         Image = null
                     };
                     form.Controls.Add(viewControl);
                     waitingZone.Init(i, j, viewControl);
-                    top = top + 12;
+                    top = top + paddingTop;
                 }
-                left = left + cardWidth + paddingWidth;                
+                left = left + cardWidth + paddingWidth;
             }
+
+
+
+
         }
 
         private void InitTempZones(int cardWidth, int cardHeight, int right, int top)

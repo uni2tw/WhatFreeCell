@@ -40,6 +40,13 @@ namespace CoreForm
             return result;
         }
 
+        public Card Pick(int n)
+        {
+            Card result;
+            result = Cards[n];            
+            return result;
+        }
+
         public static Deck Create()
         {
             Deck deckCards = new Deck();

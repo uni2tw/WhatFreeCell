@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using CoreForm.Utilities;
 
 namespace CoreForm
 {
@@ -12,6 +13,7 @@ namespace CoreForm
         public int Number { get; set; }
         public CardSuit Suit { get; set; }
         public Image Image { get; set; }
+        public Image ActivedImage { get; set; }
 
         public override string ToString()
         {
@@ -46,6 +48,7 @@ namespace CoreForm
                 .GetManifestResourceStream("CoreForm.assets.img." + GetImageFileName());
             Image img = Image.FromStream(resource);
             this.Image = img;
+            this.ActivedImage = img.DrawAsNegative();
         }
     }
    
