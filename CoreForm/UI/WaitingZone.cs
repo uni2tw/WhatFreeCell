@@ -30,8 +30,7 @@ namespace CoreForm.UI
                 return false;
             }
             var cardView = GetEmptyCardView();
-            (cardView.View as PictureBox).Image = card.Image;
-            cardView.Data = card;
+            cardView.SetCard(card, false);
             return true;
         }
 
