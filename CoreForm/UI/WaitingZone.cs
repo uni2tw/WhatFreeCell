@@ -34,7 +34,7 @@ namespace CoreForm.UI
             return true;
         }
 
-        public CardView GetEmptyCardView()
+        private CardView GetEmptyCardView()
         {
             int y = 0;
             for (y = 0; y < 13; y++)
@@ -49,7 +49,7 @@ namespace CoreForm.UI
             }
             return null;
         }
-        public CardView GetCardView(int x, int y)
+        private CardView GetCardView(int x, int y)
         {
             return slots[x].CardViews[y];
         }
@@ -66,8 +66,10 @@ namespace CoreForm.UI
 
         public void Init(int dataX, int dataY, Control viewControl)
         {
-            slots[dataX].CardViews[dataY] = new CardView
+            var slot = slots[dataX];
+            slot.CardViews[dataY] = new CardView
             {
+                Slot = slot,
                 View = viewControl,                 
                 Data = null
             };

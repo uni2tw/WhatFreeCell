@@ -8,6 +8,14 @@ namespace CoreForm.UI
         {
             this.Data = data;
             this.Actived = actived;
+            this.View.Click += delegate (object sender, System.EventArgs e)
+            {
+                this.Slot.CardClicked();
+            };
+            this.View.DoubleClick += delegate (object sender, System.EventArgs e)
+            {
+                this.Slot.CardDoubleClicked();
+            };
         }
 
         private bool _actived;
@@ -32,6 +40,7 @@ namespace CoreForm.UI
         }
         public Control View { get; set; }
         public Card Data { get; set; }
+        public WaitingSlot Slot { get; set; }
     }
     
 }

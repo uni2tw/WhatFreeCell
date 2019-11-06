@@ -10,6 +10,7 @@ namespace CoreForm.UI
         Form form;
         List<CardView> tempZones = new List<CardView>();
         List<CardView> completionZones = new List<CardView>();
+        TempZone tempZone = new TempZone(); 
         WaitingZone waitingZone = new WaitingZone();
         public int cardWidth { get; set; }
         public int cardHeight { get; set; }
