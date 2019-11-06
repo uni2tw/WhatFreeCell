@@ -64,7 +64,7 @@ namespace CoreForm.UI
             return 13;
         }
 
-        public void Init(int dataX, int dataY, Control viewControl)
+        public void InitView(int dataX, int dataY, Control viewControl)
         {
             var slot = slots[dataX];
             slot.CardViews[dataY] = new CardView

@@ -8,8 +8,7 @@ namespace CoreForm.UI
     public class FreeCellGame
     {
         Form form;
-        List<CardView> tempZones = new List<CardView>();
-        List<CardView> completionZones = new List<CardView>();
+        CompletionZone completionZone = new CompletionZone();
         TempZone tempZone = new TempZone(); 
         WaitingZone waitingZone = new WaitingZone();
         public int cardWidth { get; set; }
@@ -31,8 +30,8 @@ namespace CoreForm.UI
             cardWidth = (int)(Math.Floor((decimal)boardWidth / 9));
             cardHeight = (int)(cardWidth * 1.38);
 
-            InitTempZones(cardWidth, cardHeight, 0, 0);
-            InitCompletionZones(cardWidth, cardHeight, boardWidth - (4 * cardWidth) - 9, 0);
+            InitTempZone(cardWidth, cardHeight, 0, 0);
+            InitCompletionZone(cardWidth, cardHeight, boardWidth - (4 * cardWidth) - 9, 0);
             InitWaitingZone(boardWidth, boardHeight, cardWidth, cardHeight);
 
         }
@@ -40,17 +39,12 @@ namespace CoreForm.UI
         public void Reset(Deck deck)
         {
             //reset temp data
-            foreach (CardView cardView in tempZones)
-            {                
-                cardView.Data = null;
-            }
+            tempZone.Reset();
             //reset temp image
 
+            completionZone.Reset();
             //reset completion data
-            foreach (CardView cardView in completionZones)
-            {
-                cardView.Data = null;
-            }
+
             //reset completion image 
             
             waitingZone.Clear();
@@ -73,7 +67,6 @@ namespace CoreForm.UI
             int paddingTop = cardHeight / 6;
             int left = paddingWidth;
 
-            int idx = 0;
             for (int i = 0; i < waitingZone.GetSlotCount(); i++)
             {
                 int top = topBase;
@@ -88,18 +81,14 @@ namespace CoreForm.UI
                         Image = null
                     };
                     form.Controls.Add(viewControl);
-                    waitingZone.Init(i, j, viewControl);
+                    waitingZone.InitView(i, j, viewControl);
                     top = top + paddingTop;
                 }
                 left = left + cardWidth + paddingWidth;
             }
-
-
-
-
         }
 
-        private void InitTempZones(int cardWidth, int cardHeight, int right, int top)
+        private void InitTempZone(int cardWidth, int cardHeight, int right, int top)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -111,7 +100,8 @@ namespace CoreForm.UI
                     FlatStyle = FlatStyle.Flat
                 };
                 form.Controls.Add(viewControl);
-                tempZones.Add(new CardView
+                tempZone.InitView(
+                    new CardView
                 {
                     View = viewControl,
                     Data = null
@@ -120,8 +110,7 @@ namespace CoreForm.UI
             }
         }
 
-
-        private void InitCompletionZones(int cardWidth, int cardHeight, int right, int top)
+        private void InitCompletionZone(int cardWidth, int cardHeight, int right, int top)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -133,7 +122,7 @@ namespace CoreForm.UI
                     FlatStyle = FlatStyle.Flat
                 };
                 form.Controls.Add(viewControl);
-                completionZones.Add(new CardView
+                completionZone.InitView(new CardView
                 {
                     View = viewControl,
                     Data = null
@@ -141,11 +130,10 @@ namespace CoreForm.UI
                 right = right + cardWidth;
             }
         }
-
 
         public void MoveCardToTemp()
         {
-
+            
         }
 
         public int GetCardHeight()
