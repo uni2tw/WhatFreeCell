@@ -43,7 +43,10 @@
             // 
             this.ClientSize = new System.Drawing.Size(916, 406);
             this.Controls.Add(this.pictureBox2);
+            this.KeyPreview = true;
             this.Name = "Form1";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 
         }

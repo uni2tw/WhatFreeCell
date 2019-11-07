@@ -28,5 +28,40 @@ namespace CoreForm
             game.Reset(deck);
         }
 
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F3)
+            {
+                //game.DeselectTempCard();
+                game.DeselectWaitingCard();
+                CardView cardView = game.SelectWaitingCard(0);
+                if (cardView != null)
+                {
+                    cardView.Actived = true;
+                }
+
+                CardView targetCardView = game.SelectTempCard(0);
+
+                if (targetCardView.Data == null)
+                {
+                    game.MoveCardToTemp(cardView, targetCardView);
+                } 
+                else
+                {
+                    MessageBox.Show("此步犯規");
+                }
+            } 
+            else if (e.KeyCode == Keys.F4)
+            {
+                game.DeselectWaitingCard();
+                CardView cardView = game.SelectWaitingCard(1);
+                cardView.Actived = true;
+            }
+        }
     }
 }

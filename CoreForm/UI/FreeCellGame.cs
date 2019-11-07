@@ -36,6 +36,31 @@ namespace CoreForm.UI
 
         }
 
+        public void DeselectWaitingCard()
+        {
+            CardView cardView = GetActivedWaitingCard();
+            if (cardView != null)
+            {
+                cardView.Actived = false;
+            }
+        }
+
+        public CardView SelectTempCard(int slotNo)
+        {
+            return tempZone.SelectCardView(slotNo);
+        }
+
+        private CardView GetActivedWaitingCard()
+        {
+            CardView cardView = waitingZone.GetActivedCard();
+            return cardView;
+        }
+
+        public CardView SelectWaitingCard(int slotNo)
+        {
+            return waitingZone.SelectCard(slotNo);
+        }
+
         public void Reset(Deck deck)
         {
             //reset temp data
@@ -91,13 +116,14 @@ namespace CoreForm.UI
         private void InitTempZone(int cardWidth, int cardHeight, int right, int top)
         {
             for (int i = 0; i < 4; i++)
-            {
+            {                
                 Control viewControl = new Button
                 {
                     Location = new Point(right, top),
                     Width = cardWidth,
                     Height = cardHeight,
-                    FlatStyle = FlatStyle.Flat
+                    FlatStyle = FlatStyle.Flat,
+                    BackgroundImageLayout = ImageLayout.Stretch
                 };
                 form.Controls.Add(viewControl);
                 tempZone.InitView(
@@ -131,9 +157,10 @@ namespace CoreForm.UI
             }
         }
 
-        public void MoveCardToTemp()
+        public void MoveCardToTemp(CardView source, CardView target)
         {
-            
+            target.SetCard(source.Data, false);
+            source.SetEmpty();
         }
 
         public int GetCardHeight()

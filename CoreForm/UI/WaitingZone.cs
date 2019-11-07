@@ -49,6 +49,27 @@ namespace CoreForm.UI
             }
             return null;
         }
+
+        public CardView SelectCard(int no)
+        {
+            return slots[no].SelectLastCard();
+        }
+
+        public CardView GetActivedCard()
+        {
+            foreach (var slot in slots)
+            {
+                foreach(var cardView in slot.CardViews)
+                {
+                    if (cardView.Actived)
+                    {
+                        return cardView;
+                    }
+                }
+            }
+            return null;
+        }
+
         private CardView GetCardView(int x, int y)
         {
             return slots[x].CardViews[y];

@@ -52,6 +52,18 @@ namespace CoreForm.UI
                 }
             }
         }
+
+        public CardView SelectCardView(int slotNo)
+        {
+            foreach (var slot in slots)
+            {
+                foreach (var cardView in slot.CardViews)
+                {
+                    return cardView;
+                }
+            }
+            return null;
+        }
     }
 
     public class Slot

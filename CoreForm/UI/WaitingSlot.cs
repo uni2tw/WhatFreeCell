@@ -49,7 +49,7 @@ namespace CoreForm.UI
 
         public bool SetLastCardActived()
         {
-            var card = this.CardViews.LastOrDefault(t=>t.Data != null);
+            var card = SelectLastCard();
             if (card == null)
             {
                 return false;
@@ -60,6 +60,12 @@ namespace CoreForm.UI
                 OnSelectCard(card);
             }
             return true;
+        }
+
+        public CardView SelectLastCard()
+        {
+            var card = this.CardViews.LastOrDefault(t => t.Data != null);
+            return card;
         }
 
         public WaitingSlot()
