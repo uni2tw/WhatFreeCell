@@ -5,17 +5,28 @@ using System.Linq;
 
 namespace CoreForm.UI
 {
-    public class WaitingSlot
+    public delegate void SelectCardHandler(ZoneType zoneType, CardView cardView);
+   
+
+    public interface ISlot
     {
-        public string Name { get; set; }        
+        void CardClicked();
+
+        void CardDoubleClicked();
+
+        ZoneType Type { get; set; }
+    }
+
+    public class WaitingSlot : ISlot
+    {
+        public string Name { get; set; }
         public CardView[] CardViews { get; set; }
 
-        public delegate void SelectCardHandler(CardView cardView);
         public event SelectCardHandler OnSelectCard;
 
         public void CardClicked()
         {
-            SetLastCardActived();            
+            SetLastCardActived();
         }
 
         public void CardDoubleClicked()
@@ -28,6 +39,9 @@ namespace CoreForm.UI
                 }
             }
         }
+
+        public ZoneType Type { get; set; }
+        
         /// <summary>
         /// 移動最後一張牌到暫存區
         /// </summary>
@@ -55,10 +69,6 @@ namespace CoreForm.UI
                 return false;
             }
             card.Actived = !card.Actived;
-            if (OnSelectCard != null)
-            {
-                OnSelectCard(card);
-            }
             return true;
         }
 

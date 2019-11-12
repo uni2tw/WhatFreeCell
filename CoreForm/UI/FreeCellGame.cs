@@ -38,10 +38,19 @@ namespace CoreForm.UI
 
         public void DeselectWaitingCard()
         {
-            CardView cardView = GetActivedWaitingCard();
-            if (cardView != null)
             {
-                cardView.Actived = false;
+                CardView cardView = waitingZone.GetActivedCard();
+                if (cardView != null)
+                {
+                    cardView.Actived = false;
+                }
+            }
+            {
+                CardView cardView = tempZone.GetActtivedCard();
+                if (cardView != null)
+                {
+                    cardView.Actived = false;
+                }
             }
         }
 
@@ -50,11 +59,7 @@ namespace CoreForm.UI
             return tempZone.SelectCardView(slotNo);
         }
 
-        private CardView GetActivedWaitingCard()
-        {
-            CardView cardView = waitingZone.GetActivedCard();
-            return cardView;
-        }
+
 
         public CardView SelectWaitingCard(int slotNo)
         {
@@ -126,12 +131,7 @@ namespace CoreForm.UI
                     BackgroundImageLayout = ImageLayout.Stretch
                 };
                 form.Controls.Add(viewControl);
-                tempZone.InitView(
-                    new CardView
-                {
-                    View = viewControl,
-                    Data = null
-                });
+                tempZone.InitView(viewControl);
                 right = right + cardWidth;
             }
         }
@@ -140,19 +140,23 @@ namespace CoreForm.UI
         {
             for (int i = 0; i < 4; i++)
             {
-                Control viewControl = new Button
+                for (int j = 0; j < 13; j++)
                 {
-                    Location = new Point(right, top),
-                    Width = cardWidth,
-                    Height = cardHeight,
-                    FlatStyle = FlatStyle.Flat
-                };
-                form.Controls.Add(viewControl);
-                completionZone.InitView(new CardView
-                {
-                    View = viewControl,
-                    Data = null
-                });
+                    Control viewControl = new Button
+                    {
+                        Location = new Point(right, top),
+                        Width = cardWidth,
+                        Height = cardHeight,
+                        FlatStyle = FlatStyle.Flat
+                    };
+                    form.Controls.Add(viewControl);
+                    viewControl.BringToFront();
+                    completionZone.InitView(new CardView
+                    {
+                        View = viewControl,
+                        Data = null
+                    }, i);                    
+                }
                 right = right + cardWidth;
             }
         }
@@ -174,6 +178,10 @@ namespace CoreForm.UI
         }
 
 
+        public void OnCardSelected(ZoneType zoneType, CardView cardView)
+        {
+
+        }
     }
     
 }

@@ -5,6 +5,7 @@ namespace CoreForm.UI
 {
     public class CardView
     {
+        public event SelectCardHandler OnCardSelected;
         public void SetCard(Card data, bool actived)
         {
             this.Data = data;
@@ -13,6 +14,7 @@ namespace CoreForm.UI
         public void SetEmpty()
         {
             this.Data = null;
+            this.Actived = false;
             if (View is PictureBox)
             {
                 (View as PictureBox).Image = null;
@@ -21,6 +23,7 @@ namespace CoreForm.UI
             {
                 (View as Button).BackgroundImage = null;
             }
+            View.SendToBack();
         }
         private bool _actived;
         public bool Actived
@@ -32,6 +35,10 @@ namespace CoreForm.UI
             set
             {
                 _actived = value;
+                if (Data == null)
+                {
+                    return;
+                }
                 if (value)
                 {
                     if (View is PictureBox)
@@ -41,6 +48,10 @@ namespace CoreForm.UI
                     else if (View is Button)
                     {
                         (View as Button).BackgroundImage = Data.ActivedImage;
+                    }
+                    if (OnCardSelected != null)
+                    {
+                        OnCardSelected(this.Slot.Type, this);
                     }
                 }
                 else
@@ -77,7 +88,7 @@ namespace CoreForm.UI
             }
         }
         public Card Data { get; set; }
-        public WaitingSlot Slot { get; set; }
+        public ISlot Slot { get; set; }
 
         public override string ToString()
         {

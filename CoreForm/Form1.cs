@@ -60,7 +60,22 @@ namespace CoreForm
             {
                 game.DeselectWaitingCard();
                 CardView cardView = game.SelectWaitingCard(1);
-                cardView.Actived = true;
+                if (cardView != null)
+                {
+                    cardView.Actived = true;
+                }
+
+                CardView targetCardView = game.SelectTempCard(0);
+
+                if (targetCardView.Data == null)
+                {
+                    game.MoveCardToTemp(cardView, targetCardView);
+                }
+                else
+                {
+                    MessageBox.Show("此步犯規");
+                    game.DeselectWaitingCard();
+                }
             }
         }
     }
