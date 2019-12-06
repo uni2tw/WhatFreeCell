@@ -28,6 +28,10 @@ namespace CoreForm
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 照目前指位器的位置取出一張牌，並將指位器移到下一張
+        /// </summary>
+        /// <returns></returns>
         public Card Draw()
         {
             Card result;
