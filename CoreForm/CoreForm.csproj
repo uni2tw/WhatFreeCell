@@ -139,8 +139,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FreeCell2\" />
-  </ItemGroup>
-
 </Project>

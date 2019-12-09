@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace CoreForm
 {
-    public partial class Form1 : Form, IGame2Form
+    public partial class Form1 : Form, IGameForm
     {
         //Deck deck;
         //FreeCellGame game;
 
-        Game2 game;
+        Game game;
 
         public Form1()
         {
@@ -29,7 +29,7 @@ namespace CoreForm
             //game.Init();
             //game.Reset(deck);
             
-            game = new Game2(this);
+            game = new Game(this);
             game.Init();
             game.OnFinish += delegate ()
             {
