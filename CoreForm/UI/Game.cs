@@ -1,5 +1,4 @@
-﻿using CoreForm.FreeCell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -22,24 +21,24 @@ namespace CoreForm.UI
     public class Game
     {
         List<CardView> Cards = new List<CardView>();
-        private TempZone2 tempZone;
-        private CompletionZone2 completionZone;
-        private WaitingZone2 waitZone;
-        ICardBase selectedCard;
+        private TempZone tempZone;
+        private CompletionZone completionZone;
+        private WaitingZone waitZone;
+        CardView selectedCard;
         //52張牌        
         public void Init()
         {            
             InitBoard();
             InitCards();
 
-            tempZone = new TempZone2(this.form);
+            tempZone = new TempZone(this.form);
             tempZone.Init(cardWidth, cardHeight, 0, 0);
             tempZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
                 MessageBox.Show(zoneType.ToString() + " was click" + slot.Index);
             };
 
-            completionZone = new CompletionZone2(this.form);
+            completionZone = new CompletionZone(this.form);
             completionZone.Init(cardWidth, cardHeight, this.boardWidth - (this.cardWidth * 4) - 9 , 0);
             completionZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
@@ -51,7 +50,7 @@ namespace CoreForm.UI
             int marginTop = cardHeight / 6;
             int left = marginLeft;
 
-            waitZone = new WaitingZone2(this.form);
+            waitZone = new WaitingZone(this.form);
             waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             waitZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {

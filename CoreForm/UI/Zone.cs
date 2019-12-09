@@ -1,5 +1,4 @@
-﻿using CoreForm.FreeCell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -9,7 +8,7 @@ namespace CoreForm.UI
 {
     public delegate void ZoneHolderHandler(GameZoneType zoneType, Slot slot);
 
-    public interface IZone2
+    public interface IZone
     {
         bool CanSwap { get; }
         bool CanMoveIn { get; }
@@ -23,11 +22,11 @@ namespace CoreForm.UI
         void SetCard(int x, CardView card);
     }
 
-    public class WaitingZone2 : IZone2
+    public class WaitingZone : IZone
     {
         private IGameForm form;
 
-        public WaitingZone2(IGameForm form)
+        public WaitingZone(IGameForm form)
         {
             this.form = form;
             this.Slots = new List<Slot>();
@@ -123,7 +122,7 @@ namespace CoreForm.UI
             slot.AddCard(card);
         }
 
-        public ICardBase SelectCard(int x)
+        public CardView SelectCard(int x)
         {
             Slot slot = this.Slots[x];
             var lastCard = slot.LastCard();
@@ -135,18 +134,18 @@ namespace CoreForm.UI
             return lastCard;
         }
 
-        public List<ICardBase> RemoveCard(ICardBase selectedCard)
+        public List<CardView> RemoveCard(CardView card)
         {
 
             return null;
         }
     }
 
-    public class TempZone2 : IZone2
+    public class TempZone : IZone
     {
         IGameForm form;
         public event ZoneHolderHandler HolderClick;
-        public TempZone2(IGameForm form)
+        public TempZone(IGameForm form)
         {
             this.form = form;
             this.Slots = new List<Slot>();
@@ -166,7 +165,7 @@ namespace CoreForm.UI
             }
         }
 
-        internal void RemoveCard(ICardBase selectedCard)
+        internal void RemoveCard(CardView selectedCard)
         {
             throw new NotImplementedException();
         }
@@ -246,12 +245,12 @@ namespace CoreForm.UI
         }
     }
 
-    public class CompletionZone2 : IZone2
+    public class CompletionZone : IZone
     {
         private IGameForm form;
         public event ZoneHolderHandler HolderClick;
 
-        public CompletionZone2(IGameForm form)
+        public CompletionZone(IGameForm form)
         {
             this.form = form;
             this.Slots = new List<Slot>();
@@ -347,7 +346,7 @@ namespace CoreForm.UI
             card.ZoneType = GameZoneType.Completion;
         }
 
-        internal void RemoveCard(ICardBase selectedCard)
+        public void RemoveCard(CardView selectedCard)
         {
             throw new NotImplementedException();
         }

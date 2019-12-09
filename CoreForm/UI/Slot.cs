@@ -1,5 +1,4 @@
-﻿using CoreForm.FreeCell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -86,7 +85,7 @@ namespace CoreForm.UI
             return Cards[i];
         }
 
-        public void FindCard(ICardBase selectedCard)
+        public void FindCard(CardView selectedCard)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,4 @@
-﻿using CoreForm.FreeCell;
-using CoreForm.Utilities;
+﻿using CoreForm.Utilities;
 using System;
 using System.Drawing;
 using System.IO;
@@ -7,7 +6,7 @@ using System.Windows.Forms;
 
 namespace CoreForm.UI
 {
-    public class CardView : ICardBase
+    public class CardView
     {
         private Game game;
         public CardView(Game game, Card card, int cardWidth, int cardHeight, IGameForm form)
