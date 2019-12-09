@@ -107,7 +107,7 @@ namespace CoreForm.UI
                 //if (waitZone.IsAvailableFor(x, card))
                 //{                
                 //waitZone.SetCard(x, card);
-                MoveToWaitingZone(card, x);
+                MoveTo(card, GameZoneType.Waiting, x);
                 //}
             }
 
@@ -117,19 +117,11 @@ namespace CoreForm.UI
             {
                 MoveTo(selectedCard as CardView, GameZoneType.Temp, 0);
             }
-            selectedCard = waitZone.SelectCard(5);
+            //selectedCard = waitZone.SelectCard(5);
         }
 
-        public void MoveToWaitingZone(CardView card, int x)
+        public void MoveTo(CardView card,GameZoneType target, int x)
         {
-            this.waitZone.SetCard(x, card);
-        }
-        public void MoveTo(CardView card,GameZoneType zoneType, int x)
-        {
-            if (selectedCard == null)
-            {
-                return;
-            }
             if (card.ZoneType == GameZoneType.Waiting)
             {
                 this.waitZone.RemoveCard(selectedCard);
@@ -143,14 +135,14 @@ namespace CoreForm.UI
                 this.completionZone.RemoveCard(selectedCard);
             }
 
-            if (card.ZoneType == GameZoneType.Waiting)
+            if (target == GameZoneType.Waiting)
             {
                 this.waitZone.SetCard(x, card);
-            } else if (card.ZoneType == GameZoneType.Temp)
+            } else if (target == GameZoneType.Temp)
             {
                 this.tempZone.SetCard(x, card);
             }
-            else if (card.ZoneType == GameZoneType.Completion)
+            else if (target == GameZoneType.Completion)
             {
                 this.completionZone.SetCard(x, card);
             }

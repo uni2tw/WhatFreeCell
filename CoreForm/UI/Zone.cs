@@ -8,10 +8,7 @@ using System.Windows.Forms;
 namespace CoreForm.UI
 {
     public delegate void ZoneHolderHandler(GameZoneType zoneType, Slot slot);
-    public enum GameZoneType
-    {
-        None, Temp, Completion, Waiting
-    }
+
     public interface IZone2
     {
         bool CanSwap { get; }
