@@ -19,7 +19,7 @@ namespace CoreForm.UI
 
         bool IsAvailableFor(int x, CardView card);
 
-        void SetCard(int x, CardView card);
+        bool SetCard(int x, CardView card);
     }
 
     public class WaitingZone : IZone
@@ -106,20 +106,22 @@ namespace CoreForm.UI
             return false;
         }
 
-        public void SetCard(int x, CardView card)
+        public bool SetCard(int x, CardView card)
         {
             if (this.Slots[x].IsFull)
             {
-                throw new Exception("出錯了");
+                return false;
             }
 
             Slot slot = this.Slots[x];
-
+            
             card.View.Visible = true;
             card.View.Location = this.Slots[x].GetLocation(slot.Count);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Waiting;
+            card.Slot = slot;
             slot.AddCard(card);
+            return true;
         }
 
         public CardView SelectCard(int x)
@@ -134,10 +136,39 @@ namespace CoreForm.UI
             return lastCard;
         }
 
-        public List<CardView> RemoveCard(CardView card)
+        public List<CardView> RemoveCard(CardView theCard)
         {
+            int start;
+            List<CardView> cards = FindCards(theCard, out start);
+            foreach(var card in cards)
+            {
+                card.ZoneType = GameZoneType.None;
+                card.View.Visible = false;
+                card.Slot.RemoveCard(card);
+            }            
 
-            return null;
+            return cards;
+        }
+
+        public List<CardView> FindCards(CardView theCard, out int start)
+        {
+            List<CardView> result = new List<CardView>();
+            start = -1;
+            foreach(var slot in Slots)
+            {                
+                var cards = slot.GetCards();
+                for (int i= 0;i< cards.Count;i++)
+                {
+                    var card = cards[i];
+                    if (card.Equals(theCard))
+                    {
+                        result.Add(card);
+                        start = i;
+                        return result;
+                    }
+                }
+            }
+            return result;
         }
     }
 
@@ -210,12 +241,12 @@ namespace CoreForm.UI
             }
         }
 
-        public void SetCard(int x, CardView card)
+        public bool SetCard(int x, CardView card)
         {
             //if (this.Slots[x].Cards.Count >= this.QueueLimit)
             if (this.Slots[x].IsFull)
             {
-                throw new Exception("出錯了");
+                return false;
             }
 
             this.Slots[x].AddCard(card);
@@ -223,7 +254,7 @@ namespace CoreForm.UI
             card.View.Location = this.Slots[x].GetLocation(0);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Temp;
-
+            return true;
         }
 
         public bool IsAvailableFor(int x, CardView card)
@@ -233,7 +264,7 @@ namespace CoreForm.UI
                 return false;
             }
             CardView lastCard = this.Slots[x].LastCard();
-            if (lastCard == null && card.Number == 1)
+            if (lastCard == null)
             {
                 return true;
             }
@@ -330,11 +361,11 @@ namespace CoreForm.UI
             return false;
         }
 
-        public void SetCard(int x, CardView card)
+        public bool SetCard(int x, CardView card)
         {
             if (this.Slots[x].IsFull)
             {
-                throw new Exception("出錯了");
+                return false;
             }
 
             Slot slot = this.Slots[x];
@@ -344,6 +375,7 @@ namespace CoreForm.UI
             card.View.Location = this.Slots[x].GetLocation(0);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Completion;
+            return true;
         }
 
         public void RemoveCard(CardView selectedCard)

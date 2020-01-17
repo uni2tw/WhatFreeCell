@@ -84,6 +84,7 @@ namespace CoreForm.UI
         private Image ActivedImage { get; set; }
         private Card Data { get; set; }
         public PictureBox View { get; private set; }
+        public Slot Slot { get; set; }
     }
 
 

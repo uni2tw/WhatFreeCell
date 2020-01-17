@@ -89,6 +89,16 @@ namespace CoreForm.UI
         {
             throw new NotImplementedException();
         }
+
+        public List<CardView> GetCards()
+        {
+            return this.Cards;
+        }
+
+        public void RemoveCard(CardView theCard)
+        {
+            this.Cards.Remove(theCard);
+        }
     }
 
 
