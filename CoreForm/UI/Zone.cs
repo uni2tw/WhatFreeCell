@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -20,8 +21,15 @@ namespace CoreForm.UI
         bool IsAvailableFor(int x, CardView card);
 
         bool SetCard(int x, CardView card);
-    }
 
+        bool TrySelect(int slotIndex, out string message);
+        void DeselectSlots();
+
+        int GetSlotSelectedIndex();
+    }
+    /// <summary>
+    /// 下方待處理區
+    /// </summary>
     public class WaitingZone : IZone
     {
         private IGameForm form;
@@ -106,6 +114,12 @@ namespace CoreForm.UI
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x">slot's number</param>
+        /// <param name="card"></param>
+        /// <returns></returns>
         public bool SetCard(int x, CardView card)
         {
             if (this.Slots[x].IsFull)
@@ -121,10 +135,14 @@ namespace CoreForm.UI
             card.ZoneType = GameZoneType.Waiting;
             card.Slot = slot;
             slot.AddCard(card);
+            card.View.Click += delegate (object sender, EventArgs e)
+            {
+                HolderClick?.Invoke(GameZoneType.Waiting, slot);
+            };
             return true;
         }
 
-        public CardView SelectCard(int x)
+        public CardView SelectLastCard(int x)
         {
             Slot slot = this.Slots[x];
             var lastCard = slot.LastCard();
@@ -170,8 +188,57 @@ namespace CoreForm.UI
             }
             return result;
         }
+
+        public int GetSlotSelectedIndex()
+        {
+            foreach (var slot in this.Slots)
+            {
+                var lastCard = slot.LastCard();
+                if (lastCard == null)
+                {
+                    continue;
+                }
+                if (lastCard.Actived)
+                {
+                    return slot.Index;
+                }
+            }
+            return -1;
+        }
+
+        public bool TrySelect(int slotIndex, out string message)
+        {
+            message = string.Empty;
+            if (this.GetSlotSelectedIndex() == slotIndex)
+            {
+                return false;
+            }
+            if (this.GetSlotSelectedIndex() != -1)
+            {
+                message = "此步犯規";
+                return false;
+            }
+            this.SelectLastCard(slotIndex);
+            return true;
+        }
+
+        public void DeselectSlots()
+        {
+            foreach(var slot in this.Slots)
+            {
+                var lastCard = slot.LastCard();
+                if (lastCard == null)
+                {
+                    continue;
+                }
+                lastCard.Actived = false;               
+            }                       
+        }
     }
 
+    /// <summary>
+    /// 左上暫存區
+    /// </summary>
     public class TempZone : IZone
     {
         IGameForm form;
@@ -274,13 +341,33 @@ namespace CoreForm.UI
             }
             return false;
         }
-    }
 
+        public bool TrySelect(int slotIndex, out string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeselectSlots()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetSlotSelectedIndex()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    /// <summary>
+    /// 右上完成區
+    /// </summary>
     public class CompletionZone : IZone
     {
         private IGameForm form;
         public event ZoneHolderHandler HolderClick;
-
+        /// <summary>
+        /// 初始 右上完成區
+        /// </summary>
+        /// <param name="form"></param>
         public CompletionZone(IGameForm form)
         {
             this.form = form;
@@ -379,6 +466,21 @@ namespace CoreForm.UI
         }
 
         public void RemoveCard(CardView selectedCard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TrySelect(int slotIndex, out string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeselectSlots()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetSlotSelectedIndex()
         {
             throw new NotImplementedException();
         }

@@ -51,6 +51,10 @@ namespace CoreForm
             return result;
         }
 
+        /// <summary>
+        /// 建立一副撲克牌的資料(有序)
+        /// </summary>
+        /// <returns></returns>
         public static Deck Create()
         {
             Deck deckCards = new Deck();
@@ -71,6 +75,11 @@ namespace CoreForm
             }
             return deckCards;
         }
+        /// <summary>
+        /// 依seed亂數洗牌
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public Deck Shuffle(int seed)
         {
             Random rand = new Random(seed);
@@ -83,15 +92,6 @@ namespace CoreForm
                 pos++;
                 temp.RemoveAt(from);
             }
-            
-            //for (int i = 0; i < 26; i++)
-            //{
-            //    int from = rand.Next(Cards.Length);
-            //    int to = rand.Next(Cards.Length);
-            //    var temp = Cards[from];
-            //    Cards[from] = Cards[to];
-            //    Cards[to] = temp;
-            //}
             return this;
         }
     }

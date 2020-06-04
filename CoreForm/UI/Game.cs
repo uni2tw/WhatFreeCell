@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Windows.Forms;
 
 namespace CoreForm.UI
@@ -20,46 +21,103 @@ namespace CoreForm.UI
 
     public class Game
     {
+        /// <summary>
+        /// 存放52張卡片
+        /// </summary>
         List<CardView> Cards = new List<CardView>();
+        /// <summary>
+        /// 左上暫存區
+        /// </summary>
         private TempZone tempZone;
+        /// <summary>
+        /// 右上完成區
+        /// </summary>
         private CompletionZone completionZone;
+        /// <summary>
+        /// 下方待處理區
+        /// </summary>
         private WaitingZone waitZone;
-        CardView selectedCard;
-        //52張牌        
+        /// <summary>
+        /// 目前選取的卡片
+        /// </summary>
+        private CardView selectedCard;
+        /// <summary>
+        /// 遊戲初始
+        ///     圖片載入
+        ///     資料重置
+        ///     事件掛入
+        /// </summary>
         public void Init()
-        {            
-            InitBoard();
+        {          
+            //初始遊戲基本畫面
+            InitBoardScreen();
+            //初始撲克牌圖檔與資料
             InitCards();
 
-            tempZone = new TempZone(this.form);
-            tempZone.Init(cardWidth, cardHeight, 0, 0);
+            int top;
+            int left;
+
+            left = 0;
+            top = 0;            
+            tempZone = new TempZone(this.form);            
+            tempZone.Init(cardWidth, cardHeight, left, top);
             tempZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
                 MessageBox.Show(zoneType.ToString() + " was click" + slot.Index);
             };
 
+            left = this.boardWidth - (this.cardWidth * 4) - 9;
+            top = 0;            
             completionZone = new CompletionZone(this.form);
-            completionZone.Init(cardWidth, cardHeight, this.boardWidth - (this.cardWidth * 4) - 9 , 0);
+            completionZone.Init(cardWidth, cardHeight, left , top);
             completionZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
                 MessageBox.Show(zoneType.ToString() + " was click" + slot.Index);
             };
 
             int marginLeft = (boardWidth - cardWidth * 8) / 9;
-            int top = cardHeight + 12;
             int marginTop = cardHeight / 6;
-            int left = marginLeft;
-
-            waitZone = new WaitingZone(this.form);
+            left = marginLeft;
+            top = cardHeight + 12;            
+            waitZone = new WaitingZone(this.form);            
             waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             waitZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
-                MessageBox.Show(zoneType.ToString() + " click slot-" + slot.Index);
+                if (zoneType == GameZoneType.Waiting)
+                {
+                    string message;
+                    if (waitZone.TrySelect(slot.Index, out message) == false)
+                    {
+                        if (string.IsNullOrEmpty(message) == false)
+                        {
+                            SystemSounds.Asterisk.Play();
+                            MessageBox.Show(message);                                                        
+                        }
+                        waitZone.DeselectSlots();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(zoneType.ToString() + " click slot-" + slot.Index);
+                }
             };
+
+            //將所有牌，初始放置在等待區
+            for (int n = 0; n < this.Cards.Count; n++)
+            {
+                int locX = n % 8;
+                CardView card = Cards[n];
+                waitZone.SetCard(locX, card);
+            }
+
+
+
         }
         /// <summary>
         /// 重置排局
         /// 重置畫面
+        /// 
+        /// 未實作
         /// </summary>
         public void Reset()
         {
@@ -79,45 +137,46 @@ namespace CoreForm.UI
 
         public void Start()
         {
-            //for (int x = 0; x < 4; x++)
-            //{
-            //    CardView2 card = Cards[x];
-            //    if (tempZone.IsAvailableFor(x, card))
-            //    {
-            //        tempZone.SetCard(x, card);
-            //    }
-            //}
-
-
-            //for (int n = 4; n < 12; n++)
-            //{
-            //    int x = n % 4;
-            //    CardView2 card = Cards[n];                
-            //    if (completionZone.IsAvailableFor(x, card))
-            //    {
-            //        completionZone.SetCard(x, card);
-            //    }
-            //}
-
+  
+            return;
             for (int n = 0; n < 52; n++)
             {
-                int x = n % 8;
+                int locX = n % 8;
                 CardView card = Cards[n];
                 //if (waitZone.IsAvailableFor(x, card))
                 //{                
                 //waitZone.SetCard(x, card);
-                MoveTo(card, GameZoneType.Waiting, x, true);
+                MoveTo(card, GameZoneType.Waiting, locX, true);
                 //}
             }
 
             
-            selectedCard = waitZone.SelectCard(5);
+            selectedCard = waitZone.SelectLastCard(5);
             if (selectedCard != null)
             {
-                MoveTo(selectedCard, GameZoneType.Temp, 0, false);
+                if (MoveTo(selectedCard, GameZoneType.Temp, 0, false) == false)
+                {
+                    MessageBox.Show("移動失敗");
+                } else
+                {
+                    selectedCard = null;
+                }
             }
-            selectedCard = waitZone.SelectCard(5);
-            MoveTo(selectedCard as CardView, GameZoneType.Temp, 0, false);
+            selectedCard = waitZone.SelectLastCard(6);
+            if (selectedCard != null)
+            {
+                if (MoveTo(selectedCard, GameZoneType.Temp, 0, false) == false)
+                {
+                    MessageBox.Show("移動失敗");
+                }
+                else
+                {
+                    selectedCard = null;
+                }
+            }
+
+            //selectedCard = waitZone.SelectLastCard(5);
+            //MoveTo(selectedCard as CardView, GameZoneType.Temp, 0, false);
         }
 
 
@@ -200,7 +259,7 @@ namespace CoreForm.UI
         public event GameEventHandler OnFinish;
         public event GameEventHandler OnFail;
 
-        private void InitBoard()
+        private void InitBoardScreen()
         {
             boardWidth = 800;
             boardHeight = 600;

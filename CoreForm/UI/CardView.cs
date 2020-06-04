@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace CoreForm.UI
 {
     public class CardView
-    {
+    {        
         private Game game;
         public CardView(Game game, Card card, int cardWidth, int cardHeight, IGameForm form)
         {
@@ -85,6 +85,15 @@ namespace CoreForm.UI
         private Card Data { get; set; }
         public PictureBox View { get; private set; }
         public Slot Slot { get; set; }
+
+        public override string ToString()
+        {
+            if (this.Data != null)
+            {
+                return this.Data.ToString();
+            }
+            return base.ToString();
+        }
     }
 
 

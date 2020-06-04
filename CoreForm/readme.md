@@ -1,15 +1,5 @@
-﻿
-TODO
-調整 InitTempZones
+﻿當點擊card時，要觸發所屬的zone的holdeclick事件
 
-
-TODO
-
-card click
-for 修正點選牌的反白
-board要知道目前是哪張被選取
-temp區也要能選
-調整completion area  slot應該是陣列
 
 
 deck card images from 
