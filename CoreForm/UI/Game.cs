@@ -85,15 +85,33 @@ namespace CoreForm.UI
             {
                 if (zoneType == GameZoneType.Waiting)
                 {
-                    string message;
-                    if (waitZone.TrySelect(slot.Index, out message) == false)
+                    CardLocation prevCardLoc = this.GetSelectedCardLocation();
+                    if (prevCardLoc == null)
                     {
-                        if (string.IsNullOrEmpty(message) == false)
+                        string message;
+                        if (waitZone.TrySelect(slot.Index, out message) == false)
                         {
-                            SystemSounds.Asterisk.Play();
-                            MessageBox.Show(message);                                                        
+                            if (string.IsNullOrEmpty(message) == false)
+                            {
+                                SystemSounds.Asterisk.Play();
+                                MessageBox.Show(message);
+                            }
+                            waitZone.DeselectSlots();
                         }
+                        else
+                        {
+                            CardLocation currCardLoc = this.GetSelectedCardLocation();
+                        }
+                    } 
+                    else
+                    {
                         waitZone.DeselectSlots();
+                        string message;
+                        waitZone.TrySelect(slot.Index, out message);
+                        CardLocation currCardLoc = this.GetSelectedCardLocation();
+                        string msg1 = prevCardLoc.ToString();
+                        string msg2 = currCardLoc.ToString();
+                        MessageBox.Show("try move");
                     }
                 }
                 else
@@ -113,6 +131,23 @@ namespace CoreForm.UI
 
 
         }
+
+        public CardLocation GetSelectedCardLocation()
+        {
+            CardLocation result;
+            result = this.waitZone.GetSelectedInfo();
+            if (result != null)
+            {
+                return result;
+            }
+            result = this.tempZone.GetSelectedInfo();
+            if (result != null)
+            {
+                return result;
+            }
+            return null;
+        }
+
         /// <summary>
         /// 重置排局
         /// 重置畫面
