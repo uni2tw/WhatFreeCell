@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Media;
 using System.Text;
 using System.Windows.Forms;
 
@@ -208,20 +210,89 @@ namespace CoreForm.UI
             return null;
         }
 
-        public bool TrySelect(int slotIndex, out string message)
+        public CardMoveAction TryAction(int slotIndex, out string message)
         {
             message = string.Empty;
-            if (this.GetSlotSelectedIndex() == slotIndex)
+            var srcSlotIndex = this.GetSlotSelectedIndex();
+            if (srcSlotIndex == slotIndex)
             {
-                return false;
+                this.DeselectSlots();
+                return CardMoveAction.Deselect;
             }
-            if (this.GetSlotSelectedIndex() != -1)
+            if (srcSlotIndex != -1)
             {
-                message = "此步犯規";
-                return false;
+                //this.Slots[slotIndex].LastCard()
+                //step 1 判斷可移動的卡片數
+                //取得新位置的最後一張卡號
+                //目前位置的卡後開始從最大張數判斷可否搬移
+
+                //TODO 判斷犯規或是可移動 
+
+                var srcCard = this.Slots[srcSlotIndex].LastCard();
+                var destCard = this.Slots[slotIndex].GetCards();
+                int spareSpaces = 1;
+
+                List<CardView> moveableCards;
+                if (TryMove(this.Slots[srcSlotIndex], this.Slots[slotIndex], spareSpaces, out moveableCards))
+                {
+                    MessageBox.Show("移動 " + moveableCards.Count + " 牌");
+                    this.DeselectSlots();
+                    return CardMoveAction.Move;
+                }
+                else
+                {
+                    SystemSounds.Asterisk.Play();
+                    MessageBox.Show("此步犯規");
+                    this.DeselectSlots();
+                    return CardMoveAction.Fail;
+                }
+
             }
             this.SelectLastCard(slotIndex);
-            return true;
+            return  CardMoveAction.Select;
+        }
+
+        private bool TryMove(Slot srcSlot, Slot destSlot, int spareSpaces, out List<CardView> moveableCards)
+        {
+            moveableCards = new List<CardView>();
+            List<CardView> srcLinkedCards = new List<CardView>();            
+            for (int i= 0 ; i< srcSlot.GetCards().Count; i++)
+            {
+                if (srcSlot.GetCards().Count - i > spareSpaces)
+                {
+                    continue;
+                }
+                var srcCard = srcSlot.GetCard(i);
+                var srcLinkedLastCard = srcLinkedCards.LastOrDefault();
+                if (srcLinkedLastCard == null)
+                {
+                    srcLinkedCards.Add(srcCard);
+                } 
+                else
+                {
+                    if (srcLinkedLastCard.CheckLinkable(srcCard) == false)
+                    {
+                        srcLinkedCards.Clear();                        
+                    }
+                    srcLinkedCards.Add(srcCard);                
+                }                
+            }
+            var destCard = destSlot.LastCard();
+            if (destCard == null)
+            {
+                moveableCards.AddRange(srcLinkedCards);
+                return true;
+            }
+            
+            for(int i=0;i< srcLinkedCards.Count; i++)
+            {
+                if (srcLinkedCards[i].CheckLinkable(destCard)) {
+                    moveableCards.AddRange(srcLinkedCards.Skip(i));
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void DeselectSlots()
@@ -236,5 +307,7 @@ namespace CoreForm.UI
                 lastCard.Actived = false;               
             }                       
         }
+
     }
 }
+

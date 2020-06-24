@@ -94,6 +94,27 @@ namespace CoreForm.UI
             }
             return base.ToString();
         }
+
+        public bool CheckLinkable(CardView theCard)
+        {
+            if ((this.Suit == CardSuit.Club || this.Suit == CardSuit.Spare) &&
+                (theCard.Suit == CardSuit.Club || theCard.Suit == CardSuit.Spare)
+                )
+            {
+                return false;
+            }
+            if ((this.Suit == CardSuit.Heart || this.Suit == CardSuit.Diamond) &&
+                (theCard.Suit == CardSuit.Heart || theCard.Suit == CardSuit.Diamond)
+                )
+            {
+                return false;
+            }
+            if (theCard.Number - this.Number != 1)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 
 

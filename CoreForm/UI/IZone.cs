@@ -16,7 +16,7 @@ namespace CoreForm.UI
 
         bool SetCard(int x, CardView card);
 
-        bool TrySelect(int slotIndex, out string message);
+        CardMoveAction TryAction(int slotIndex, out string message);
         void DeselectSlots();
 
         int GetSlotSelectedIndex();

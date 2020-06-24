@@ -111,7 +111,7 @@ namespace CoreForm.UI
             return false;
         }
 
-        public bool TrySelect(int slotIndex, out string message)
+        public CardMoveAction TryAction(int slotIndex, out string message)
         {
             throw new NotImplementedException();
         }

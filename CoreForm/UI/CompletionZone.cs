@@ -137,5 +137,11 @@ namespace CoreForm.UI
         {
             return null;
         }
+
+        CardMoveAction IZone.TryAction(int slotIndex, out string message)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

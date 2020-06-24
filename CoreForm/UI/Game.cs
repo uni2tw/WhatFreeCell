@@ -37,10 +37,7 @@ namespace CoreForm.UI
         /// 下方待處理區
         /// </summary>
         private WaitingZone waitZone;
-        /// <summary>
-        /// 目前選取的卡片
-        /// </summary>
-        private CardView selectedCard;
+
         /// <summary>
         /// 遊戲初始
         ///     圖片載入
@@ -63,7 +60,12 @@ namespace CoreForm.UI
             tempZone.Init(cardWidth, cardHeight, left, top);
             tempZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
-                MessageBox.Show(zoneType.ToString() + " was click" + slot.Index);
+                this.TryAction(zoneType, slot);
+                //var cardInfo = this.GetSelectedCardInfo();
+                //string message = string.Format("{0} was selected, click {1}-{2}",
+                //    cardInfo,
+                //    zoneType, slot.Index);
+                //MessageBox.Show(message);
             };
 
             left = this.boardWidth - (this.cardWidth * 4) - 9;
@@ -72,7 +74,14 @@ namespace CoreForm.UI
             completionZone.Init(cardWidth, cardHeight, left , top);
             completionZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
-                MessageBox.Show(zoneType.ToString() + " was click" + slot.Index);
+                this.TryAction(zoneType, slot);
+                //var cardInfo = this.GetSelectedCardInfo();
+                //if (cardInfo != null)
+                //{
+                //    string message = string.Format(
+                //        "{0} was selected, click {1}", cardInfo, zoneType, slot.Index);
+                //    MessageBox.Show(message);
+                //}                
             };
 
             int marginLeft = (boardWidth - cardWidth * 8) / 9;
@@ -83,41 +92,13 @@ namespace CoreForm.UI
             waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             waitZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
-                if (zoneType == GameZoneType.Waiting)
-                {
-                    CardLocation prevCardLoc = this.GetSelectedCardLocation();
-                    if (prevCardLoc == null)
-                    {
-                        string message;
-                        if (waitZone.TrySelect(slot.Index, out message) == false)
-                        {
-                            if (string.IsNullOrEmpty(message) == false)
-                            {
-                                SystemSounds.Asterisk.Play();
-                                MessageBox.Show(message);
-                            }
-                            waitZone.DeselectSlots();
-                        }
-                        else
-                        {
-                            CardLocation currCardLoc = this.GetSelectedCardLocation();
-                        }
-                    } 
-                    else
-                    {
-                        waitZone.DeselectSlots();
-                        string message;
-                        waitZone.TrySelect(slot.Index, out message);
-                        CardLocation currCardLoc = this.GetSelectedCardLocation();
-                        string msg1 = prevCardLoc.ToString();
-                        string msg2 = currCardLoc.ToString();
-                        MessageBox.Show("try move");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(zoneType.ToString() + " click slot-" + slot.Index);
-                }
+                this.TryAction(zoneType, slot);
+                //string message;
+                //CardMoveAction moveResult = waitZone.TryAction(slot.Index, out message);
+                //if (moveResult == CardMoveAction.Move)
+                //{
+                //    this.OnMove(zoneType);
+                //}
             };
 
             //將所有牌，初始放置在等待區
@@ -132,7 +113,12 @@ namespace CoreForm.UI
 
         }
 
-        public CardLocation GetSelectedCardLocation()
+        /// <summary>
+        /// 取得遊戲中，選取的撲克牌
+        /// 回傳選取牌與所在的區域
+        /// </summary>
+        /// <returns></returns>
+        public CardLocation GetSelectedCardInfo()
         {
             CardLocation result;
             result = this.waitZone.GetSelectedInfo();
@@ -146,6 +132,14 @@ namespace CoreForm.UI
                 return result;
             }
             return null;
+        }
+
+        /// <summary>
+        /// 試著選取、取消選取、搬移
+        /// </summary>
+        public void TryAction(GameZoneType zoneType, Slot slot)
+        {
+            MessageBox.Show(string.Format("new action {0}-{1}", zoneType, slot.Index));
         }
 
         /// <summary>
@@ -170,115 +164,28 @@ namespace CoreForm.UI
             }                    
         }
 
+        public void FinishGame()
+        {
+
+        }
+
+        public void AutoPutCardToCompeleteZone()
+        {
+
+        }
+
         public void Start()
         {
   
-            return;
-            for (int n = 0; n < 52; n++)
-            {
-                int locX = n % 8;
-                CardView card = Cards[n];
-                //if (waitZone.IsAvailableFor(x, card))
-                //{                
-                //waitZone.SetCard(x, card);
-                MoveTo(card, GameZoneType.Waiting, locX, true);
-                //}
-            }
-
-            
-            selectedCard = waitZone.SelectLastCard(5);
-            if (selectedCard != null)
-            {
-                if (MoveTo(selectedCard, GameZoneType.Temp, 0, false) == false)
-                {
-                    MessageBox.Show("移動失敗");
-                } else
-                {
-                    selectedCard = null;
-                }
-            }
-            selectedCard = waitZone.SelectLastCard(6);
-            if (selectedCard != null)
-            {
-                if (MoveTo(selectedCard, GameZoneType.Temp, 0, false) == false)
-                {
-                    MessageBox.Show("移動失敗");
-                }
-                else
-                {
-                    selectedCard = null;
-                }
-            }
-
-            //selectedCard = waitZone.SelectLastCard(5);
-            //MoveTo(selectedCard as CardView, GameZoneType.Temp, 0, false);
+           
         }
 
 
-        public bool MoveTo(CardView card,GameZoneType target, int x, bool force)
-        {
-            if (force == false)
-            {
-                if (target == GameZoneType.Waiting && this.waitZone.IsAvailableFor(x, card) == false)
-                {
-                    return false;
-                }
-                else if (target == GameZoneType.Temp && this.tempZone.IsAvailableFor(x, card) == false)
-                {
-                    return false;
-                }
-                else if (target == GameZoneType.Completion && this.completionZone.IsAvailableFor(x, card) == false)
-                {
-                    return false;
-                }
-            }
-
-            if (card.ZoneType == GameZoneType.Waiting)
-            {                
-                this.waitZone.RemoveCard(selectedCard);
-            }
-            else if (card.ZoneType == GameZoneType.Temp)
-            {
-                this.tempZone.RemoveCard(selectedCard);
-            }
-            else if (card.ZoneType == GameZoneType.Completion)
-            {
-                this.completionZone.RemoveCard(selectedCard);
-            }
-
-            if (target == GameZoneType.Waiting)
-            {
-                this.waitZone.SetCard(x, card);
-            } 
-            else if (target == GameZoneType.Temp)
-            {
-                this.tempZone.SetCard(x, card);
-            }
-            else if (target == GameZoneType.Completion)
-            {
-                this.completionZone.SetCard(x, card);
-            }
-            
-            card.Actived = false;
-
-            return true;
-        }
         public void MoveToCompletionZone(CardView card, int x)
         {
             this.completionZone.SetCard(x, card);
         }
 
-        private void UnSelectCard()
-        {
-            if (selectedCard == null)
-            {
-                return;
-            }
-            if (selectedCard.Actived)
-            {
-                selectedCard.Actived = false;
-            }
-        }
 
         private IGameForm form;
         public Game(IGameForm form)
