@@ -44,18 +44,20 @@ namespace CoreForm.UI
         ///     資料重置
         ///     事件掛入
         /// </summary>
-        public void Init()
+        public void Init(int layoutMarginTop = 0)
         {          
             //初始遊戲基本畫面
             InitBoardScreen();
             //初始撲克牌圖檔與資料
             InitCards();
 
+
+
             int top;
             int left;
 
             left = 0;
-            top = 0;            
+            top = 0 + layoutMarginTop;
             tempZone = new TempZone(this.form);            
             tempZone.Init(cardWidth, cardHeight, left, top);
             tempZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
@@ -69,7 +71,7 @@ namespace CoreForm.UI
             };
 
             left = this.boardWidth - (this.cardWidth * 4) - 9;
-            top = 0;            
+            top = 0 + layoutMarginTop;
             completionZone = new CompletionZone(this.form);
             completionZone.Init(cardWidth, cardHeight, left , top);
             completionZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
@@ -87,7 +89,7 @@ namespace CoreForm.UI
             int marginLeft = (boardWidth - cardWidth * 8) / 9;
             int marginTop = cardHeight / 6;
             left = marginLeft;
-            top = cardHeight + 12;            
+            top = cardHeight + 12 + layoutMarginTop;            
             waitZone = new WaitingZone(this.form);            
             waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             waitZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
