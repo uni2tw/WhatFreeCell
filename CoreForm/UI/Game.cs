@@ -141,7 +141,22 @@ namespace CoreForm.UI
         /// </summary>
         public void TryAction(GameZoneType zoneType, Slot slot)
         {
-            MessageBox.Show(string.Format("new action {0}-{1}", zoneType, slot.Index));
+            if (zoneType == GameZoneType.Waiting)
+            {
+                string message;
+                CardMoveAction moveResult = waitZone.TryAction(slot.Index, out message);
+
+
+
+
+
+
+
+            }
+            else
+            {
+                MessageBox.Show(string.Format("new action {0}-{1}", zoneType, slot.Index));
+            }
         }
 
         /// <summary>
