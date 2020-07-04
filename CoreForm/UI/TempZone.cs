@@ -113,7 +113,8 @@ namespace CoreForm.UI
 
         public CardMoveAction TryAction(int slotIndex, out string message)
         {
-            throw new NotImplementedException();
+            message = string.Empty;
+            return CardMoveAction.Move;
         }
 
         public void DeselectSlots()

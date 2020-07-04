@@ -153,10 +153,37 @@ namespace CoreForm.UI
 
 
             }
-            else
+            else if (zoneType == GameZoneType.Completion)
             {
-                MessageBox.Show(string.Format("new action {0}-{1}", zoneType, slot.Index));
+                MessageBox.Show(string.Format("new action(c) {0}-{1}", zoneType, slot.Index));
             }
+            else if (zoneType == GameZoneType.Temp)
+            {
+                string message;
+                CardMoveAction moveResult = tempZone.TryAction(slot.Index, out message);
+
+                var card = GetActiviedCard();
+                if (card != null)
+                {                    
+                    MessageBox.Show(string.Format("移到暫存區第 {0} 排，目前選取 {1}", slot.Index, card.ToString()));
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("移到暫存區第 {0} 排，目前無選取", slot.Index));
+                }
+            }
+        }
+
+        public CardView GetActiviedCard()
+        {
+            foreach(var card in this.Cards)
+            {
+                if (card.Actived)
+                {
+                    return card;
+                }
+            }
+            return null;
         }
 
         /// <summary>

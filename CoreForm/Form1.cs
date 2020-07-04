@@ -15,14 +15,14 @@ namespace CoreForm
 {
     public partial class Form1 : Form, IGameForm
     {
-        int menuHeight = 0;
         Game game;
 
         public Form1()
         {
             InitializeComponent();
 
-            //InitializeMenu();
+            int menuHeight = 0;
+            //InitializeMenu(out menuHeight);
 
             this.Text = "新接龍";
 
