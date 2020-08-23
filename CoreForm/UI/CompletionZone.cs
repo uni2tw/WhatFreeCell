@@ -66,7 +66,7 @@ namespace CoreForm.UI
                     BackgroundImageLayout = ImageLayout.Stretch
                 };
                 form.SetControlReady(holder);
-                var slot = new Slot(left, top, cardHeight, holder, Capacity, i);
+                var slot = new Slot(left, top, cardHeight, holder, Capacity, i, GameZoneType.Completion);
                 Slots.Add(slot);
 
                 holder.Click += delegate (object sender, EventArgs e)
@@ -93,6 +93,31 @@ namespace CoreForm.UI
             {
                 return true;
             }
+            return false;
+        }
+        public bool MoveCard(int slotIndex, CardView card)
+        {
+            Slot pSlot = card.Slot;
+            if (CheckCanMoveIn(pSlot, card) == false)
+            {
+                return false;
+            }
+            pSlot.RemoveCard(card);
+            card.Actived = false;
+            return SetCard(slotIndex, card);
+        }
+
+        private bool CheckCanMoveIn(Slot pSlot, CardView newCard)
+        {
+            var lastCard = pSlot.LastCard();
+            if (lastCard == null && newCard.Number == 1)
+            {
+                return true;
+            }
+            else if (lastCard.Suit == newCard.Suit && newCard.Number - lastCard.Number == 1)
+            {
+                return true;
+            }            
             return false;
         }
 

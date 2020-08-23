@@ -68,7 +68,7 @@ namespace CoreForm.UI
                 };
 
                 form.SetControlReady(holder);
-                var slot = new Slot(left, top, cardHeight, holder, this.Capacity, i);
+                var slot = new Slot(left, top, cardHeight, holder, this.Capacity, i, GameZoneType.Waiting);
                 Slots.Add(slot);
                 holder.Click += delegate (object sender, EventArgs e)
                 {
@@ -96,6 +96,12 @@ namespace CoreForm.UI
             return false;
         }
 
+        public bool MoveCard(int slotIndex, CardView card)
+        {
+            var pSlot = card.Slot;
+            pSlot.RemoveCard(card);
+            return SetCard(slotIndex, card);
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -119,7 +125,7 @@ namespace CoreForm.UI
             slot.AddCard(card);
             card.View.Click += delegate (object sender, EventArgs e)
             {
-                HolderClick?.Invoke(GameZoneType.Waiting, slot);
+                HolderClick?.Invoke(card.Slot.ZoneType, card.Slot);
             };
             return true;
         }
@@ -233,7 +239,7 @@ namespace CoreForm.UI
                 int spareSpaces = 1;
 
                 List<CardView> moveableCards;
-                if (TryMove(this.Slots[srcSlotIndex], this.Slots[slotIndex], spareSpaces, out moveableCards))
+                if (MoveCardsFromSlotToSlot(this.Slots[srcSlotIndex], this.Slots[slotIndex], spareSpaces, out moveableCards))
                 {
                     MessageBox.Show("移動 " + moveableCards.Count + " 牌");
                     this.DeselectSlots();
@@ -252,11 +258,14 @@ namespace CoreForm.UI
             return  CardMoveAction.Select;
         }
 
-        private bool TryMove(Slot srcSlot, Slot destSlot, int spareSpaces, out List<CardView> moveableCards)
+        private bool MoveCardsFromSlotToSlot(Slot srcSlot, Slot destSlot, int spareSpaces, out List<CardView> moveableCards)
         {
             moveableCards = new List<CardView>();
-            List<CardView> srcLinkedCards = new List<CardView>();            
-            for (int i= 0 ; i< srcSlot.GetCards().Count; i++)
+
+
+
+                List<CardView> srcLinkedCards = new List<CardView>();
+            for (int i = 0; i < srcSlot.GetCards().Count; i++)
             {
                 if (srcSlot.GetCards().Count - i > spareSpaces)
                 {
@@ -267,15 +276,15 @@ namespace CoreForm.UI
                 if (srcLinkedLastCard == null)
                 {
                     srcLinkedCards.Add(srcCard);
-                } 
+                }
                 else
                 {
                     if (srcLinkedLastCard.CheckLinkable(srcCard) == false)
                     {
-                        srcLinkedCards.Clear();                        
+                        srcLinkedCards.Clear();
                     }
-                    srcLinkedCards.Add(srcCard);                
-                }                
+                    srcLinkedCards.Add(srcCard);
+                }
             }
             var destCard = destSlot.LastCard();
             if (destCard == null)
@@ -283,10 +292,11 @@ namespace CoreForm.UI
                 moveableCards.AddRange(srcLinkedCards);
                 return true;
             }
-            
-            for(int i=0;i< srcLinkedCards.Count; i++)
+
+            for (int i = 0; i < srcLinkedCards.Count; i++)
             {
-                if (srcLinkedCards[i].CheckLinkable(destCard)) {
+                if (srcLinkedCards[i].CheckLinkable(destCard))
+                {
                     moveableCards.AddRange(srcLinkedCards.Skip(i));
                     return true;
                 }

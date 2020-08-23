@@ -16,6 +16,9 @@ namespace CoreForm.UI
         public int cardHeight { get; private set; }
 
         public int Index { get; set; }
+
+        public GameZoneType ZoneType { get; set; }
+
         /// <summary>
         /// 一列最多可以放幾張牌
         /// </summary>
@@ -29,7 +32,7 @@ namespace CoreForm.UI
         }
 
         public Slot(int right, int top, int cardHeight, 
-            Control holder, int capacity, int index)
+            Control holder, int capacity, int index, GameZoneType zoneType)
         {
             this.right = right;
             this.top = top;
@@ -37,7 +40,19 @@ namespace CoreForm.UI
             this.Holder = holder;
             this.Capacity = capacity;
             this.Index = index;
+            this.ZoneType = zoneType;
             Cards = new List<CardView>();
+        }
+
+        public int CheckMoveable(Slot srcSlot)
+        {
+            if (this.ZoneType == GameZoneType.Completion)
+            {
+
+
+                return 0;
+            }
+            throw new NotImplementedException();
         }
 
         public Point GetLocation(int y)
@@ -98,6 +113,11 @@ namespace CoreForm.UI
         public void RemoveCard(CardView theCard)
         {
             this.Cards.Remove(theCard);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}-{1}", this.ZoneType, this.Index);
         }
     }
 

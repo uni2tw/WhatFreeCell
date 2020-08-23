@@ -67,7 +67,7 @@ namespace CoreForm.UI
                 };
 
                 form.SetControlReady(holder);
-                var slot = new Slot(right, top, cardHeight, holder, Capacity, i);
+                var slot = new Slot(right, top, cardHeight, holder, Capacity, i, GameZoneType.Temp);
                 Slots.Add(slot);
                 holder.Click += delegate (object sender, EventArgs e)
                 {
@@ -76,7 +76,12 @@ namespace CoreForm.UI
                 right = right + cardWidth;
             }
         }
-
+        public bool MoveCard(int slotIndex, CardView card)
+        {
+            var pSlot = card.Slot;
+            pSlot.RemoveCard(card);
+            return SetCard(slotIndex, card);
+        }
         public bool SetCard(int x, CardView card)
         {
             //if (this.Slots[x].Cards.Count >= this.QueueLimit)
@@ -85,11 +90,15 @@ namespace CoreForm.UI
                 return false;
             }
 
-            this.Slots[x].AddCard(card);
+            Slot slot = this.Slots[x];
+
+            slot.AddCard(card);
             card.View.Visible = true;
             card.View.Location = this.Slots[x].GetLocation(0);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Temp;
+            card.Slot = slot;
+
             return true;
         }
 
@@ -114,17 +123,47 @@ namespace CoreForm.UI
         public CardMoveAction TryAction(int slotIndex, out string message)
         {
             message = string.Empty;
+            var srcSlotIndex = this.GetSlotSelectedIndex();
+            if (srcSlotIndex == slotIndex)
+            {
+                this.DeselectSlots();
+                return CardMoveAction.Deselect;
+            }
+            else if (this.Slots[slotIndex].IsFull)
+            {
+                return CardMoveAction.Fail;
+            }
             return CardMoveAction.Move;
         }
 
         public void DeselectSlots()
         {
-            throw new NotImplementedException();
+            foreach (var slot in this.Slots)
+            {
+                var lastCard = slot.LastCard();
+                if (lastCard == null)
+                {
+                    continue;
+                }
+                lastCard.Actived = false;
+            }
         }
 
         public int GetSlotSelectedIndex()
         {
-            throw new NotImplementedException();
+            foreach (var slot in this.Slots)
+            {
+                var lastCard = slot.LastCard();
+                if (lastCard == null)
+                {
+                    continue;
+                }
+                if (lastCard.Actived)
+                {
+                    return slot.Index;
+                }
+            }
+            return -1;
         }
 
         public CardLocation GetSelectedInfo()

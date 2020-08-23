@@ -16,76 +16,38 @@ namespace CoreForm
     public partial class Form1 : Form, IGameForm
     {
         Game game;
+        public const string _GAME_TITLE = "新接龍";
 
         public Form1()
         {
             InitializeComponent();
-
-            int menuHeight = 0;
-            //InitializeMenu(out menuHeight);
-
-            this.Text = "新接龍";
+        
+            this.Text = _GAME_TITLE;
 
             game = new Game(this);
-            game.Init(menuHeight);
-            game.OnFinish += delegate ()
-            {
-                if (MessageBox.Show("你還要再一次嗎?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    game.Reset();
-                    game.Start();
-                } 
-                else
-                {
-                    this.Quit();
-                }
-            };
+            game.InitScreen();
+            game.InitEvents();
 
-            game.OnFail += delegate ()
-            {
-                if (MessageBox.Show("你還要再一次嗎?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    game.Reset();
-                    game.Start();
-                }
-                else
-                {
-                    this.Quit();
-                }
-            };
             game.Reset();
-            game.Start();            
+            game.Start();
+
+            this.FormClosing += Form1_FormClosing;
         }
 
-        private void InitializeMenu()
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var menu = new System.Windows.Forms.MenuStrip();            
-
-            menu.Dock = DockStyle.Top;
-            menu.BackColor = Color.Silver;            
-
-
-            var menuItem0 = new ToolStripMenuItem();
-            menuItem0.Text = "遊戲(&G)";
-            menu.Items.Add(menuItem0);
-            menuItem0.DropDownItems.Add("新遊戲", null);
-            menuItem0.DropDownItems.Add("選擇牌局", null);
-            menuItem0.DropDownItems.Add("重啟牌局", null);
-            menuItem0.DropDownItems.Add(new ToolStripSeparator());
-            menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
+            if (this.game.IsPlaying)
             {
-                this.Close();
-            };
-
-            var menuItem1 = new ToolStripMenuItem();
-            menuItem1.Text = "說明(&H))";
-            menu.Items.Add(menuItem1);
-            menuItem1.DropDownItems.Add("關於新接龍", null);
-
-            this.Controls.Add(menu);
+                if (MessageBox.Show("是否放棄這一局", _GAME_TITLE, MessageBoxButtons.YesNo) == DialogResult.No) {
+                    e.Cancel = true;
+                }
+            }           
         }
 
-        private void Quit()
+        /// <summary>
+        /// 結束遊戲
+        /// </summary>
+        public void Quit()
         {
             this.Close();
         }
@@ -146,6 +108,12 @@ namespace CoreForm
         {
             this.Controls.Add(control);
             control.BringToFront();
+        }
+
+
+        public void SetControl(Control control)
+        {
+            this.Controls.Add(control);
         }
     }
 }

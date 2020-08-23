@@ -14,6 +14,7 @@ namespace CoreForm.UI
 
         bool IsAvailableFor(int x, CardView card);
 
+        bool MoveCard(int slotIndex, CardView card);
         bool SetCard(int x, CardView card);
 
         CardMoveAction TryAction(int slotIndex, out string message);

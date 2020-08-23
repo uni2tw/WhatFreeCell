@@ -90,7 +90,7 @@ namespace CoreForm.UI
         {
             if (this.Data != null)
             {
-                return this.Data.ToString();
+                return this.Data.ToString() + "@" + this.Slot.ToString();
             }
             return base.ToString();
         }
