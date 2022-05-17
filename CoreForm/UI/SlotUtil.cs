@@ -14,7 +14,18 @@ namespace CoreForm.UI
             }
             else if (srcSlot.ZoneType == GameZoneType.Temp && destSlot.ZoneType == GameZoneType.Completion)
             {
-
+                if (destSlot.IsFull)
+                {
+                    return false;
+                }
+                if (SlotUtil.CheckLinkable(destSlot.LastCard() , srcSlot.LastCard()) == false)
+                {
+                    return false;
+                }
+                var card = srcSlot.LastCard();
+                srcSlot.RemoveCard(card);
+                card.Actived = false;
+                return destSlot.Zone.SetCard(destSlot.Index, card);
             }
             else if (srcSlot.ZoneType == GameZoneType.Temp && destSlot.ZoneType == GameZoneType.Waiting)
             {
@@ -34,9 +45,9 @@ namespace CoreForm.UI
                 {
                     return false;
                 }
-                if (destSlot.CheckMoveable(srcSlot) > 0)
+                if (destSlot.CheckMoveable(srcSlot) == 0)
                 {
-
+                    //return false;
                 }
                 bool moveable = false;
                 var srcCard = srcSlot.LastCard();
@@ -83,6 +94,36 @@ namespace CoreForm.UI
             }
 
             return false;
+        }
+        /// <summary>
+        /// 檢查2張卡能不能連結
+        /// </summary>
+        /// <param name="prevCard"></param>
+        /// <param name="card"></param>
+        /// <returns></returns>
+        public static bool CheckLinkable(CardView prevCard, CardView card)
+        {
+            if (card == null)
+            {
+                return false;
+            }
+            if (prevCard == null)
+            {
+                if (card.Number == 1)
+                {
+                    return true;
+                }
+                return false;
+            }            
+            if (prevCard.Suit != card.Suit) 
+            {
+                return false;
+            }
+            if (card.Number - prevCard.Number != 1)
+            {
+                return false;
+            }            
+            return true;
         }
     }
 }

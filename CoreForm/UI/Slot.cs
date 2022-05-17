@@ -18,7 +18,7 @@ namespace CoreForm.UI
         public int Index { get; set; }
 
         public GameZoneType ZoneType { get; set; }
-
+        public IZone Zone { get; set; }
         /// <summary>
         /// 一列最多可以放幾張牌
         /// </summary>
@@ -32,7 +32,7 @@ namespace CoreForm.UI
         }
 
         public Slot(int right, int top, int cardHeight, 
-            Control holder, int capacity, int index, GameZoneType zoneType)
+            Control holder, int capacity, int index, GameZoneType zoneType, IZone zone)
         {
             this.right = right;
             this.top = top;
@@ -41,6 +41,7 @@ namespace CoreForm.UI
             this.Capacity = capacity;
             this.Index = index;
             this.ZoneType = zoneType;
+            this.Zone = zone;
             Cards = new List<CardView>();
         }
 
@@ -48,8 +49,12 @@ namespace CoreForm.UI
         {
             if (this.ZoneType == GameZoneType.Completion)
             {
-
-
+                var srcLastCard = srcSlot.LastCard();
+                var lastCard = this.LastCard();
+                if (SlotUtil.CheckLinkable(lastCard, srcLastCard))
+                {
+                    return 1;
+                }
                 return 0;
             }
             throw new NotImplementedException();

@@ -7,6 +7,15 @@ namespace CoreForm.UI
 {
     public enum GameZoneType
     {
-        None, Temp, Completion, Waiting
+        None, 
+        /// <summary>
+        /// 左上，暫存交換用
+        /// </summary>
+        Temp, 
+        Completion, 
+        /// <summary>
+        /// 下方，工作區
+        /// </summary>
+        Waiting
     }
 }

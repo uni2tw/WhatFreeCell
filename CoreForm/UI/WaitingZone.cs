@@ -68,7 +68,7 @@ namespace CoreForm.UI
                 };
 
                 form.SetControlReady(holder);
-                var slot = new Slot(left, top, cardHeight, holder, this.Capacity, i, GameZoneType.Waiting);
+                var slot = new Slot(left, top, cardHeight, holder, this.Capacity, i, GameZoneType.Waiting, this);
                 Slots.Add(slot);
                 holder.Click += delegate (object sender, EventArgs e)
                 {

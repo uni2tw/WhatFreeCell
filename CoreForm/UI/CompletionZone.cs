@@ -66,7 +66,7 @@ namespace CoreForm.UI
                     BackgroundImageLayout = ImageLayout.Stretch
                 };
                 form.SetControlReady(holder);
-                var slot = new Slot(left, top, cardHeight, holder, Capacity, i, GameZoneType.Completion);
+                var slot = new Slot(left, top, cardHeight, holder, Capacity, i, GameZoneType.Completion, this);
                 Slots.Add(slot);
 
                 holder.Click += delegate (object sender, EventArgs e)
@@ -135,6 +135,7 @@ namespace CoreForm.UI
             card.View.Location = this.Slots[x].GetLocation(0);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Completion;
+            card.Slot = slot;
             return true;
         }
 

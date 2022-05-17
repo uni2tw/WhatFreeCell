@@ -220,39 +220,40 @@ namespace CoreForm.UI
         public void TryAction(GameZoneType zoneType, Slot slot)
         {
             var selectedCard = this.GetActivedCard();
-            if (zoneType == GameZoneType.Waiting)
+            if (slot.Zone is WaitingZone)
             {
                 string message;
                 CardMoveAction moveResult = waitZone.TryAction(slot.Index, out message);
 
             }
-            else if (zoneType == GameZoneType.Completion)
+            else if (slot.Zone is CompletionZone)
             {
                 if (selectedCard != null)
                 {
                     if (SlotUtil.Move(selectedCard.Slot, slot) == false)
                     {
                         this.ShowGameAlert();
+                        //selectedCard = this.GetActivedCard();
                     }
                 }
 
-                if (slot.IsFull)
-                {
-                    //nothing happend
-                }
-                else if (selectedCard == null)
-                {
-                    //nothing happend
-                }
-                else
-                {
-                    if (completionZone.MoveCard(slot.Index, selectedCard) == false)
-                    {
-                        this.ShowGameAlert();
-                    }
-                }
+                //if (slot.IsFull)
+                //{
+                //    //nothing happend
+                //}
+                //else if (selectedCard == null)
+                //{
+                //    //nothing happend
+                //}
+                //else
+                //{
+                //    if (completionZone.MoveCard(slot.Index, selectedCard) == false)
+                //    {
+                //        this.ShowGameAlert();
+                //    }
+                //}
             }
-            else if (zoneType == GameZoneType.Temp)
+            else if (slot.Zone is TempZone)
             {
                 //CardMoveAction moveResult = tempZone.TryAction(slot.Index, out message);
                 if (selectedCard != null && selectedCard.Slot == slot)
