@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using CoreForm.UI;
+using System.Collections.Generic;
 
-namespace CoreForm.UI
+namespace FreeCell.Entities.GameEntities
 {
     public delegate void ZoneHolderHandler(GameZoneType zoneType, Slot slot);
     public interface IZone

@@ -1,4 +1,4 @@
-﻿namespace CoreForm
+﻿namespace CoreForm.Entities.CardEntities
 {
     /// <summary>
     /// 牌的花色
@@ -7,5 +7,5 @@
     {
         Spare = 0, Heart = 1, Diamond = 2, Club = 3
     }
-    
+
 }

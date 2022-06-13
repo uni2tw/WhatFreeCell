@@ -1,4 +1,6 @@
-﻿using CoreForm.Utilities;
+﻿using CoreForm.Entities.CardEntities;
+using CoreForm.Utilities;
+using FreeCell.Entities.GameEntities;
 using System;
 using System.Drawing;
 using System.IO;

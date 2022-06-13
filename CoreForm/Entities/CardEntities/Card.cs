@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using CoreForm.Utilities;
 
-namespace CoreForm
+namespace CoreForm.Entities.CardEntities
 {
     /// <summary>
     /// 一張牌
@@ -47,9 +47,9 @@ namespace CoreForm
             Stream resource = assembly
                 .GetManifestResourceStream("CoreForm.assets.img." + GetImageFileName());
             Image img = Image.FromStream(resource);
-            this.Image = img;
-            this.ActivedImage = img.DrawAsNegative();
+            Image = img;
+            ActivedImage = img.DrawAsNegative();
         }
     }
-   
+
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CoreForm.UI;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CoreForm.UI
+namespace FreeCell.Entities.GameEntities
 {
     /// <summary>
     /// 右上完成區
@@ -19,7 +20,7 @@ namespace CoreForm.UI
         public CompletionZone(IGameForm form)
         {
             this.form = form;
-            this.Slots = new List<Slot>();
+            Slots = new List<Slot>();
         }
 
         public bool CanSwap
@@ -80,11 +81,11 @@ namespace CoreForm.UI
 
         public bool IsAvailableFor(int x, CardView card)
         {
-            if (this.Slots[x].IsFull)
+            if (Slots[x].IsFull)
             {
                 return false;
             }
-            CardView lastCard = this.Slots[x].LastCard();
+            CardView lastCard = Slots[x].LastCard();
             if (lastCard == null && card.Number == 1)
             {
                 return true;
@@ -117,22 +118,22 @@ namespace CoreForm.UI
             else if (lastCard.Suit == newCard.Suit && newCard.Number - lastCard.Number == 1)
             {
                 return true;
-            }            
+            }
             return false;
         }
 
         public bool SetCard(int x, CardView card)
         {
-            if (this.Slots[x].IsFull)
+            if (Slots[x].IsFull)
             {
                 return false;
             }
 
-            Slot slot = this.Slots[x];
+            Slot slot = Slots[x];
 
-            this.Slots[x].AddCard(card);
+            Slots[x].AddCard(card);
             card.View.Visible = true;
-            card.View.Location = this.Slots[x].GetLocation(0);
+            card.View.Location = Slots[x].GetLocation(0);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Completion;
             card.Slot = slot;

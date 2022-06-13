@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
+﻿using CoreForm.UI;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,8 +8,8 @@ using System.Media;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CoreForm.UI
-{    
+namespace FreeCell.Entities.GameEntities
+{
     /// <summary>
     /// 下方待處理區
     /// </summary>
@@ -19,7 +20,7 @@ namespace CoreForm.UI
         public WaitingZone(IGameForm form)
         {
             this.form = form;
-            this.Slots = new List<Slot>();
+            Slots = new List<Slot>();
         }
 
         public bool CanSwap
@@ -68,7 +69,7 @@ namespace CoreForm.UI
                 };
 
                 form.SetControlReady(holder);
-                var slot = new Slot(left, top, cardHeight, holder, this.Capacity, i, GameZoneType.Waiting, this);
+                var slot = new Slot(left, top, cardHeight, holder, Capacity, i, GameZoneType.Waiting, this);
                 Slots.Add(slot);
                 holder.Click += delegate (object sender, EventArgs e)
                 {
@@ -80,11 +81,11 @@ namespace CoreForm.UI
 
         public bool IsAvailableFor(int x, CardView card)
         {
-            if (this.Slots[x].IsFull)
+            if (Slots[x].IsFull)
             {
                 return false;
             }
-            CardView lastCard = this.Slots[x].LastCard();
+            CardView lastCard = Slots[x].LastCard();
             if (lastCard == null && card.Number == 1)
             {
                 return true;
@@ -110,15 +111,15 @@ namespace CoreForm.UI
         /// <returns></returns>
         public bool SetCard(int x, CardView card)
         {
-            if (this.Slots[x].IsFull)
+            if (Slots[x].IsFull)
             {
                 return false;
             }
 
-            Slot slot = this.Slots[x];
-            
+            Slot slot = Slots[x];
+
             card.View.Visible = true;
-            card.View.Location = this.Slots[x].GetLocation(slot.Count);
+            card.View.Location = Slots[x].GetLocation(slot.Count);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Waiting;
             card.Slot = slot;
@@ -132,7 +133,7 @@ namespace CoreForm.UI
 
         public CardView SelectLastCard(int x)
         {
-            Slot slot = this.Slots[x];
+            Slot slot = Slots[x];
             var lastCard = slot.LastCard();
             if (lastCard == null)
             {
@@ -146,24 +147,24 @@ namespace CoreForm.UI
         {
             int start;
             List<CardView> cards = FindCards(theCard, out start);
-            foreach(var card in cards)
+            foreach (var card in cards)
             {
                 card.ZoneType = GameZoneType.None;
                 card.View.Visible = false;
                 card.Slot.RemoveCard(card);
-            }            
+            }
 
             return cards;
-        }        
+        }
 
         public List<CardView> FindCards(CardView theCard, out int start)
         {
             List<CardView> result = new List<CardView>();
             start = -1;
-            foreach(var slot in Slots)
-            {                
+            foreach (var slot in Slots)
+            {
                 var cards = slot.GetCards();
-                for (int i= 0;i< cards.Count;i++)
+                for (int i = 0; i < cards.Count; i++)
                 {
                     var card = cards[i];
                     if (card.Equals(theCard))
@@ -179,7 +180,7 @@ namespace CoreForm.UI
 
         public int GetSlotSelectedIndex()
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in Slots)
             {
                 var lastCard = slot.LastCard();
                 if (lastCard == null)
@@ -196,7 +197,7 @@ namespace CoreForm.UI
 
         public CardLocation GetSelectedInfo()
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in Slots)
             {
                 var lastCard = slot.LastCard();
                 if (lastCard == null)
@@ -219,10 +220,10 @@ namespace CoreForm.UI
         public CardMoveAction TryAction(int slotIndex, out string message)
         {
             message = string.Empty;
-            var srcSlotIndex = this.GetSlotSelectedIndex();
+            var srcSlotIndex = GetSlotSelectedIndex();
             if (srcSlotIndex == slotIndex)
             {
-                this.DeselectSlots();
+                DeselectSlots();
                 return CardMoveAction.Deselect;
             }
             if (srcSlotIndex != -1)
@@ -234,28 +235,28 @@ namespace CoreForm.UI
 
                 //TODO 判斷犯規或是可移動 
 
-                var srcCard = this.Slots[srcSlotIndex].LastCard();
-                var destCard = this.Slots[slotIndex].GetCards();
+                var srcCard = Slots[srcSlotIndex].LastCard();
+                var destCard = Slots[slotIndex].GetCards();
                 int spareSpaces = 1;
 
                 List<CardView> moveableCards;
-                if (MoveCardsFromSlotToSlot(this.Slots[srcSlotIndex], this.Slots[slotIndex], spareSpaces, out moveableCards))
+                if (MoveCardsFromSlotToSlot(Slots[srcSlotIndex], Slots[slotIndex], spareSpaces, out moveableCards))
                 {
                     MessageBox.Show("移動 " + moveableCards.Count + " 牌");
-                    this.DeselectSlots();
+                    DeselectSlots();
                     return CardMoveAction.Move;
                 }
                 else
                 {
                     SystemSounds.Asterisk.Play();
                     MessageBox.Show("此步犯規");
-                    this.DeselectSlots();
+                    DeselectSlots();
                     return CardMoveAction.Fail;
                 }
 
             }
-            this.SelectLastCard(slotIndex);
-            return  CardMoveAction.Select;
+            SelectLastCard(slotIndex);
+            return CardMoveAction.Select;
         }
 
         private bool MoveCardsFromSlotToSlot(Slot srcSlot, Slot destSlot, int spareSpaces, out List<CardView> moveableCards)
@@ -264,7 +265,7 @@ namespace CoreForm.UI
 
 
 
-                List<CardView> srcLinkedCards = new List<CardView>();
+            List<CardView> srcLinkedCards = new List<CardView>();
             for (int i = 0; i < srcSlot.GetCards().Count; i++)
             {
                 if (srcSlot.GetCards().Count - i > spareSpaces)
@@ -307,15 +308,15 @@ namespace CoreForm.UI
 
         public void DeselectSlots()
         {
-            foreach(var slot in this.Slots)
+            foreach (var slot in Slots)
             {
                 var lastCard = slot.LastCard();
                 if (lastCard == null)
                 {
                     continue;
                 }
-                lastCard.Actived = false;               
-            }                       
+                lastCard.Actived = false;
+            }
         }
 
     }

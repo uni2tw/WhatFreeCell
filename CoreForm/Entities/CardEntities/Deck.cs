@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreForm
+namespace CoreForm.Entities.CardEntities
 {
     /// <summary>
     /// 一副牌
@@ -13,13 +13,14 @@ namespace CoreForm
         {
             Cards = new Card[52];
         }
-        public Card[] Cards { get; set; }        
+        public Card[] Cards { get; set; }
         public int Pos { get; set; }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < Cards.Length; i++) {
-                if (i > 0 )
+            for (int i = 0; i < Cards.Length; i++)
+            {
+                if (i > 0)
                 {
                     sb.Append(", ");
                 }
@@ -47,7 +48,7 @@ namespace CoreForm
         public Card Pick(int n)
         {
             Card result;
-            result = Cards[n];            
+            result = Cards[n];
             return result;
         }
 
@@ -95,5 +96,5 @@ namespace CoreForm
             return this;
         }
     }
-    
+
 }

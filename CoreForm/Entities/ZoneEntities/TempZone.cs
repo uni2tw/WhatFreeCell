@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CoreForm.UI;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CoreForm.UI
+namespace FreeCell.Entities.GameEntities
 {
     /// <summary>
     /// 左上暫存區
@@ -15,7 +16,7 @@ namespace CoreForm.UI
         public TempZone(IGameForm form)
         {
             this.form = form;
-            this.Slots = new List<Slot>();
+            Slots = new List<Slot>();
         }
         public bool CanSwap
         {
@@ -85,16 +86,16 @@ namespace CoreForm.UI
         public bool SetCard(int x, CardView card)
         {
             //if (this.Slots[x].Cards.Count >= this.QueueLimit)
-            if (this.Slots[x].IsFull)
+            if (Slots[x].IsFull)
             {
                 return false;
             }
 
-            Slot slot = this.Slots[x];
+            Slot slot = Slots[x];
 
             slot.AddCard(card);
             card.View.Visible = true;
-            card.View.Location = this.Slots[x].GetLocation(0);
+            card.View.Location = Slots[x].GetLocation(0);
             card.View.BringToFront();
             card.ZoneType = GameZoneType.Temp;
             card.Slot = slot;
@@ -104,11 +105,11 @@ namespace CoreForm.UI
 
         public bool IsAvailableFor(int x, CardView card)
         {
-            if (this.Slots[x].IsFull)
+            if (Slots[x].IsFull)
             {
                 return false;
             }
-            CardView lastCard = this.Slots[x].LastCard();
+            CardView lastCard = Slots[x].LastCard();
             if (lastCard == null)
             {
                 return true;
@@ -123,13 +124,13 @@ namespace CoreForm.UI
         public CardMoveAction TryAction(int slotIndex, out string message)
         {
             message = string.Empty;
-            var srcSlotIndex = this.GetSlotSelectedIndex();
+            var srcSlotIndex = GetSlotSelectedIndex();
             if (srcSlotIndex == slotIndex)
             {
-                this.DeselectSlots();
+                DeselectSlots();
                 return CardMoveAction.Deselect;
             }
-            else if (this.Slots[slotIndex].IsFull)
+            else if (Slots[slotIndex].IsFull)
             {
                 return CardMoveAction.Fail;
             }
@@ -138,7 +139,7 @@ namespace CoreForm.UI
 
         public void DeselectSlots()
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in Slots)
             {
                 var lastCard = slot.LastCard();
                 if (lastCard == null)
@@ -151,7 +152,7 @@ namespace CoreForm.UI
 
         public int GetSlotSelectedIndex()
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in Slots)
             {
                 var lastCard = slot.LastCard();
                 if (lastCard == null)
@@ -168,7 +169,7 @@ namespace CoreForm.UI
 
         public CardLocation GetSelectedInfo()
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in Slots)
             {
                 var lastCard = slot.LastCard();
                 if (lastCard == null)
