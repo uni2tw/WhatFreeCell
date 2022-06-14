@@ -9,11 +9,11 @@ namespace FreeCell.Entities.GameEntities
     /// <summary>
     /// 左上暫存區
     /// </summary>
-    public class TempZone : IZone
+    public class Foundations : IZone
     {
         IGameForm form;
         public event ZoneHolderHandler HolderClick;
-        public TempZone(IGameForm form)
+        public Foundations(IGameForm form)
         {
             this.form = form;
             Slots = new List<Slot>();

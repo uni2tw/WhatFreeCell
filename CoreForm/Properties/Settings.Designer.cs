@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FreeCell.Properties {
+namespace FreeCellSolitaire.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

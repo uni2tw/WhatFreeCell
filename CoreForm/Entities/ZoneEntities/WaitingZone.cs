@@ -13,11 +13,11 @@ namespace FreeCell.Entities.GameEntities
     /// <summary>
     /// 下方待處理區
     /// </summary>
-    public class WaitingZone : IZone
+    public class Tableau  : IZone
     {
         private IGameForm form;
 
-        public WaitingZone(IGameForm form)
+        public Tableau (IGameForm form)
         {
             this.form = form;
             Slots = new List<Slot>();

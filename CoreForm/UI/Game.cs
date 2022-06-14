@@ -34,15 +34,15 @@ namespace CoreForm.UI
         /// <summary>
         /// 左上暫存區
         /// </summary>
-        private TempZone tempZone;
+        private Foundations tempZone;
         /// <summary>
         /// 右上完成區
         /// </summary>
-        private CompletionZone completionZone;
+        private FreeCells completionZone;
         /// <summary>
         /// 下方待處理區
         /// </summary>
-        private WaitingZone waitZone;
+        private Tableau  waitZone;
 
         /// <summary>
         /// 目前遊戲正在進行中
@@ -153,7 +153,7 @@ namespace CoreForm.UI
 
             left = 0;
             top = 0 + layoutMarginTop;
-            tempZone = new TempZone(this.form);            
+            tempZone = new Foundations(this.form);            
             tempZone.Init(cardWidth, cardHeight, left, top);
             tempZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
@@ -163,7 +163,7 @@ namespace CoreForm.UI
 
             left = this.boardWidth - (this.cardWidth * 4) - 9;
             top = 0 + layoutMarginTop;
-            completionZone = new CompletionZone(this.form);
+            completionZone = new FreeCells(this.form);
             completionZone.Init(cardWidth, cardHeight, left , top);
             completionZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
@@ -175,7 +175,7 @@ namespace CoreForm.UI
             int marginTop = cardHeight / 6;
             left = marginLeft;
             top = cardHeight + 12 + layoutMarginTop;            
-            waitZone = new WaitingZone(this.form);            
+            waitZone = new Tableau (this.form);            
             waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             waitZone.HolderClick += delegate (GameZoneType zoneType, Slot slot)
             {
@@ -222,13 +222,13 @@ namespace CoreForm.UI
         public void TryAction(GameZoneType zoneType, Slot slot)
         {
             var selectedCard = this.GetActivedCard();
-            if (slot.Zone is WaitingZone)
+            if (slot.Zone is Tableau )
             {
                 string message;
                 CardMoveAction moveResult = waitZone.TryAction(slot.Index, out message);
 
             }
-            else if (slot.Zone is CompletionZone)
+            else if (slot.Zone is FreeCells)
             {
                 if (selectedCard != null)
                 {
@@ -255,7 +255,7 @@ namespace CoreForm.UI
                 //    }
                 //}
             }
-            else if (slot.Zone is TempZone)
+            else if (slot.Zone is Foundations)
             {
                 //CardMoveAction moveResult = tempZone.TryAction(slot.Index, out message);
                 if (selectedCard != null && selectedCard.Slot == slot)

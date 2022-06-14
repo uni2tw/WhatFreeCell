@@ -9,7 +9,7 @@ namespace FreeCell.Entities.GameEntities
     /// <summary>
     /// 右上完成區
     /// </summary>
-    public class CompletionZone : IZone
+    public class FreeCells : IZone
     {
         private IGameForm form;
         public event ZoneHolderHandler HolderClick;
@@ -17,7 +17,7 @@ namespace FreeCell.Entities.GameEntities
         /// 初始 右上完成區
         /// </summary>
         /// <param name="form"></param>
-        public CompletionZone(IGameForm form)
+        public FreeCells(IGameForm form)
         {
             this.form = form;
             Slots = new List<Slot>();
