@@ -1,4 +1,4 @@
-﻿namespace CoreForm.Entities.CardEntities
+﻿namespace FreeCellSolitaire.Core.CardModels
 {
     /// <summary>
     /// 牌的花色

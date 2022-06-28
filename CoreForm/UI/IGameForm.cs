@@ -1,48 +1,17 @@
-﻿using FreeCellSolitaire.Core.GameModels;
-using FreeCellSolitaire.Entities.GameEntities;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Media;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace CoreForm.UI
 {
-
-    public delegate void GameEventHandler();
-
-   
-
-    public class Game : IGame
+    public interface IGameForm
     {
-        public bool IsPlaying
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public void InitEvents()
-        {
-           
-        }
-
-        public void InitScreen()
-        {
-        }
-
-        public void Reset()
-        {
-           
-        }
-
-        public void Start()
-        {
-        
-        }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public Color BackColor { get; set; }
+        void Quit();
+        void SetControl(Control control);
+        void SetControlReady(Control control);
     }
-
     //public class Game
     //{
     //    /// <summary>

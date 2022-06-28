@@ -1,4 +1,5 @@
 ﻿using CoreForm.UI;
+using FreeCellSolitaire.Core.GameModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace CoreForm
 {
     public partial class Form1 : Form, IGameForm
     {
-        Game game;
+        IGame game;
         public const string _GAME_TITLE = "新接龍";
 
         public Form1()
@@ -24,7 +25,7 @@ namespace CoreForm
         
             this.Text = _GAME_TITLE;
 
-            game = new Game(this);
+            game = new Game();
             game.InitScreen();
             game.InitEvents();
 

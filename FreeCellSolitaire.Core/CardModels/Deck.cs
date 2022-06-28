@@ -1,55 +1,55 @@
-﻿using System;
+﻿using FreeCellSolitaire.Entities.GameEntities;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
-namespace CoreForm.Entities.CardEntities
+namespace FreeCellSolitaire.Core.CardModels
 {
     /// <summary>
     /// 一副牌
     /// </summary>
     public class Deck
     {
-        public Deck()
+        private Deck()
         {
-            Cards = new Card[52];
+            _cards = new Card[52];
         }
-        public Card[] Cards { get; set; }
-        public int Pos { get; set; }
+        private Card[] _cards;
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < Cards.Length; i++)
+            for (int i = 0; i < _cards.Length; i++)
             {
                 if (i > 0)
                 {
                     sb.Append(", ");
                 }
-                sb.AppendLine(string.Format("{0}", Cards[i].ToString()));
+                sb.AppendLine(string.Format("{0}", _cards[i].ToString()));
             }
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 照目前指位器的位置取出一張牌，並將指位器移到下一張
-        /// </summary>
-        /// <returns></returns>
-        public Card Draw()
+        int pointer = 0;
+        public Card Pick()
         {
-            Card result;
-            if (Pos == Cards.Length)
+            if (GetCardsCount() == 0)
             {
                 return null;
             }
-            result = Cards[Pos];
-            Pos++;
+            var result = _cards[pointer];
+            pointer++;
             return result;
         }
 
-        public Card Pick(int n)
+        public void Reset()
         {
-            Card result;
-            result = Cards[n];
-            return result;
+            pointer = 0;
+        }
+
+        public int GetCardsCount()
+        {
+            return _cards.Length - pointer ;
         }
 
         /// <summary>
@@ -69,8 +69,7 @@ namespace CoreForm.Entities.CardEntities
                         Number = i + 1,
                         Suit = (CardSuit)j,
                     };
-                    card.ReloadImage();
-                    deckCards.Cards[pos] = card;
+                    deckCards._cards[pos] = card;
                     pos++;
                 }
             }
@@ -84,12 +83,12 @@ namespace CoreForm.Entities.CardEntities
         public Deck Shuffle(int seed)
         {
             Random rand = new Random(seed);
-            List<Card> temp = new List<Card>(Cards);
+            List<Card> temp = new List<Card>(_cards);
             int pos = 0;
             while (temp.Count > 0)
             {
                 int from = rand.Next(temp.Count);
-                Cards[pos] = temp[from];
+                _cards[pos] = temp[from];
                 pos++;
                 temp.RemoveAt(from);
             }
