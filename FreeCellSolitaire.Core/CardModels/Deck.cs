@@ -11,9 +11,9 @@ namespace FreeCellSolitaire.Core.CardModels
     /// </summary>
     public class Deck
     {
-        private Deck()
+        public Deck(int cardCount)
         {
-            _cards = new Card[52];
+            _cards = new Card[cardCount];
         }
         private Card[] _cards;
         public override string ToString()
@@ -56,14 +56,20 @@ namespace FreeCellSolitaire.Core.CardModels
         /// 建立一副撲克牌的資料(有序)
         /// </summary>
         /// <returns></returns>
-        public static Deck Create()
+        public static Deck Create(int cardCount = 52)
         {
-            Deck deckCards = new Deck();
+            Deck deckCards = new Deck(cardCount);
             int pos = 0;
+            bool full = false;
             for (int i = 0; i < 13; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
+                    if (pos >= cardCount)
+                    {
+                        full = true;
+                        break;
+                    }
                     var card = new Card
                     {
                         Number = i + 1,
@@ -71,6 +77,10 @@ namespace FreeCellSolitaire.Core.CardModels
                     };
                     deckCards._cards[pos] = card;
                     pos++;
+                }
+                if (full)
+                {
+                    break;
                 }
             }
             return deckCards;

@@ -1,4 +1,5 @@
-﻿using FreeCellSolitaire.Core.CardModels;
+﻿using System.Linq;
+using FreeCellSolitaire.Core.CardModels;
 
 namespace FreeCellSolitaire.Core.GameModels
 {
@@ -7,10 +8,21 @@ namespace FreeCellSolitaire.Core.GameModels
     /// </summary>
     public class Tableau : IZone
     {
-        private IGame _game;
+        IGame _game;
+        Column[] _columns;
         public Tableau(IGame game)
         {
             this._game = game;
+            this.Init();
+        }
+
+        private void Init()
+        {
+            _columns = new Column[ColumnCount];
+            for (int i = 0; i < ColumnCount; i++)
+            {
+                _columns[i] = new Column(this, i, ColumnCapacity);
+            }
         }
 
         public bool CanInternalSwap
@@ -27,6 +39,7 @@ namespace FreeCellSolitaire.Core.GameModels
                 return true;
             }
         }
+
         public bool CanMoveOut
         {
             get
@@ -34,45 +47,49 @@ namespace FreeCellSolitaire.Core.GameModels
                 return true;
             }
         }
-        public int ColumnCapacity
-        {
-            get
-            {
-                return 13;
-            }
-        }
+        public int ColumnCapacity => 13;
 
-        public Column[] _columns = new Column[4];
+        public int ColumnCount => 8;
 
         public void Init(Deck deck)
-        {
-            _columns[0] = new Column(this, 0, ColumnCapacity);
-            _columns[1] = new Column(this, 1, ColumnCapacity);
-            _columns[2] = new Column(this, 2, ColumnCapacity);
-            _columns[3] = new Column(this, 3, ColumnCapacity);
-
+        {            
+            _columns = new Column[ColumnCount];
+            for (int i=0;i< ColumnCount; i++)
+            {
+                _columns[i] = new Column(this, i, ColumnCapacity);
+            }
+            if (deck == null) return;
             int n = 0;
             while (true)
             {
                 var card = deck.Pick();
-                _columns[n % 4].AddCards(card);
                 if (card == null)
                 {
                     break;
                 }
+                _columns[n % ColumnCount].AddCards(card);
                 n++;
             }            
         }
 
         public void DebugInfo()
-        {
+        {            
             Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-            Console.WriteLine(_columns[0].ToString());
-            Console.WriteLine(_columns[1].ToString());
-            Console.WriteLine(_columns[2].ToString());
-            Console.WriteLine(_columns[3].ToString());
+            for (int i = 0; i < ColumnCount; i++)
+            {
+                Console.WriteLine($"tableau[{i}]:{_columns[i]}");
+            }
         }
 
+        public void DebugColumnInfo(int columnIndex)
+        {
+            Console.WriteLine($"tableau[{columnIndex}]:{_columns[columnIndex]}");
+        }
+
+        public bool WasEmpty()
+        {
+            return _columns.All(x => x.GetLastCard() == null);
+        }
 
         public bool MoveCard(int sourceIndex, IZone target, int targetIndex)
         {
@@ -82,6 +99,21 @@ namespace FreeCellSolitaire.Core.GameModels
         public override string ToString()
         {
             return this.GetType().Name;
+        }
+
+        public Column GetColumn(int columnIndex)
+        {
+            return _columns[columnIndex];
+        }
+
+        public CardView GetCard(int columnIndex, int? cardIndex = null)
+        {
+            if (cardIndex == null)
+            {
+                cardIndex = GetColumn(columnIndex).LastCardIndex();
+            }
+            var card = GetColumn(columnIndex).GetCard(cardIndex.Value);
+            return card;
         }
 
     }

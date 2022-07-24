@@ -5,7 +5,7 @@
     /// </summary>
     public enum CardSuit
     {
-        Spare = 0, Heart = 1, Diamond = 2, Club = 3
+        Spade = 0, Heart = 1, Diamond = 2, Club = 3
     }
 
 }

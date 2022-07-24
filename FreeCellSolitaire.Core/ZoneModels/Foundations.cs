@@ -6,10 +6,22 @@
     public class Foundations : IZone
     {
         IGame _game;
+        Column[] _columns;
         public Foundations(IGame game)
         {
             this._game = game;
+            Init();
         }
+
+        private void Init()
+        {
+             _columns = new Column[ColumnCount];
+            for (int i = 0; i < ColumnCount; i++)
+            {
+                _columns[i] = new Column(this, i, ColumnCapacity);
+            }
+        }
+
         public bool CanInternalSwap
         {
             get
@@ -32,28 +44,18 @@
                 return true;
             }
         }
-        public int ColumnCapacity
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public int ColumnCapacity => 1;
 
-        public Column[] _columns = new Column[4];
-
-        public void Init()
-        {
-            _columns[0] = new Column(this, 0,ColumnCapacity);
-            _columns[1] = new Column(this, 1,ColumnCapacity);
-            _columns[2] = new Column(this, 2,ColumnCapacity);
-            _columns[3] = new Column(this, 3,ColumnCapacity);
-        }
-
+        public int ColumnCount => 4;
 
         public bool MoveCard(int sourceIndex, IZone target, int targetIndex)
         {
             return true;
+        }
+
+        public Column GetColumn(int columnIndex)
+        {
+            return _columns[columnIndex];
         }
     }
 }

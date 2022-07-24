@@ -10,7 +10,7 @@
 
         public override string ToString()
         {
-            if (Suit == CardSuit.Spare)
+            if (Suit == CardSuit.Spade)
             {
                 return "黑桃 " + Number;
             }

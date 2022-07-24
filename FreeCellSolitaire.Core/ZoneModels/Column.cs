@@ -1,4 +1,6 @@
 ﻿using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Core.Exceptions;
+using FreeCellSolitaire.Entities.GameEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +18,61 @@ namespace FreeCellSolitaire.Core.GameModels
             _capacity = capacity;
             _cards = new List<CardView>();
         }
+
+        public bool Droppable(CardView cardView)
+        {
+            if (this._cards.Count + 1 > this._capacity)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool Draggable()
+        {
+            return this.Owner.CanMoveOut; 
+        }
+
+        public CardView GetLastCard()
+        {
+            return _cards.LastOrDefault();
+        }
+
+        public bool RemoveCard(CardView cardView)
+        {
+            return _cards.Remove(cardView);
+        }
+
         private List<CardView> _cards;
         public bool AddCards(Card card)
+        {            
+            var cardView = new CardView(this, card);
+            return AddCards(cardView);
+        }
+        public bool AddCards(CardView cardView)
         {
             if (_cards.Count >= _capacity)
             {
                 return false;
-            }
-            var cardView = new CardView(this, card);
+            }            
             _cards.Add(cardView);
             return true;
+        }
+        public int LastCardIndex()
+        {
+            return _cards.Count - 1;
+        }
+
+        public CardView GetCard(int cardIndex)
+        {
+            try
+            {
+                return _cards[cardIndex];
+            }
+            catch
+            {
+                throw new CardNotFoundException();
+            }
         }
 
         private IZone _owner;
@@ -52,18 +99,16 @@ namespace FreeCellSolitaire.Core.GameModels
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{_owner}[{_index}]:");
             foreach (var card in _cards)
             {
                 if (sb.Length > 0)
                 {
-                    sb.Append(", ");
+                    sb.Append(",");
                 }
                 sb.Append($"{card}");
             }
             return sb.ToString();
 
         }
-
     }
 }

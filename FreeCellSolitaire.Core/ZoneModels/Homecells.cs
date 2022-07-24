@@ -7,7 +7,9 @@ namespace FreeCellSolitaire.Entities.GameEntities
     /// </summary>
     public class Homecells : IZone
     {
-        private IGame _game;
+        IGame _game;
+        Column[] _columns;
+
         /// <summary>
         /// 初始 右上完成區
         /// </summary>
@@ -15,6 +17,16 @@ namespace FreeCellSolitaire.Entities.GameEntities
         public Homecells(IGame game)
         {
             this._game = game;
+            this.Init();
+        }
+
+        private void Init()
+        {
+            _columns = new Column[ColumnCount];
+            for (int i = 0; i < ColumnCount; i++)
+            {
+                _columns[i] = new Column(this, i, ColumnCapacity);
+            }
         }
 
         public bool CanInternalSwap
@@ -38,29 +50,18 @@ namespace FreeCellSolitaire.Entities.GameEntities
                 return false;
             }
         }
-        public int ColumnCapacity
-        {
-            get
-            {
-                return 13;
-            }
-        }
+        public int ColumnCapacity => 13;
 
-
-        public Column[] _columns = new Column[4];
-
-        public void Init()
-        {
-            this._columns[0] = new Column(this,0, ColumnCapacity);
-            this._columns[1] = new Column(this,1, ColumnCapacity);
-            this._columns[2] = new Column(this,2, ColumnCapacity);
-            this._columns[3] = new Column(this,3, ColumnCapacity);
-        }
-
+        public int ColumnCount => 4;
 
         public bool MoveCard(int sourceIndex, IZone target, int targetIndex)
         {
             return true;
+        }
+
+        public Column GetColumn(int columnIndex)
+        {
+            return _columns[columnIndex];
         }
     }
 }
