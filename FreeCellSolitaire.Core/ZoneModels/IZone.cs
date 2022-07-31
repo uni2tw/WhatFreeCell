@@ -2,6 +2,7 @@
 {
     public interface IZone
     {
+        IGame Game { get; }
         bool CanInternalSwap { get; }
         bool CanMoveIn { get; }
         bool CanMoveOut { get; }

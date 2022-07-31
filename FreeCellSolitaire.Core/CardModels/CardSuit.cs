@@ -5,7 +5,22 @@
     /// </summary>
     public enum CardSuit
     {
-        Spade = 0, Heart = 1, Diamond = 2, Club = 3
+        /// <summary>
+        /// 黑桃
+        /// </summary>
+        Spade = 0, 
+        /// <summary>
+        /// 紅心
+        /// </summary>
+        Heart = 1, 
+        /// <summary>
+        /// 方塊
+        /// </summary>
+        Diamond = 2, 
+        /// <summary>
+        /// 梅花
+        /// </summary>
+        Club = 3
     }
 
 }

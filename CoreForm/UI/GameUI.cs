@@ -11,9 +11,17 @@ namespace CoreForm.UI
 
     public delegate void GameEventHandler();
 
-   
+    public interface IGameUI
+    {
+        void InitScreen();
+        void Reset();
+        void Start();
+        void InitEvents();
+        bool IsPlaying { get; }
+    }
 
-    public class Game : IGame
+
+    public class GameUI : IGameUI
     {
         public bool IsPlaying
         {

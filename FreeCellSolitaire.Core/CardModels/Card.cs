@@ -5,7 +5,19 @@
     /// </summary>
     public class Card
     {
-        public int Number { get; set; }
+        private int _number;
+        public int Number
+        {
+            get
+            {
+                return _number;
+            }
+            set
+            {
+                System.Diagnostics.Debug.Assert(value >= 1 && value <= 13);             
+                _number = value;
+            }
+        }
         public CardSuit Suit { get; set; }
 
         public override string ToString()

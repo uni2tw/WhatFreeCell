@@ -10,9 +10,19 @@
         public Foundations(IGame game)
         {
             this._game = game;
+            if (game != null)
+            {
+                this._game.Foundations = this;
+            }
             Init();
         }
-
+        public IGame Game
+        {
+            get
+            {
+                return _game;
+            }
+        }
         private void Init()
         {
              _columns = new Column[ColumnCount];
@@ -56,6 +66,18 @@
         public Column GetColumn(int columnIndex)
         {
             return _columns[columnIndex];
+        }
+
+        public void DebugInfo(bool timeStamp = true)
+        {
+            if (timeStamp)
+            {
+                Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
+            for (int i = 0; i < ColumnCount; i++)
+            {
+                Console.WriteLine($"{nameof(Foundations).ToLower()}[{i}]:{_columns[i]}");
+            }
         }
     }
 }

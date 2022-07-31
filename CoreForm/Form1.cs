@@ -16,7 +16,7 @@ namespace CoreForm
 {
     public partial class Form1 : Form, IGameForm
     {
-        IGame game;
+        IGameUI game;
         public const string _GAME_TITLE = "新接龍";
 
         public Form1()
@@ -25,7 +25,7 @@ namespace CoreForm
         
             this.Text = _GAME_TITLE;
 
-            game = new Game();
+            game = new GameUI();
             game.InitScreen();
             game.InitEvents();
 

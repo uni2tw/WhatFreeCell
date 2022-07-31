@@ -38,14 +38,15 @@ namespace FreeCellSolitaire.Tests
         {
             var deck = Deck.Create(1).Shuffle(101);
             var tableau = new Tableau(null);
-            var homecells = new Homecells(null);            
-            tableau.Init(deck);
+            var homecells = new Homecells(null);
+            
+            tableau.GetColumn(0).AddCards(new Card { Suit = CardSuit.Spade, Number = 1 });
 
-            //
             var card = tableau.GetColumn(0).GetLastCard();
-            Assert.IsTrue(card.Moveable(tableau.GetColumn(1)));
+            
 
-            Assert.IsTrue(tableau.WasEmpty());
+            Assert.IsTrue(card.Moveable(homecells.GetColumn(0)));
+         
         }
 
 
@@ -64,7 +65,6 @@ namespace FreeCellSolitaire.Tests
             CardView card2 = tableau.GetCard(3);
             Assert.AreEqual(card2.Suit, CardSuit.Spade);
             Assert.AreEqual(card2.Number, 13);
-
 
 
             tableau.DebugColumnInfo(3);

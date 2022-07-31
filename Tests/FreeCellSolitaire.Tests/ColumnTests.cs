@@ -134,17 +134,45 @@ namespace FreeCellSolitaire.Tests
             tableau.GetColumn(0).AddCards(new Card { Suit = CardSuit.Club, Number = 1 });
             var card = tableau.GetColumn(0).GetLastCard();
 
-            card.Move(tableau.GetColumn(0));
-            
             Assert.IsTrue(card.Move(tableau.GetColumn(1)));
             Assert.AreEqual(tableau.GetColumn(1).GetLastCard(), card);
             Assert.AreEqual(card.Owner.Owner, tableau);
         }
         [Test]
-        public void MoveFromTableauToTableauMultiCards()
+        public void GetLinkedCards()
         {
+            var tableau = new Tableau(null);
+            tableau.GetColumn(0).AddCards(new Card { Number = 3, Suit = CardSuit.Spade });
+            tableau.GetColumn(0).AddCards(new Card { Number = 2, Suit = CardSuit.Heart });
+            tableau.GetColumn(0).AddCards(new Card { Number = 1, Suit = CardSuit.Club });
 
+            Assert.AreEqual(tableau.GetColumn(0).GetCard(0).GetLinkedCards().Count, 3);
+            Assert.AreEqual(tableau.GetColumn(0).GetCard(1).GetLinkedCards().Count, 2);
+            Assert.AreEqual(tableau.GetColumn(0).GetCard(2).GetLinkedCards().Count, 1);
         }
+
+       
+        [Test]
+        public void TableauMoveMoreThanOneCard()
+        {
+            var tableau = new Tableau(null);
+            tableau.GetColumn(0).AddCards(new Card { Number = 3, Suit = CardSuit.Spade });
+            tableau.GetColumn(0).AddCards(new Card { Number = 2, Suit = CardSuit.Heart });
+            tableau.GetColumn(0).AddCards(new Card { Number = 1, Suit = CardSuit.Club });
+
+            var card = tableau.GetColumn(0).GetCard(0);
+
+            Assert.AreEqual(tableau.GetColumn(0).GetCardsCount(), 3);
+            Assert.AreEqual(tableau.GetColumn(1).GetCardsCount(), 0);
+
+            card.Move(tableau.GetColumn(1));
+
+            Assert.AreEqual(0, tableau.GetColumn(0).GetCardsCount());
+            Assert.AreEqual(3, tableau.GetColumn(1).GetCardsCount());
+            //TODO
+        }
+
+
         [Test]
         public void MoveableFromTableauToHomecells()
         {
@@ -170,7 +198,7 @@ namespace FreeCellSolitaire.Tests
             Assert.AreEqual(card.Owner.Owner, foundations);
         }
 
-        
-
+       
     }
+   
 }

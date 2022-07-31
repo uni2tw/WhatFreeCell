@@ -13,7 +13,19 @@ namespace FreeCellSolitaire.Core.GameModels
         public Tableau(IGame game)
         {
             this._game = game;
+            if (game != null)
+            {
+                this._game.Tableau = this;
+            }
             this.Init();
+        }
+
+        public IGame Game
+        {
+            get
+            {
+                return _game;
+            }
         }
 
         private void Init()
@@ -72,9 +84,12 @@ namespace FreeCellSolitaire.Core.GameModels
             }            
         }
 
-        public void DebugInfo()
-        {            
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        public void DebugInfo(bool timeStamp = true)
+        {
+            if (timeStamp)
+            {
+                Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            } 
             for (int i = 0; i < ColumnCount; i++)
             {
                 Console.WriteLine($"tableau[{i}]:{_columns[i]}");
@@ -110,7 +125,7 @@ namespace FreeCellSolitaire.Core.GameModels
         {
             if (cardIndex == null)
             {
-                cardIndex = GetColumn(columnIndex).LastCardIndex();
+                cardIndex = GetColumn(columnIndex).GetCardsCount() - 1;
             }
             var card = GetColumn(columnIndex).GetCard(cardIndex.Value);
             return card;

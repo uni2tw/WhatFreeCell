@@ -29,39 +29,5 @@ namespace FreeCellSolitaire.Tests
             Assert.IsFalse(card3.IsBlack());
             Assert.IsFalse(card4.IsRed());
         }
-
-        //[Test]
-        //public void Tableau_internal_moveable_test()
-        //{
-        //    var tableau = new Tableau(null);
-        //    tableau.Init(null);
-        //    CardView card = new CardView(tableau.GetColumn(0), new Card { Number = 1, Suit = CardSuit.Spade });
-
-        //    CardView card2 = new CardView(tableau.GetColumn(1), new Card { Number = 2, Suit = CardSuit.Heart });
-
-        //    Assert.IsTrue(card.CheckMoveable(card2));
-
-        //    Assert.IsFalse(card2.CheckMoveable(card));
-
-        //    //Assert.IsFalse(card2.CardIsMoveable(tableau.GetColumn(5)));
-
-        //}
-
-        //[Test]
-        //public void s04_Moveable()
-        //{            
-        //    //¶Â®ç1
-        //    CardView card = new CardView(null , new Card { Number = 1, Suit = CardSuit.Spade });
-        //    //¶Â®ç2
-        //    CardView card2 = new CardView(null, new Card { Number = 2, Suit = CardSuit.Spade });
-        //    //¬õ¤ß2
-        //    CardView card3 = new CardView(null, new Card { Number = 2, Suit = CardSuit.Heart });
-
-        //    Assert.IsTrue(card.CheckMoveable(new Homecells(null).GetColumn(0)));
-        //    Assert.IsFalse(card.CheckMoveable(card3, new Homecells(null)));
-
-
-        //}
-
     }
 }

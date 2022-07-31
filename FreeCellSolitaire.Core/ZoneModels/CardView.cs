@@ -4,6 +4,8 @@ using System.Diagnostics;
 
 namespace FreeCellSolitaire.Core.GameModels;
 
+
+
 /// <summary>
 /// 一張牌
 /// </summary>
@@ -37,17 +39,44 @@ public class CardView
             return false;
         }
 
-        //move
-        if (destColumn.AddCards(this))
+        var cards = this.GetLinkedCards();
+        foreach(var card in cards)
         {
-            Debug.Assert(this.Owner.RemoveCard(this));
-            this.SetOwner(destColumn);
-            return true;
-        }
-        
-        return false;
+            //move
+            if (destColumn.AddCards(card))
+            {
+                Debug.Assert(card.Owner.RemoveCard(card));
+                card.SetOwner(destColumn);                
+            }
+        }        
+        return true;
     }
 
+    /// <summary>
+    /// 包括自己與自已底下的卡片
+    /// </summary>
+    /// <returns></returns>
+    public List<CardView> GetLinkedCards()
+    {
+        var result = new List<CardView>(); ;
+        for (int i = this.Index(); i < this.Owner.GetCardsCount(); i++)
+        {
+            result.Add(this.Owner.GetCard(i));
+        }        
+        return result;
+    }
+
+    private int Index()
+    {
+        for (int i = 0; i < this.Owner.GetCardsCount(); i++)
+        {
+            if (this.Owner.GetCard(i) == this)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public int Number
     {

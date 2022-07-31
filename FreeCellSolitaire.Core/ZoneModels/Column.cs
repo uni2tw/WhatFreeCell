@@ -33,9 +33,9 @@ namespace FreeCellSolitaire.Core.GameModels
             return this.Owner.CanMoveOut; 
         }
 
-        public CardView GetLastCard()
+        public bool Empty()
         {
-            return _cards.LastOrDefault();
+            return _cards.Count == 0;
         }
 
         public bool RemoveCard(CardView cardView)
@@ -58,9 +58,10 @@ namespace FreeCellSolitaire.Core.GameModels
             _cards.Add(cardView);
             return true;
         }
-        public int LastCardIndex()
+
+        public int GetCardsCount()
         {
-            return _cards.Count - 1;
+            return _cards.Count;
         }
 
         public CardView GetCard(int cardIndex)
@@ -73,6 +74,10 @@ namespace FreeCellSolitaire.Core.GameModels
             {
                 throw new CardNotFoundException();
             }
+        }
+        public CardView GetLastCard()
+        {
+            return _cards.LastOrDefault();
         }
 
         private IZone _owner;
@@ -109,6 +114,37 @@ namespace FreeCellSolitaire.Core.GameModels
             }
             return sb.ToString();
 
+        }
+
+        //AddCards("s1,s2,s3");
+        public void AddCards(string cardExpressions)
+        {
+            string[] exprs = cardExpressions.Split(',');
+            foreach(var expr in exprs)
+            {
+                Card card = new Card();                    
+                if (expr[0] == 's')
+                {
+                    card.Suit = CardSuit.Spade;
+                    card.Number = Convert.ToInt32(expr.Substring(1));
+                } 
+                else if (expr[0] == 'h')
+                {
+                    card.Suit = CardSuit.Heart;
+                    card.Number = Convert.ToInt32(expr.Substring(1));
+                }
+                else if (expr[0] == 'd')
+                {
+                    card.Suit = CardSuit.Diamond;
+                    card.Number = Convert.ToInt32(expr.Substring(1));
+                }
+                else if (expr[0] == 'c')
+                {
+                    card.Suit = CardSuit.Club;
+                    card.Number = Convert.ToInt32(expr.Substring(1));
+                }
+                this.AddCards(card);
+            }
         }
     }
 }

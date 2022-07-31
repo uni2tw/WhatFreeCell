@@ -17,9 +17,19 @@ namespace FreeCellSolitaire.Entities.GameEntities
         public Homecells(IGame game)
         {
             this._game = game;
+            if (game != null)
+            {
+                this._game.Homecells = this;
+            }
             this.Init();
         }
-
+        public IGame Game
+        {
+            get
+            {
+                return _game;
+            }
+        }
         private void Init()
         {
             _columns = new Column[ColumnCount];
@@ -62,6 +72,14 @@ namespace FreeCellSolitaire.Entities.GameEntities
         public Column GetColumn(int columnIndex)
         {
             return _columns[columnIndex];
+        }
+
+        internal void DebugInfo()
+        {
+            for (int i = 0; i < ColumnCount; i++)
+            {
+                Console.WriteLine($"{nameof(Homecells).ToLower()}[{i}]:{_columns[i]}");
+            }
         }
     }
 }
