@@ -23,17 +23,9 @@ public class CardView
     {
         this.Owner = column;
     }
+
     public bool Move(Column destColumn)
     {
-        var srcColumn = this.Owner;
-        if (srcColumn.Draggable() == false)
-        {
-            return false;
-        }
-        if (destColumn.Droppable(this) == false)
-        {
-            return false;
-        }    
         if (this.Moveable(destColumn) == false)
         {
             return false;
@@ -112,6 +104,16 @@ public class CardView
     /// <exception cref="Exception"></exception>
     public bool Moveable(Column destColumn)
     {
+        var srcColumn = this.Owner;
+        if (srcColumn.Draggable() == false)
+        {
+            return false;
+        }
+        if (destColumn.Droppable(this) == false)
+        {
+            return false;
+        }
+
         var srcCard = this;
 
         Debug.Assert(srcCard != null);
@@ -123,11 +125,40 @@ public class CardView
         IZone destZone = destColumn.Owner;
         IZone srcZone = srcCard.Owner.Owner;
 
-        var destCard = destColumn.GetLastCard();        
-        if (destCard == null) return true;
+        var destCard = destColumn.GetLastCard();
+        return CheckAppendable(destCard, destZone.GetType());
+    }
 
-        if (destZone.GetType() == typeof(Tableau))
+    public bool NeededByOthers(Tableau tableau)
+    {
+        bool result = false;
+        var srcCard = this;
+        for (int i = 0; i < tableau.ColumnCount; i++)
         {
+            var col = tableau.GetColumn(i);
+            for (int j = 0; j < col.GetCardsCount(); j++)
+            {
+                var destCard = col.GetCard(j);
+                if (destCard.Number != 1 && destCard.CheckAppendable(srcCard, typeof(Tableau)))
+                {
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+
+    private bool CheckAppendable(CardView destCard, Type zoneType)
+    {
+        var srcCard = this;
+
+        Debug.Assert(srcCard != null);
+        Debug.Assert(srcCard.Owner != null);
+        Debug.Assert(srcCard.Owner.Owner != null);
+
+        if (zoneType == typeof(Tableau))
+        {
+            if (destCard == null) return true;
             if (srcCard.IsBlack() && destCard.IsRed())
             {
                 if (srcCard.Number - destCard.Number == -1)
@@ -144,8 +175,12 @@ public class CardView
             }
             return false;
         }
-        else if (destZone.GetType() == typeof(Homecells))
+        else if (zoneType == typeof(Homecells))
         {
+            if (destCard == null)
+            {
+                return srcCard.Number == 1;
+            }
             //相同花色，點數大的可以放置在點數小的後面
             if (srcCard.Suit == destCard.Suit)
             {
@@ -156,13 +191,13 @@ public class CardView
             }
             return false;
         }
-        else if (destZone.GetType() == typeof(Foundations))
+        else if (zoneType == typeof(Foundations))
         {
-            return true;
+            if (destCard == null) return true;
+            return false;
         }
-
-        throw new Exception($"Zone unspecified, move fail");
-    }    
+        throw new Exception($"zoneType unspecified fail");
+    }
 
     public bool IsRed()
     {

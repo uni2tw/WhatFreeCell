@@ -27,7 +27,7 @@ namespace FreeCellSolitaire.Tests
             var tableau = new Tableau(null);
             tableau.Init(deck);            
 
-            CardView card = tableau.GetCard(0);
+            CardView card = tableau.GetColumn(0).GetLastCard();
             Console.WriteLine($"card:{card}");
             Assert.IsNotNull(card);
         }
@@ -58,11 +58,11 @@ namespace FreeCellSolitaire.Tests
             tableau.Init(deck);
 
 
-            CardView card = tableau.GetCard(5);
+            CardView card = tableau.GetColumn(5).GetLastCard();
             Assert.AreEqual(card.Suit, CardSuit.Heart);
             Assert.AreEqual(card.Number, 12);
 
-            CardView card2 = tableau.GetCard(3);
+            CardView card2 = tableau.GetColumn(3).GetLastCard();
             Assert.AreEqual(card2.Suit, CardSuit.Spade);
             Assert.AreEqual(card2.Number, 13);
 
@@ -84,11 +84,11 @@ namespace FreeCellSolitaire.Tests
             tableau.Init(deck);
 
 
-            CardView card = tableau.GetCard(5);
+            CardView card = tableau.GetColumn(5).GetLastCard();
             Assert.AreEqual(card.Suit, CardSuit.Heart);
             Assert.AreEqual(card.Number, 12);
 
-            CardView card2 = tableau.GetCard(3);
+            CardView card2 = tableau.GetColumn(3).GetLastCard();
             Assert.AreEqual(card2.Suit, CardSuit.Spade);
             Assert.AreEqual(card2.Number, 13);
 

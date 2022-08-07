@@ -120,17 +120,6 @@ namespace FreeCellSolitaire.Core.GameModels
         {
             return _columns[columnIndex];
         }
-
-        public CardView GetCard(int columnIndex, int? cardIndex = null)
-        {
-            if (cardIndex == null)
-            {
-                cardIndex = GetColumn(columnIndex).GetCardsCount() - 1;
-            }
-            var card = GetColumn(columnIndex).GetCard(cardIndex.Value);
-            return card;
-        }
-
     }
 }
 
