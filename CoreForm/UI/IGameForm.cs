@@ -3,6 +3,9 @@ using System.Windows.Forms;
 
 namespace CoreForm.UI
 {
+    /// <summary>
+    /// 畫面
+    /// </summary>
     public interface IGameForm
     {
         public int Width { get; set; }
