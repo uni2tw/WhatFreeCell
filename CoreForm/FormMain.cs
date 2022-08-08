@@ -16,7 +16,7 @@ namespace CoreForm
 {
     public partial class FormMain : Form, IGameForm
     {
-        IGameUI game;
+        IGameUI gui;
         public const string _GAME_TITLE = "新接龍";
 
         public FormMain()
@@ -25,19 +25,19 @@ namespace CoreForm
         
             this.Text = _GAME_TITLE;
 
-            game = new GameUI(this);
-            game.InitScreen();
-            game.InitEvents();
+            gui = new GameUI(this);
+            gui.InitScreen();
+            gui.InitEvents();
 
-            game.Reset();
-            game.Start();
+            gui.Reset();
+            gui.Start();
 
             this.FormClosing += Form1_FormClosing;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.game.IsPlaying)
+            if (this.gui.IsPlaying)
             {
                 if (MessageBox.Show("是否放棄這一局", _GAME_TITLE, MessageBoxButtons.YesNo) == DialogResult.No) {
                     e.Cancel = true;

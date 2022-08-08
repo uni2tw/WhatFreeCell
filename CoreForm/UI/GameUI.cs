@@ -1,4 +1,5 @@
-﻿using FreeCellSolitaire.Core.GameModels;
+﻿using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Core.GameModels;
 using FreeCellSolitaire.Entities.GameEntities;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace CoreForm.UI
     public delegate void GameEventHandler();
 
     /// <summary>
-    /// 畫面的邏輯,事件與互動
+    /// UI抽象層，邏輯,事件與互動
     /// </summary>
     public interface IGameUI
     {
@@ -29,9 +30,10 @@ namespace CoreForm.UI
     public class GameUI : IGameUI
     {
         IGameForm _form;
+        IGame _game;
         public GameUI(IGameForm form)
         {
-            this._form = form;
+            this._form = form;            
         }
         public bool IsPlaying
         {
@@ -59,7 +61,6 @@ namespace CoreForm.UI
         }
         /// <summary>
         /// 初始化功能表單
-        /// 暫未使用 但需保留
         /// </summary>
         private void InitializeMenu()
         {
@@ -100,7 +101,12 @@ namespace CoreForm.UI
         }
         public void Reset()
         {
-           
+            _game = new Game();
+            var tableau = new Tableau(_game);
+            var homecells = new Homecells(_game);
+            var foundations = new Foundations(_game);
+            var deck = Deck.Create().Shuffle(101);            
+            tableau.Init(deck);
         }
 
         public void Start()
