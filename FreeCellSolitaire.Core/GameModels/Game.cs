@@ -148,5 +148,22 @@ public class Game : IGame
         }
         return false;
     }
+
+    public IGame Clone()
+    {
+        return new Game
+        {
+            EnableAssist = this.EnableAssist,
+            Tableau = this.Tableau.Clone() as Tableau,
+            Foundations = this.Foundations.Clone() as Foundations,
+            Homecells = this.Homecells.Clone() as Homecells
+        };
+    }
+
+    public bool IsGameover()
+    {
+        return false;
+    }
+
 }
 

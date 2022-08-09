@@ -1,4 +1,6 @@
-﻿namespace FreeCellSolitaire.Core.GameModels
+﻿using FreeCellSolitaire.Entities.GameEntities;
+
+namespace FreeCellSolitaire.Core.GameModels
 {
     /// <summary>
     /// 左上暫存區
@@ -78,6 +80,17 @@
             {
                 Console.WriteLine($"{nameof(Foundations).ToLower()}[{i}]:{_columns[i]}");
             }
+        }
+
+        public IZone Clone()
+        {
+            Foundations clone = new Foundations(this._game);
+            clone.Init();
+            for (int i = 0; i < this.ColumnCount; i++)
+            {
+                clone.GetColumn(i).AddCards(this.GetColumn(i).ToNotation());
+            }
+            return clone;
         }
     }
 }

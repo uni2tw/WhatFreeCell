@@ -198,6 +198,15 @@ namespace FreeCellSolitaire.Tests
             Assert.AreEqual(card.Owner.Owner, foundations);
         }
 
+        [Test]
+        public void ColumnToString()
+        {
+            Column col = new Column(null, 0, 2);
+            col.AddCards(new Card { Suit = CardSuit.Heart, Number = 1 });
+            col.AddCards(new Card { Suit = CardSuit.Heart, Number = 2 });
+            Assert.AreEqual("¬õ¤ß 1,¬õ¤ß 2", col.ToString());
+            Assert.AreEqual("h1,h2", col.ToNotation());
+        }
        
     }
    

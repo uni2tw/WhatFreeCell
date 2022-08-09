@@ -12,6 +12,7 @@
         bool MoveCard(int sourceIndex, IZone target, int targetIndex);
 
         Column GetColumn(int columnIndex);
+        public IZone Clone();
 
     }
 }

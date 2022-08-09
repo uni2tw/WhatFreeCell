@@ -113,12 +113,29 @@ namespace FreeCellSolitaire.Core.GameModels
                 sb.Append($"{card}");
             }
             return sb.ToString();
-
         }
+        public string ToNotation()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var card in _cards)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(",");
+                }
+                sb.Append($"{card.ToNotation()}");
+            }
+            return sb.ToString();
+        }
+
 
         //AddCards("s1,s2,s3");
         public void AddCards(string cardExpressions)
         {
+            if (string.IsNullOrEmpty(cardExpressions))
+            {
+                return;
+            }
             string[] exprs = cardExpressions.Split(',');
             foreach(var expr in exprs)
             {
@@ -146,5 +163,6 @@ namespace FreeCellSolitaire.Core.GameModels
                 this.AddCards(card);
             }
         }
+        
     }
 }

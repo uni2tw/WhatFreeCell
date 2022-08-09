@@ -40,5 +40,26 @@
             }
             return string.Empty;
         }
+
+        public string ToNotation()
+        {
+            if (Suit == CardSuit.Spade)
+            {
+                return "s" + Number;
+            }
+            if (Suit == CardSuit.Heart)
+            {
+                return "h" + Number;
+            }
+            if (Suit == CardSuit.Diamond)
+            {
+                return "d" + Number;
+            }
+            if (Suit == CardSuit.Club)
+            {
+                return "c" + Number;
+            }
+            return string.Empty;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Entities.GameEntities;
 
 namespace FreeCellSolitaire.Core.GameModels
 {
@@ -119,6 +120,17 @@ namespace FreeCellSolitaire.Core.GameModels
         public Column GetColumn(int columnIndex)
         {
             return _columns[columnIndex];
+        }
+
+        public IZone Clone()
+        {
+            Tableau clone = new Tableau(this._game);
+            clone.Init();
+            for (int i = 0; i < this.ColumnCount; i++)
+            {
+                clone.GetColumn(i).AddCards(this.GetColumn(i).ToNotation());
+            }
+            return clone;
         }
     }
 }

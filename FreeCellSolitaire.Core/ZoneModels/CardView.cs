@@ -91,6 +91,10 @@ public class CardView
         return $"{_card}";
     }
 
+    public string ToNotation()
+    {
+        return $"{_card.ToNotation()}";
+    }
 
 
     /// <summary>

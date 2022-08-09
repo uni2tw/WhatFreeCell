@@ -13,6 +13,8 @@ public interface IGame
     void Move(string notation);
     void DebugInfo(int stepNum);
     bool IsCompleted();
+    bool IsGameover();
     bool EnableAssist { get; set; }
+    IGame Clone();
 }
 

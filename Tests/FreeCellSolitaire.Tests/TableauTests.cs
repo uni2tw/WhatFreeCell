@@ -114,8 +114,17 @@ namespace FreeCellSolitaire.Tests
             tableau = new Tableau(null);
             tableau.Init(deck);
             Assert.IsFalse(tableau.WasEmpty());
+           
+        }
 
-            
+        [Test]
+        public void Clone()
+        {
+            var tableau = new Tableau(null);
+            tableau.GetColumn(0).AddCards("h1,h2");
+            Assert.AreEqual("h1,h2", tableau.GetColumn(0).ToNotation());
+            var clone = tableau.Clone() as Tableau;
+            Assert.AreEqual("h1,h2", clone.GetColumn(0).ToNotation());
         }
 
     }
