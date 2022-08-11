@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text;
 using FreeCellSolitaire.Core.CardModels;
 using FreeCellSolitaire.Entities.GameEntities;
 
@@ -87,14 +88,21 @@ namespace FreeCellSolitaire.Core.GameModels
 
         public void DebugInfo(bool timeStamp = true)
         {
+            Console.Write(GetDebugInfo(true));
+        }
+
+        public string GetDebugInfo(bool timeStamp = true)
+        {
+            StringBuilder sb = new StringBuilder();
             if (timeStamp)
             {
-                Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-            } 
+                sb.AppendLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
             for (int i = 0; i < ColumnCount; i++)
             {
-                Console.WriteLine($"tableau[{i}]:{_columns[i]}");
+                sb.AppendLine($"tableau[{i}]:{_columns[i]}");
             }
+            return sb.ToString();
         }
 
         public void DebugColumnInfo(int columnIndex)
@@ -124,7 +132,7 @@ namespace FreeCellSolitaire.Core.GameModels
 
         public IZone Clone()
         {
-            Tableau clone = new Tableau(this._game);
+            Tableau clone = new Tableau(null);
             clone.Init();
             for (int i = 0; i < this.ColumnCount; i++)
             {

@@ -1,5 +1,6 @@
 ﻿using FreeCellSolitaire.Entities.GameEntities;
 using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace FreeCellSolitaire.Core.GameModels;
@@ -137,6 +138,25 @@ public class Game : IGame
         this.Homecells?.DebugInfo();
     }
 
+    public string GetDebugInfo(int stepNum)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"=== {stepNum} ===");
+        if (this.Tableau != null)
+        {
+            sb.Append(this.Tableau.GetDebugInfo(false));
+        }
+        if (this.Foundations != null)
+        {
+            sb.Append(this.Foundations.GetDebugInfo(false));
+        }
+        if (this.Homecells != null)
+        {
+            sb.Append(this.Homecells.GetDebugInfo());
+        }
+        return sb.ToString();
+    }
+
     public bool IsCompleted()
     {
         if (Homecells.GetColumn(0).GetCardsCount() +
@@ -151,18 +171,72 @@ public class Game : IGame
 
     public IGame Clone()
     {
-        return new Game
-        {
-            EnableAssist = this.EnableAssist,
-            Tableau = this.Tableau.Clone() as Tableau,
-            Foundations = this.Foundations.Clone() as Foundations,
-            Homecells = this.Homecells.Clone() as Homecells
-        };
+        var clone = new Game { EnableAssist = this.EnableAssist };
+        clone.Tableau = this.Tableau.Clone() as Tableau;
+        clone.Homecells = this.Homecells.Clone() as Homecells;
+        clone.Foundations = this.Foundations.Clone() as Foundations;
+        return clone;
     }
 
-    public bool IsGameover()
+    public bool EstimateGameover()
     {
-        return false;
+        bool gameove = false;
+        Queue<IGame> samples = new Queue<IGame>();
+        samples.Enqueue(this.Clone());
+        int depth = 0;
+        while (samples.Count > 0)
+        {
+            var data = GetPossibleSituations(samples.Dequeue(), ref depth);
+            foreach (var datum in data)
+            {
+                samples.Enqueue(datum);
+            }
+        };
+        return gameove;
+    }
+
+    public List<IGame> GetPossibleSituations(IGame game, ref int depth)
+    {
+        depth++;
+        List<IGame> samples = new List<IGame>();                
+        for (int i = 0; i < game.Tableau.ColumnCount; i++)
+        {                        
+            for (int j = 0; j < game.Tableau.ColumnCount; j++)
+            {
+                var one = game.Clone();
+                var srcColumn = one.Tableau.GetColumn(i);
+                var srcCard = srcColumn.GetLastCard();
+                if (srcCard == null)
+                {
+                    continue;
+                }
+                var tarColumn = one.Tableau.GetColumn(j);
+                if (srcCard.Move(tarColumn))
+                {
+                    samples.Add(one);
+                    continue;
+                }
+            }
+        }
+        return samples;        
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this == obj)
+        {
+            return true;
+        }
+        var castObj = obj as IGame;
+        if (castObj == null)
+        {
+            return false;
+        }
+        return castObj.GetDebugInfo(0) == this.GetDebugInfo(0);
     }
 
 }

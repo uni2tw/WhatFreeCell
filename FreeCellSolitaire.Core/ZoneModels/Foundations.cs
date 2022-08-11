@@ -1,4 +1,5 @@
 ﻿using FreeCellSolitaire.Entities.GameEntities;
+using System.Text;
 
 namespace FreeCellSolitaire.Core.GameModels
 {
@@ -72,24 +73,31 @@ namespace FreeCellSolitaire.Core.GameModels
 
         public void DebugInfo(bool timeStamp = true)
         {
+            Console.Write(GetDebugInfo(timeStamp));
+        }
+
+        public string GetDebugInfo(bool timeStamp = true)
+        {
+            StringBuilder sb = new StringBuilder();
             if (timeStamp)
             {
-                Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                sb.AppendLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             }
             for (int i = 0; i < ColumnCount; i++)
             {
-                Console.WriteLine($"{nameof(Foundations).ToLower()}[{i}]:{_columns[i]}");
+                sb.AppendLine($"{nameof(Foundations).ToLower()}[{i}]:{_columns[i]}");
             }
+            return sb.ToString();
         }
 
         public IZone Clone()
         {
-            Foundations clone = new Foundations(this._game);
+            Foundations clone = new Foundations(null);
             clone.Init();
             for (int i = 0; i < this.ColumnCount; i++)
             {
                 clone.GetColumn(i).AddCards(this.GetColumn(i).ToNotation());
-            }
+            }            
             return clone;
         }
     }

@@ -12,7 +12,6 @@ namespace FreeCellSolitaire.Tests
         {
         }
 
-        #region Game MoveableSpace
         [Test]
         public void GameExtraMobility()
         {
@@ -422,12 +421,27 @@ namespace FreeCellSolitaire.Tests
         [Test]
         public void GameCloneTest()
         {
-            IGame game = new Game();
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            //origin-26458
+            tableau.GetColumn(0).AddCards("s13,h11,s5,c11,s8,h9,h4");
+            tableau.GetColumn(1).AddCards("h12,d12,c13,d13,d5,h2,h1");
+            tableau.GetColumn(2).AddCards("c2,c5,c6,s7,d4,d1,c3");
+            tableau.GetColumn(3).AddCards("d8,h6,c9,s11,d9,s6,c8");
+            tableau.GetColumn(4).AddCards("d11,s9,d7,h3,s12,c10");
+            tableau.GetColumn(5).AddCards("c4,c12,d3,h13,c7,d6");
+            tableau.GetColumn(6).AddCards("h5,s10,d2,h10,s1,h8");
+            tableau.GetColumn(7).AddCards("c1,d10,s3,s2,s4,h7");
+
             var clone = game.Clone();
+            Assert.AreEqual("h7", clone.Tableau.GetColumn(7).GetLastCard().ToNotation());
+            Assert.AreEqual("h5,s10,d2,h10,s1,h8", clone.Tableau.GetColumn(6).ToNotation());
         }
 
         [Test]
-        public void IsGameover()
+        public void EstimateGameover()
         {
             IGame game = new Game() { EnableAssist = true };
             var tableau = new Tableau(game);
@@ -449,14 +463,73 @@ namespace FreeCellSolitaire.Tests
             game.Move("t1f1");
             game.Move("t1f2");
             game.Move("t1f3");
-            Assert.IsFalse(game.IsGameover());
+            Assert.IsFalse(game.EstimateGameover());
 
             game.DebugInfo(2);
             game.Move("t7t3");
             game.DebugInfo(3);
 
-            Assert.IsTrue(game.IsGameover());
+            Assert.IsTrue(game.EstimateGameover());
         }
-        #endregion
+
+        [Test] 
+        public void GameEquals()
+        {
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            //origin-26458
+            tableau.GetColumn(0).AddCards("h1");
+
+            IGame game2 = new Game() { EnableAssist = true };
+            var tableau2 = new Tableau(game2);
+            var homecells2 = new Homecells(game2);
+            var foundations2 = new Foundations(game2);
+            //origin-26458
+            tableau2.GetColumn(0).AddCards("h1");
+
+            IGame game3 = new Game() { EnableAssist = true };
+            var tableau3 = new Tableau(game3);
+            var homecells3 = new Homecells(game3);
+            var foundations3 = new Foundations(game3);
+            //origin-26458
+            tableau3.GetColumn(0).AddCards("h3");
+
+            Assert.AreEqual(game, game2);
+            Assert.AreNotEqual(game, game3);
+
+        }
+        [Test]
+        public void GetPossibleSituations()
+        {
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            //origin-26458
+            tableau.GetColumn(0).AddCards("s13,h11,s5,c11,s8,h9,h4");
+            tableau.GetColumn(1).AddCards("h12,d12,c13,d13,d5,h2,h1");
+            tableau.GetColumn(2).AddCards("c2,c5,c6,s7,d4,d1,c3");
+            tableau.GetColumn(3).AddCards("d8,h6,c9,s11,d9,s6,c8");
+            tableau.GetColumn(4).AddCards("d11,s9,d7,h3,s12,c10");
+            tableau.GetColumn(5).AddCards("c4,c12,d3,h13,c7,d6");
+            tableau.GetColumn(6).AddCards("h5,s10,d2,h10,s1,h8");
+            tableau.GetColumn(7).AddCards("c1,d10,s3,s2,s4,h7");
+
+            int depth = 0;
+            var deductions = (game as Game).GetPossibleSituations(game, ref depth);
+
+            game.DebugInfo(0);
+            for (int i = 0; i < deductions.Count; i++)
+            {
+                Assert.AreNotEqual(game, deductions[i], "推演的版本，不應該跟初始版本內容相同");
+                deductions[i].DebugInfo(i + 1);
+            }
+
+            //TODO
+        }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FreeCellSolitaire.Core.GameModels;
+using System.Text;
 
 namespace FreeCellSolitaire.Entities.GameEntities
 {
@@ -77,15 +78,22 @@ namespace FreeCellSolitaire.Entities.GameEntities
 
         public void DebugInfo()
         {
+            Console.Write(GetDebugInfo());
+        }
+
+        public string GetDebugInfo()
+        {
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < ColumnCount; i++)
             {
-                Console.WriteLine($"{nameof(Homecells).ToLower()}[{i}]:{_columns[i]}");
+                sb.AppendLine($"{nameof(Homecells).ToLower()}[{i}]:{_columns[i]}");
             }
+            return sb.ToString();
         }
 
         public IZone Clone()
         {
-            Homecells clone = new Homecells(this._game);
+            Homecells clone = new Homecells(null);
             clone.Init();
             for (int i = 0; i < this.ColumnCount; i++)
             {
