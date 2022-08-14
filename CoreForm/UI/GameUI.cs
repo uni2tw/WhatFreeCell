@@ -55,10 +55,29 @@ namespace CoreForm.UI
         public void InitScreen()
         {
             //空畫面            
-            //InitBoardScreen();
+            InitBoardScreen();
             //功能表單
             InitializeMenu();
         }
+
+        private int boardWidth { get; set; }
+        private int boardHeight { get; set; }
+        private int cardWidth { get; set; }
+        private int cardHeight { get; set; }
+        private void InitBoardScreen()
+        {
+            boardWidth = 800;
+            boardHeight = 600;
+
+            _form.Width = boardWidth;
+            _form.Height = boardHeight;
+            _form.BackColor = Color.FromArgb(0, 123, 0);
+
+
+            cardWidth = (int)(Math.Floor((decimal)boardWidth / 9));
+            cardHeight = (int)(cardWidth * 1.38);
+        }
+
         /// <summary>
         /// 初始化功能表單
         /// </summary>
@@ -107,6 +126,11 @@ namespace CoreForm.UI
             var foundations = new Foundations(_game);
             var deck = Deck.Create().Shuffle(101);            
             tableau.Init(deck);
+
+            TableauContainer tc = new TableauUI(this._form);
+            HomecellsContainer hc = new HomecellsUI(this._form);
+            FoundationsContainer fc = new FoundationsContainer(this._form);
+
         }
 
         public void Start()
