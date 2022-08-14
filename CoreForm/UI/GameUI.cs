@@ -1,6 +1,7 @@
 ﻿using FreeCellSolitaire.Core.CardModels;
 using FreeCellSolitaire.Core.GameModels;
 using FreeCellSolitaire.Entities.GameEntities;
+using FreeCellSolitaire.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,6 +32,10 @@ namespace CoreForm.UI
     {
         IGameForm _form;
         IGame _game;
+        private TableauContainer _tableauUI;
+        private HomecellsContainer _homecellsUI;
+        private FoundationsContainer _foundationsUI;
+
         public GameUI(IGameForm form)
         {
             this._form = form;            
@@ -127,10 +132,11 @@ namespace CoreForm.UI
             var deck = Deck.Create().Shuffle(101);            
             tableau.Init(deck);
 
-            TableauContainer tc = new TableauUI(this._form);
-            HomecellsContainer hc = new HomecellsUI(this._form);
-            FoundationsContainer fc = new FoundationsContainer(this._form);
+            this._tableauUI = new TableauContainer(this._form);
+            this._homecellsUI = new HomecellsContainer(this._form);
+            this._foundationsUI = new FoundationsContainer(this._form);
 
+            
         }
 
         public void Start()
