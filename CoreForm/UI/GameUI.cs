@@ -63,7 +63,11 @@ namespace CoreForm.UI
             InitBoardScreen();
             //功能表單
             InitializeMenu();
+
+            InitControls();
         }
+
+
 
         private int boardWidth { get; set; }
         private int boardHeight { get; set; }
@@ -123,6 +127,27 @@ namespace CoreForm.UI
 
             _form.SetControl(menu);
         }
+
+        private void InitControls()
+        {
+            int layoutMarginTop = 24;
+            int marginLeft = (boardWidth - cardWidth * 8) / 9;
+            int marginTop = cardHeight / 6;
+            int left = marginLeft;
+            int top = cardHeight + 12 + layoutMarginTop;
+            this._foundationsUI = new FoundationsContainer(this._form);
+            this._foundationsUI.Setup(left, top, cardWidth, cardHeight);
+
+
+            //        waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
+            //        waitZone.HolderClick += delegate (ColumnType zoneType, Slot slot)
+
+
+            //this._tableauUI = new TableauContainer(this._form);
+            //this._homecellsUI = new HomecellsContainer(this._form);
+
+        }
+
         public void Reset()
         {
             _game = new Game();
@@ -130,13 +155,7 @@ namespace CoreForm.UI
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
             var deck = Deck.Create().Shuffle(101);            
-            tableau.Init(deck);
-
-            this._tableauUI = new TableauContainer(this._form);
-            this._homecellsUI = new HomecellsContainer(this._form);
-            this._foundationsUI = new FoundationsContainer(this._form);
-
-            
+            tableau.Init(deck); 
         }
 
         public void Start()

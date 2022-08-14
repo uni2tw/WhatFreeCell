@@ -168,8 +168,7 @@ namespace FreeCellSolitaire.Tests
             card.Move(tableau.GetColumn(1));
 
             Assert.AreEqual(0, tableau.GetColumn(0).GetCardsCount());
-            Assert.AreEqual(3, tableau.GetColumn(1).GetCardsCount());
-            //TODO
+            Assert.AreEqual(3, tableau.GetColumn(1).GetCardsCount());            
         }
 
 

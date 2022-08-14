@@ -30,6 +30,7 @@
         {
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.SuspendLayout();
             // 
             // pictureBox2
             // 
@@ -39,15 +40,16 @@
             this.pictureBox2.TabIndex = 7;
             this.pictureBox2.TabStop = false;
             // 
-            // Form1
+            // FormMain
             // 
             this.ClientSize = new System.Drawing.Size(916, 406);
             this.Controls.Add(this.pictureBox2);
             this.KeyPreview = true;
-            this.Name = "Form1";
+            this.Name = "FormMain";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.ResumeLayout(false);
 
         }
 

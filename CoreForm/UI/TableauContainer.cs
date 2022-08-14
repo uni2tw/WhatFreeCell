@@ -26,7 +26,7 @@ namespace FreeCellSolitaire.UI
 
     }
 
-    public class TableauContainer
+    public class TableauContainer : ContainerControl
     {
         private List<TableauColumnPanel> _tableauColumns;
         private IGameForm form;

@@ -95,8 +95,7 @@ namespace FreeCellSolitaire.Tests
 
 
             tableau.DebugColumnInfo(3);
-            tableau.DebugColumnInfo(5);
-            //TODO ¥ý´úmoveable
+            tableau.DebugColumnInfo(5);            
             Assert.IsFalse(card2.Move(tableau.GetColumn(5)));
             tableau.DebugColumnInfo(3);
             tableau.DebugColumnInfo(5);
