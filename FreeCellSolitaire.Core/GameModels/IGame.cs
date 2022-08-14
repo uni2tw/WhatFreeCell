@@ -16,6 +16,7 @@ public interface IGame
     bool IsCompleted();
     bool EstimateGameover();
     bool EnableAssist { get; set; }
+    void TryAssistMove();
     IGame Clone();
 }
 

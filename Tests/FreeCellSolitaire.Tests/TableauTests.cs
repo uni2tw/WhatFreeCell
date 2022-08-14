@@ -127,5 +127,16 @@ namespace FreeCellSolitaire.Tests
             Assert.AreEqual("h1,h2", clone.GetColumn(0).ToNotation());
         }
 
+
+
+        [Test]
+        public void DisallowMoveToSameColumn()
+        {
+            var tableau = new Tableau(null);
+            tableau.GetColumn(0).AddCards("s8,h7");
+            var card = tableau.GetColumn(0).GetLastCard();
+            Assert.IsFalse(card.Moveable(tableau.GetColumn(0)));
+            Assert.IsFalse(card.Move(tableau.GetColumn(0)));
+        }
     }
 }

@@ -77,7 +77,7 @@ public class Game : IGame
             TryAssistMove();
         }
     }
-    private void TryAssistMove()
+    public void TryAssistMove()
     {
         bool anything;
         do
@@ -181,39 +181,70 @@ public class Game : IGame
     public bool EstimateGameover()
     {
         bool gameove = false;
-        Queue<IGame> samples = new Queue<IGame>();
-        samples.Enqueue(this.Clone());
+        Queue<IGame> queueItems = new Queue<IGame>();
+        HashSet<IGame> samples = new HashSet<IGame>();
+        queueItems.Enqueue(this.Clone());
         int depth = 0;
-        while (samples.Count > 0)
+        while (queueItems.Count > 0 || depth <= 2)
         {
-            var data = GetPossibleSituations(samples.Dequeue(), ref depth);
+            var data = GetPossibleSituations(queueItems.Dequeue(), ref depth);
+
             foreach (var datum in data)
-            {
-                samples.Enqueue(datum);
+            {                
+                if (samples.Contains(datum) == false)
+                {
+                    datum.DebugInfo(2 * 10 + data.IndexOf(datum) + 1);
+                    queueItems.Enqueue(datum);
+                    samples.Add(datum);
+                }
             }
         };
+        gameove = samples.Count <= 2;
         return gameove;
     }
 
     public List<IGame> GetPossibleSituations(IGame game, ref int depth)
     {
         depth++;
-        List<IGame> samples = new List<IGame>();                
-        for (int i = 0; i < game.Tableau.ColumnCount; i++)
-        {                        
-            for (int j = 0; j < game.Tableau.ColumnCount; j++)
+        List<IGame> samples = new List<IGame>();        
+        for (int i = 0; i < game.Tableau.ColumnCount + game.Foundations.ColumnCount; i++)
+        {
+            for (int j = 0; j < game.Tableau.ColumnCount + game.Foundations.ColumnCount; j++)
             {
-                var one = game.Clone();
-                var srcColumn = one.Tableau.GetColumn(i);
+                var clone = game.Clone();
+
+                Column srcColumn;
+                if (i < clone.Tableau.ColumnCount)
+                {
+                    srcColumn = clone.Tableau.GetColumn(i);
+                }
+                else
+                {
+                    srcColumn = clone.Foundations.GetColumn(i - clone.Tableau.ColumnCount);
+                }
+
                 var srcCard = srcColumn.GetLastCard();
                 if (srcCard == null)
                 {
                     continue;
                 }
-                var tarColumn = one.Tableau.GetColumn(j);
-                if (srcCard.Move(tarColumn))
+                Column destColumn;
+                if (j < clone.Tableau.ColumnCount)
                 {
-                    samples.Add(one);
+                    destColumn = clone.Tableau.GetColumn(j);
+                }
+                else
+                {
+                    destColumn = clone.Foundations.GetColumn(j - clone.Tableau.ColumnCount);
+                }
+                
+                if (srcCard.Move(destColumn))
+                {
+                    if (EnableAssist)
+                    {
+                        clone.TryAssistMove();
+                    }
+                    samples.Add(clone);
                     continue;
                 }
             }
@@ -237,6 +268,11 @@ public class Game : IGame
             return false;
         }
         return castObj.GetDebugInfo(0) == this.GetDebugInfo(0);
+    }
+
+    public override int GetHashCode()
+    {
+        return GetDebugInfo(0).GetHashCode();
     }
 
 }

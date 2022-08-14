@@ -207,7 +207,8 @@ namespace FreeCellSolitaire.Tests
             Assert.AreEqual("¬õ¤ß 1,¬õ¤ß 2", col.ToString());
             Assert.AreEqual("h1,h2", col.ToNotation());
         }
-       
+
+
     }
    
 }
