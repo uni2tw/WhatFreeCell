@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Text;
 using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Entities.GameEntities;
 
 namespace FreeCellSolitaire.Core.GameModels
 {
@@ -59,7 +61,7 @@ namespace FreeCellSolitaire.Core.GameModels
                 return true;
             }
         }
-        public int ColumnCapacity => 13;
+        public int ColumnCapacity => 19;
 
         public int ColumnCount => 8;
 
@@ -86,14 +88,21 @@ namespace FreeCellSolitaire.Core.GameModels
 
         public void DebugInfo(bool timeStamp = true)
         {
+            Console.Write(GetDebugInfo(true));
+        }
+
+        public string GetDebugInfo(bool timeStamp = true)
+        {
+            StringBuilder sb = new StringBuilder();
             if (timeStamp)
             {
-                Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-            } 
+                sb.AppendLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
             for (int i = 0; i < ColumnCount; i++)
             {
-                Console.WriteLine($"tableau[{i}]:{_columns[i]}");
+                sb.AppendLine($"tableau[{i}]:{_columns[i]}");
             }
+            return sb.ToString();
         }
 
         public void DebugColumnInfo(int columnIndex)
@@ -119,6 +128,17 @@ namespace FreeCellSolitaire.Core.GameModels
         public Column GetColumn(int columnIndex)
         {
             return _columns[columnIndex];
+        }
+
+        public IZone Clone()
+        {
+            Tableau clone = new Tableau(null);
+            clone.Init();
+            for (int i = 0; i < this.ColumnCount; i++)
+            {
+                clone.GetColumn(i).AddCards(this.GetColumn(i).ToNotation());
+            }
+            return clone;
         }
     }
 }

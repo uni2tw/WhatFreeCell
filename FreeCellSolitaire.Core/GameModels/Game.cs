@@ -1,5 +1,6 @@
 ﻿using FreeCellSolitaire.Entities.GameEntities;
 using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace FreeCellSolitaire.Core.GameModels;
@@ -76,7 +77,7 @@ public class Game : IGame
             TryAssistMove();
         }
     }
-    private void TryAssistMove()
+    public void TryAssistMove()
     {
         bool anything;
         do
@@ -129,12 +130,39 @@ public class Game : IGame
         } while (anything);
     }
 
-    public void DebugInfo(int stepNum)
+    public void DebugInfo(int stepNum, bool enabled = true)
     {
-        Console.WriteLine($"=== {stepNum} ===");
-        this.Tableau?.DebugInfo(false);
-        this.Foundations?.DebugInfo(false);
-        this.Homecells?.DebugInfo();
+        Console.Write(GetDebugInfo(stepNum.ToString(), enabled));
+    }
+    public void DebugInfo(string stepNum = "", bool enabled=true)
+    {
+        Console.Write(GetDebugInfo(stepNum, enabled));
+    }
+
+    public string GetDebugInfo(string stepNum = "", bool enabled = true)
+    {
+        if (enabled == false)
+        {
+            return string.Empty;
+        }
+        StringBuilder sb = new StringBuilder();
+        if (string.IsNullOrEmpty(stepNum) == false)
+        {
+            sb.AppendLine($"=== {stepNum} ===");
+        }
+        if (this.Tableau != null)
+        {
+            sb.Append(this.Tableau.GetDebugInfo(false));
+        }
+        if (this.Foundations != null)
+        {
+            sb.Append(this.Foundations.GetDebugInfo(false));
+        }
+        if (this.Homecells != null)
+        {
+            sb.Append(this.Homecells.GetDebugInfo());
+        }
+        return sb.ToString();
     }
 
     public bool IsCompleted()
@@ -148,5 +176,112 @@ public class Game : IGame
         }
         return false;
     }
+
+    public IGame Clone()
+    {
+        var clone = new Game { EnableAssist = this.EnableAssist };
+        clone.Tableau = this.Tableau.Clone() as Tableau;
+        clone.Homecells = this.Homecells.Clone() as Homecells;
+        clone.Foundations = this.Foundations.Clone() as Foundations;
+        return clone;
+    }
+
+    public bool EstimateGameover(bool debug = false)
+    {
+        bool gameove = false;
+        Queue<IGame> queueItems = new Queue<IGame>();
+        HashSet<IGame> samples = new HashSet<IGame>();
+        queueItems.Enqueue(this.Clone());
+        int depth = 0;
+        while (queueItems.Count > 0 || depth <= 2)
+        {
+            var data = GetPossibleSituations(queueItems.Dequeue(), ref depth);
+
+            foreach (var datum in data)
+            {                
+                if (samples.Contains(datum) == false)
+                {                    
+                    queueItems.Enqueue(datum);
+                    samples.Add(datum);
+                    datum.DebugInfo($"s-{samples.Count}", debug);
+                }
+            }
+        };
+        gameove = samples.Count <= 2;
+        return gameove;
+    }
+
+    public List<IGame> GetPossibleSituations(IGame game, ref int depth)
+    {
+        depth++;
+        List<IGame> samples = new List<IGame>();        
+        for (int i = 0; i < game.Tableau.ColumnCount + game.Foundations.ColumnCount; i++)
+        {
+            for (int j = 0; j < game.Tableau.ColumnCount + game.Foundations.ColumnCount; j++)
+            {
+                var clone = game.Clone();
+
+                Column srcColumn;
+                if (i < clone.Tableau.ColumnCount)
+                {
+                    srcColumn = clone.Tableau.GetColumn(i);
+                }
+                else
+                {
+                    srcColumn = clone.Foundations.GetColumn(i - clone.Tableau.ColumnCount);
+                }
+
+                var srcCard = srcColumn.GetLastCard();
+                if (srcCard == null)
+                {
+                    continue;
+                }
+                Column destColumn;
+                if (j < clone.Tableau.ColumnCount)
+                {
+                    destColumn = clone.Tableau.GetColumn(j);
+                }
+                else
+                {
+                    destColumn = clone.Foundations.GetColumn(j - clone.Tableau.ColumnCount);
+                }
+                
+                if (srcCard.Move(destColumn))
+                {
+                    if (EnableAssist)
+                    {
+                        clone.TryAssistMove();
+                    }
+                    samples.Add(clone);
+                    continue;
+                }
+            }
+        }
+        return samples;        
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this == obj)
+        {
+            return true;
+        }
+        var castObj = obj as IGame;
+        if (castObj == null)
+        {
+            return false;
+        }
+        return castObj.GetDebugInfo() == this.GetDebugInfo();
+    }
+
+    public override int GetHashCode()
+    {
+        return GetDebugInfo().GetHashCode();
+    }
+
 }
 
