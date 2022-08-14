@@ -130,18 +130,26 @@ public class Game : IGame
         } while (anything);
     }
 
-    public void DebugInfo(int stepNum)
+    public void DebugInfo(int stepNum, bool enabled = true)
     {
-        Console.WriteLine($"=== {stepNum} ===");
-        this.Tableau?.DebugInfo(false);
-        this.Foundations?.DebugInfo(false);
-        this.Homecells?.DebugInfo();
+        Console.Write(GetDebugInfo(stepNum.ToString(), enabled));
+    }
+    public void DebugInfo(string stepNum = "", bool enabled=true)
+    {
+        Console.Write(GetDebugInfo(stepNum, enabled));
     }
 
-    public string GetDebugInfo(int stepNum)
+    public string GetDebugInfo(string stepNum = "", bool enabled = true)
     {
+        if (enabled == false)
+        {
+            return string.Empty;
+        }
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"=== {stepNum} ===");
+        if (string.IsNullOrEmpty(stepNum) == false)
+        {
+            sb.AppendLine($"=== {stepNum} ===");
+        }
         if (this.Tableau != null)
         {
             sb.Append(this.Tableau.GetDebugInfo(false));
@@ -178,7 +186,7 @@ public class Game : IGame
         return clone;
     }
 
-    public bool EstimateGameover()
+    public bool EstimateGameover(bool debug = false)
     {
         bool gameove = false;
         Queue<IGame> queueItems = new Queue<IGame>();
@@ -192,10 +200,10 @@ public class Game : IGame
             foreach (var datum in data)
             {                
                 if (samples.Contains(datum) == false)
-                {
-                    datum.DebugInfo(2 * 10 + data.IndexOf(datum) + 1);
+                {                    
                     queueItems.Enqueue(datum);
                     samples.Add(datum);
+                    datum.DebugInfo($"s-{samples.Count}", debug);
                 }
             }
         };
@@ -267,12 +275,12 @@ public class Game : IGame
         {
             return false;
         }
-        return castObj.GetDebugInfo(0) == this.GetDebugInfo(0);
+        return castObj.GetDebugInfo() == this.GetDebugInfo();
     }
 
     public override int GetHashCode()
     {
-        return GetDebugInfo(0).GetHashCode();
+        return GetDebugInfo().GetHashCode();
     }
 
 }

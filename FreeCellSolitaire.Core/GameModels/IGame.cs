@@ -11,10 +11,11 @@ public interface IGame
     Tableau Tableau { get; set; }
 
     void Move(string notation);
-    void DebugInfo(int stepNum);
-    string GetDebugInfo(int stepNum);
+    void DebugInfo(string stepNum = "", bool enabled = true);
+    void DebugInfo(int stepNum, bool enabled = true);
+    string GetDebugInfo(string stepNum = "", bool enabled = true);
     bool IsCompleted();
-    bool EstimateGameover();
+    bool EstimateGameover(bool debug = false);
     bool EnableAssist { get; set; }
     void TryAssistMove();
     IGame Clone();

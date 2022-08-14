@@ -201,7 +201,7 @@ namespace FreeCellSolitaire.Tests
         [Test]
         public void ColumnToString()
         {
-            Column col = new Column(null, 0, 2);
+            Column col = new Column(new Tableau(null), 0, 2);
             col.AddCards(new Card { Suit = CardSuit.Heart, Number = 1 });
             col.AddCards(new Card { Suit = CardSuit.Heart, Number = 2 });
             Assert.AreEqual("¬õ¤ß 1,¬õ¤ß 2", col.ToString());

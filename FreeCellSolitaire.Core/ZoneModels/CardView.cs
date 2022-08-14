@@ -133,6 +133,11 @@ public class CardView
         return CheckAppendable(destCard, destZone.GetType());
     }
 
+    /// <summary>
+    /// 如果這張牌，還被tableu裏的牌需要，就不能被移到homecells
+    /// </summary>
+    /// <param name="tableau"></param>
+    /// <returns></returns>
     public bool NeededByOthers(Tableau tableau)
     {
         bool result = false;

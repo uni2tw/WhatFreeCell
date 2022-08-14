@@ -440,39 +440,6 @@ namespace FreeCellSolitaire.Tests
             Assert.AreEqual("h5,s10,d2,h10,s1,h8", clone.Tableau.GetColumn(6).ToNotation());
         }
 
-        [Test]
-        public void EstimateGameover()
-        {
-            IGame game = new Game() { EnableAssist = true };
-            var tableau = new Tableau(game);
-            var homecells = new Homecells(game);
-            var foundations = new Foundations(game);
-            //origin-26458
-            tableau.GetColumn(0).AddCards("s13,h11,s5,c11,s8,h9,h4");
-            tableau.GetColumn(1).AddCards("h12,d12,c13,d13,d5,h2,h1");
-            tableau.GetColumn(2).AddCards("c2,c5,c6,s7,d4,d1,c3");
-            tableau.GetColumn(3).AddCards("d8,h6,c9,s11,d9,s6,c8");
-            tableau.GetColumn(4).AddCards("d11,s9,d7,h3,s12,c10");
-            tableau.GetColumn(5).AddCards("c4,c12,d3,h13,c7,d6");
-            tableau.GetColumn(6).AddCards("h5,s10,d2,h10,s1,h8");
-            tableau.GetColumn(7).AddCards("c1,d10,s3,s2,s4,h7");
-
-            game.DebugInfo(1);
-            game.Move("t1h0");
-            game.Move("t1f0");
-            game.Move("t1f1");
-            game.Move("t1f2");
-            game.Move("t1f3");
-            game.DebugInfo(2);
-            Assert.IsFalse(game.EstimateGameover());
-
-            
-            game.Move("t7t3");
-            game.DebugInfo(3);
-
-            //Assert.IsTrue(game.EstimateGameover());
-        }
-
         [Test] 
         public void GameEquals()
         {
@@ -563,10 +530,70 @@ namespace FreeCellSolitaire.Tests
                 Assert.AreNotEqual(game, deductions[i], "推演的版本，不應該跟初始版本內容相同");
                 deductions[i].DebugInfo(i + 1);
             }
-
-            //TODO
         }
 
+        [Test]
+        public void EstimateGameover()
+        {
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            //origin-26458
+            tableau.GetColumn(0).AddCards("s13,h11,s5,c11,s8,h9,h4");
+            tableau.GetColumn(1).AddCards("h12,d12,c13,d13,d5,h2,h1");
+            tableau.GetColumn(2).AddCards("c2,c5,c6,s7,d4,d1,c3");
+            tableau.GetColumn(3).AddCards("d8,h6,c9,s11,d9,s6,c8");
+            tableau.GetColumn(4).AddCards("d11,s9,d7,h3,s12,c10");
+            tableau.GetColumn(5).AddCards("c4,c12,d3,h13,c7,d6");
+            tableau.GetColumn(6).AddCards("h5,s10,d2,h10,s1,h8");
+            tableau.GetColumn(7).AddCards("c1,d10,s3,s2,s4,h7");
 
+            game.DebugInfo(1);
+            game.Move("t1h0");
+            game.Move("t1f0");
+            game.Move("t1f1");
+            game.Move("t1f2");
+            game.Move("t1f3");
+            game.DebugInfo(2);
+            Assert.IsFalse(game.EstimateGameover(debug: false));
+
+
+            game.Move("t7t3");
+            game.DebugInfo(3);
+
+            Assert.IsTrue(game.EstimateGameover(debug: true));
+        }
+
+        [Test]
+        public void EstimateGameover2()
+        {
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            //origin-26458
+            foundations.GetColumn(0).AddCards("d10");
+            foundations.GetColumn(1).AddCards("h8");
+            foundations.GetColumn(2).AddCards("h10");
+            foundations.GetColumn(3).AddCards("d4");
+
+            tableau.GetColumn(0).AddCards("s13,h11,s5,c11,s8,h9,h4,c3");
+            tableau.GetColumn(1).AddCards("h12,d12,c13,d13,d5");
+            tableau.GetColumn(2).AddCards("c2,c5,c6,s7");
+            tableau.GetColumn(3).AddCards("d8,h6,c9,s11,d9,s6,c8,h7");
+            tableau.GetColumn(4).AddCards("d11,s9,d7,h3,s12,c10");
+            tableau.GetColumn(5).AddCards("c4,c12,d3,h13,c7,d6");
+            tableau.GetColumn(6).AddCards("h5");
+            tableau.GetColumn(7).AddCards("s10");
+
+            homecells.GetColumn(0).AddCards("h1,h2");
+            homecells.GetColumn(1).AddCards("d1,d2");
+            homecells.GetColumn(2).AddCards("s1,s2,s3,s4");
+            homecells.GetColumn(3).AddCards("c1");
+
+            game.DebugInfo(0);
+            Assert.IsTrue(game.EstimateGameover(debug: true));
+        }
     }
 }
