@@ -130,7 +130,7 @@ public class CardView
         IZone srcZone = srcCard.Owner.Owner;
 
         var destCard = destColumn.GetLastCard();
-        return CheckAppendable(destCard, destZone.GetType());
+        return CheckLinkable(destCard, destZone.GetType());
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ public class CardView
             for (int j = 0; j < col.GetCardsCount(); j++)
             {
                 var destCard = col.GetCard(j);
-                if (destCard.Number != 1 && destCard.CheckAppendable(srcCard, typeof(Tableau)))
+                if (destCard.Number != 1 && destCard.CheckLinkable(srcCard, typeof(Tableau)))
                 {
                     result = true;
                 }
@@ -157,7 +157,14 @@ public class CardView
         return result;
     }
 
-    private bool CheckAppendable(CardView destCard, Type zoneType)
+    /// <summary>
+    /// 牌移動時，判斷是否可以移到目標牌的下方
+    /// </summary>
+    /// <param name="destCard"></param>
+    /// <param name="zoneType"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    private bool CheckLinkable(CardView destCard, Type zoneType)
     {
         var srcCard = this;
 
