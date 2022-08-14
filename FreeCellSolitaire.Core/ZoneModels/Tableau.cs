@@ -61,7 +61,7 @@ namespace FreeCellSolitaire.Core.GameModels
                 return true;
             }
         }
-        public int ColumnCapacity => 20;
+        public int ColumnCapacity => 19;
 
         public int ColumnCount => 8;
 
