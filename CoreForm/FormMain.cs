@@ -36,13 +36,15 @@ namespace CoreForm
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        {            
+            /*
             if (this.gui.IsPlaying)
             {
                 if (MessageBox.Show("是否放棄這一局", _GAME_TITLE, MessageBoxButtons.YesNo) == DialogResult.No) {
                     e.Cancel = true;
                 }
-            }           
+            } 
+            */
         }
 
         /// <summary>
@@ -115,6 +117,11 @@ namespace CoreForm
         public void SetControl(Control control)
         {
             this.Controls.Add(control);
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {            
+            ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
         }
     }
 }
