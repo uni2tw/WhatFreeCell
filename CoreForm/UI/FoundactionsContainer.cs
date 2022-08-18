@@ -6,32 +6,36 @@ using System.Windows.Forms;
 
 namespace FreeCellSolitaire.UI
 {
-    public class FoundationsContainer : TableLayoutPanel
+    public class FoundationsContainer : Panel
     {
         private List<FoundationColumnPanel> _columnPanels;
         private IGameForm _form;
-        
-        public FoundationsContainer(IGameForm form, int columnNumber)
+        private int _columnNumber;
+        private int _cardWidth;
+        private int _cardHeight;
+        private int _cardBorderWidth = 1;
+
+        public FoundationsContainer(IGameForm form, int columnNumber, int left, int top, int cardWidth, int cardHeight)
         {            
-            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.None;            
             this._form = form;
-
+            _columnNumber = columnNumber;
+            _cardWidth = cardWidth;
+            _cardHeight = cardHeight;
             _columnPanels = new List<FoundationColumnPanel>(columnNumber);
-            this.ColumnCount = columnNumber;
-            float columnWidth = 100F / columnNumber;
-            this.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, columnWidth));
-            this.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, columnWidth));
-            this.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, columnWidth));
-            this.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, columnWidth));
-            this.Location = new System.Drawing.Point(40, 40);
+            this.BorderStyle = BorderStyle.None;
+                        
             this.Name = nameof(FoundationsContainer);
-            this.RowCount = 1;
-            this.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.Size = new System.Drawing.Size(640, 240);
+                     
+            Resize(left, top, cardWidth, cardHeight);
+        }
 
-            for (int i = 0; i < columnNumber; i++)
+        public void SetControls()
+        {
+            for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new FoundationColumnPanel();
+                int left = (_cardWidth + _cardBorderWidth + _cardBorderWidth) * i;
+                int top = 0;
+                var panel = new FoundationColumnPanel(i, left, top, _cardWidth, _cardHeight, _cardBorderWidth);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
@@ -39,41 +43,33 @@ namespace FreeCellSolitaire.UI
 
         public void Resize(int left, int top, int cardWidth, int cardHeight)
         {
-            int right = left + cardWidth * 4;
-            int bottom = top + cardHeight;
+            int right = left + (cardWidth + _cardBorderWidth + _cardBorderWidth) * 4;
+            int bottom = top + cardHeight + _cardBorderWidth + _cardBorderWidth;
 
             this.Left = left;
             this.Top = top;
             this.Width = right - this.Left;
             this.Height = bottom - this.Top;
-            this._form.SetControlReady(this);
-
-            //_columnPanels.ForEach(x => this.Controls.Add(x));
+            this._form.SetControlReady(this);         
         }
     }
 
     public class FoundationColumnPanel : GeneralColumnPanel
     {
-        public FoundationColumnPanel()
+        public FoundationColumnPanel(int index, int left, int top, int cardWidth, int cardHeight, int cardBorderWidth)
         {
-            Dock = DockStyle.Fill;
+            Location = new Point(left, top);
+            Width = cardWidth + cardBorderWidth + cardBorderWidth;
+            Height = cardHeight + cardBorderWidth + cardBorderWidth;            
+            //BackColor = Color.BlueViolet;
+            BorderStyle = BorderStyle.FixedSingle;
+            //Dock = DockStyle.Fill;
             BorderStyle = BorderStyle.None;
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;
-                ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);        
+                ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
             };
-        }
-
-
-        public FoundationColumnPanel(int left, int top, int cardWidth, int cardHeight)
-        {
-            Location = new Point(left, top);
-            Width = cardWidth;
-            Height = cardHeight;
-            Dock = DockStyle.Fill;
-            BorderStyle = BorderStyle.FixedSingle;
-            BackgroundImageLayout = ImageLayout.Stretch;
         }
     }
 

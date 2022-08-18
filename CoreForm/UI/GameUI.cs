@@ -133,8 +133,9 @@ namespace CoreForm.UI
             int layoutMarginTop = 24;            
             int left = 0;            
             int top = layoutMarginTop;
-            this._foundationsUI = new FoundationsContainer(this._form, columnNumber: 4);
-            this._foundationsUI.Resize(left, top, cardWidth, cardHeight);
+            this._foundationsUI = new FoundationsContainer(this._form, columnNumber: 4, left, top, cardWidth, cardHeight);
+            this._foundationsUI.SetControls();
+            //this._foundationsUI.Resize(left, top, cardWidth, cardHeight);
 
             this._form.SetControlReady(this._foundationsUI);
             

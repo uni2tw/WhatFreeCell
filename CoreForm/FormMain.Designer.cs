@@ -31,7 +31,6 @@ namespace CoreForm
         private void InitializeComponent()
         {
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,19 +42,9 @@ namespace CoreForm
             this.pictureBox2.TabIndex = 7;
             this.pictureBox2.TabStop = false;
             // 
-            // panel1
-            // 
-            this.panel1.BackColor = Color.FromArgb(0, 123, 0);
-            this.panel1.Location = new System.Drawing.Point(413, 105);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 193);
-            this.panel1.TabIndex = 8;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
             // FormMain
             // 
             this.ClientSize = new System.Drawing.Size(916, 406);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox2);
             this.KeyPreview = true;
             this.Name = "FormMain";
@@ -68,7 +57,6 @@ namespace CoreForm
 
         #endregion
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Panel panel1;
     }
 }
 

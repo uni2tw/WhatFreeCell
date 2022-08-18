@@ -22,7 +22,7 @@ namespace CoreForm
         public FormMain()
         {
             InitializeComponent();
-        
+
             this.Text = _GAME_TITLE;
 
             gui = new GameUI(this);
@@ -36,7 +36,7 @@ namespace CoreForm
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {            
+        {
             /*
             if (this.gui.IsPlaying)
             {
@@ -58,7 +58,7 @@ namespace CoreForm
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -119,9 +119,5 @@ namespace CoreForm
             this.Controls.Add(control);
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {            
-            ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
-        }
     }
 }
