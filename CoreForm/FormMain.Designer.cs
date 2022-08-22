@@ -46,6 +46,7 @@ namespace CoreForm
             // 
             this.ClientSize = new System.Drawing.Size(916, 406);
             this.Controls.Add(this.pictureBox2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
             this.Name = "FormMain";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);

@@ -60,31 +60,25 @@ namespace CoreForm.UI
         public void InitScreen()
         {
             //空畫面            
-            InitBoardScreen();
+            //InitBoardScreen(800,600);
+            InitBoardScreen(1280,960);
             //功能表單
             InitializeMenu();
 
             InitControls();
         }
 
-
-
-        private int boardWidth { get; set; }
-        private int boardHeight { get; set; }
-        private int cardWidth { get; set; }
-        private int cardHeight { get; set; }
-        private void InitBoardScreen()
+        private int _layoutMarginTop = 24;
+        private int _cardWidth;
+        private int _cardHeight;
+        private void InitBoardScreen(int boardWidth, int boardHeight)
         {
-            boardWidth = 800;
-            boardHeight = 600;
-
             _form.Width = boardWidth;
             _form.Height = boardHeight;
             _form.BackColor = Color.FromArgb(0, 123, 0);
-
-
-            cardWidth = (int)(Math.Floor((decimal)boardWidth / 9));
-            cardHeight = (int)(cardWidth * 1.38);
+  
+            _cardWidth = (int)(Math.Floor((decimal)_form.ClientSize.Width / 9));
+            _cardHeight = (int)(_cardWidth * 1.38);
         }
 
         /// <summary>
@@ -129,14 +123,19 @@ namespace CoreForm.UI
         }
 
         private void InitControls()
-        {
-            int layoutMarginTop = 24;            
+        {        
             int left = 0;            
-            int top = layoutMarginTop;
-            this._foundationsUI = new FoundationsContainer(this._form, columnNumber: 4, left, top, cardWidth, cardHeight);
+            int top = _layoutMarginTop;
+            this._foundationsUI = new FoundationsContainer(
+                this._form, columnNumber: 4, left, top, _cardWidth, _cardHeight);
 
             this._form.SetControlReady(this._foundationsUI);
-            
+
+
+            left = _cardWidth * 5 ;
+            this._homecellsUI = new HomecellsContainer(
+                this._form, columnNumber: 4, left, top, _cardWidth, _cardHeight);
+
 
             //        waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             //        waitZone.HolderClick += delegate (ColumnType zoneType, Slot slot)

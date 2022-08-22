@@ -15,12 +15,6 @@ namespace FreeCellSolitaire.UI
 
     }
 
-
-
-    public class HomecellColumnPanel : GeneralColumnPanel
-    {
-
-    }
     public class TableauColumnPanel : GeneralColumnPanel
     {
 

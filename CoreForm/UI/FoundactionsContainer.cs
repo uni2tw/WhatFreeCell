@@ -40,15 +40,13 @@ namespace FreeCellSolitaire.UI
         {
             for (int i = 0; i < _columnNumber; i++)
             {
-                int left = (_cardWidth + _cardBorderWidth + _cardBorderWidth) * i;
-                int top = 0;
-                var panel = new FoundationColumnPanel(i, left, top, _cardWidth, _cardHeight, _cardBorderWidth);
+                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
         }
 
-        public new void ResizeTo(int left, int top, int ratio)
+        public void ResizeTo(int left, int top, int ratio)
         {
             _left = left;
             _top = top;
@@ -79,11 +77,11 @@ namespace FreeCellSolitaire.UI
 
     public class FoundationColumnPanel : GeneralColumnPanel
     {
-        public FoundationColumnPanel(int index, int left, int top, int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
+        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
         {          
             //BackColor = Color.BlueViolet;
             BorderStyle = BorderStyle.FixedSingle;
-            //Dock = DockStyle.Fill;
+            Dock = DockStyle.Left;
             BorderStyle = BorderStyle.None;            
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
@@ -91,30 +89,109 @@ namespace FreeCellSolitaire.UI
                 ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
             };            
 
-            ResizeTo(left, top, cardWidth, cardHeight, cardBorderWidth, ratio);
+            ResizeTo(cardWidth, cardHeight, cardBorderWidth, ratio);
         }
 
-        public void ResizeTo(int left, int top, int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
+        public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
         {
-            Location = new Point(left, top);
-            Width = cardWidth + cardBorderWidth + cardBorderWidth;
-            Height = cardHeight + cardBorderWidth + cardBorderWidth;
+            //Width = cardWidth + cardBorderWidth + cardBorderWidth;
+            //Height = cardHeight + cardBorderWidth + cardBorderWidth;
+            Width = cardWidth;
+            Height = cardHeight;
         }
     }
 
-    public class HomecellsContainer
+    public class HomecellColumnPanel : GeneralColumnPanel
     {
-        private List<HomecellColumnPanel> _columnContainers;
-        private IGameForm form;
-
-        public HomecellsContainer()
+        public HomecellColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
         {
-            _columnContainers = new List<HomecellColumnPanel>(4);
+            //BackColor = Color.BlueViolet;
+            BorderStyle = BorderStyle.FixedSingle;
+            Dock = DockStyle.Left;
+            BorderStyle = BorderStyle.None;
+            this.Paint += delegate (object sender, PaintEventArgs e)
+            {
+                var self = sender as Panel;
+                ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
+            };
+
+            ResizeTo(cardWidth, cardHeight, cardBorderWidth, ratio);
         }
 
-        public HomecellsContainer(IGameForm form)
+        public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
         {
-            this.form = form;
+            //Width = cardWidth + cardBorderWidth + cardBorderWidth;
+            //Height = cardHeight + cardBorderWidth + cardBorderWidth;
+            Width = cardWidth;
+            Height = cardHeight;
+        }
+    }
+
+    public class HomecellsContainer : Panel
+    {
+        List<HomecellColumnPanel> _columnPanels;
+        IGameForm _form;
+        int _columnNumber;
+        int _top;
+        int _left;
+        int _cardWidth;
+        int _cardHeight;
+        int _cardBorderWidth = 1;
+        int _ratio = 100;
+
+        public HomecellsContainer(IGameForm form, int columnNumber,
+            int left, int top, int cardWidth, int cardHeight, int ratio = 100)
+        {
+            this._form = form;
+            _columnNumber = columnNumber;
+            _cardWidth = cardWidth;
+            _cardHeight = cardHeight;
+
+            _columnPanels = new List<HomecellColumnPanel>(columnNumber);
+            this.BorderStyle = BorderStyle.None;
+            this.Name = nameof(FoundationsContainer);
+
+            SetControls();
+
+            ResizeTo(left, top, ratio);
+        }
+
+        public void SetControls()
+        {
+            for (int i = 0; i < _columnNumber; i++)
+            {
+                var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
+                _columnPanels.Add(panel);
+                this.Controls.Add(panel);
+            }
+        }
+
+        public void ResizeTo(int left, int top, int ratio)
+        {
+            _left = left;
+            _top = top;
+            _ratio = ratio;
+
+            int right = _left + (_cardWidth + _cardBorderWidth + _cardBorderWidth) * 4;
+            int bottom = _top + _cardHeight + _cardBorderWidth + _cardBorderWidth;
+
+            this.Left = _left;
+            this.Top = _top;
+            this.Width = right - _left;
+            this.Height = bottom - _top;
+
+            if (ratio > 100)
+            {
+                this.Width = (int)(this.Width * ratio / 100);
+                this.Height = (int)(this.Height * ratio / 100);
+            }
+
+            foreach (var columnPanel in _columnPanels)
+            {
+
+            }
+
+            this._form.SetControlReady(this);
         }
     }
 }

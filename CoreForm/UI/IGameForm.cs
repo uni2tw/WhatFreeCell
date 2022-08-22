@@ -10,6 +10,7 @@ namespace CoreForm.UI
     {
         public int Width { get; set; }
         public int Height { get; set; }
+        public Size ClientSize { get;  }
         public Color BackColor { get; set; }
         void Quit();
         void SetControl(Control control);

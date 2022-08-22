@@ -22,7 +22,7 @@ namespace CoreForm
         public FormMain()
         {
             InitializeComponent();
-
+            
             this.Text = _GAME_TITLE;
 
             gui = new GameUI(this);
