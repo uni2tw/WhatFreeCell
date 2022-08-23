@@ -15,24 +15,5 @@ namespace FreeCellSolitaire.UI
 
     }
 
-    public class TableauColumnPanel : GeneralColumnPanel
-    {
 
-    }
-
-    public class TableauContainer : ContainerControl
-    {
-        private List<TableauColumnPanel> _tableauColumns;
-        private IGameForm form;
-
-        public TableauContainer()
-        {
-            _tableauColumns = new List<TableauColumnPanel>(4);
-        }
-
-        public TableauContainer(IGameForm form)
-        {
-            this.form = form;
-        }
-    }
 }

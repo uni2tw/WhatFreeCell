@@ -6,6 +6,64 @@ using System.Windows.Forms;
 
 namespace FreeCellSolitaire.UI
 {
+    public class TableauContainer : GeneralContainer
+    {
+
+        List<TableauColumnPanel> _columnPanels;
+        int _columnNumber;
+        int _cardBorderWidth = 1;
+        int _ratio = 100;
+
+        public TableauContainer(IGameForm form, int columnNumber,
+            Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
+            : base(form, cardWidth, cardHeight)
+        {
+            _columnNumber = columnNumber;
+
+            _columnPanels = new List<TableauColumnPanel>(columnNumber);
+            this.BorderStyle = BorderStyle.None;
+            this.Name = nameof(FoundationsContainer);
+
+            SetControls();
+
+            ResizeTo(rect, dock, ratio);
+        }
+
+        public void SetControls()
+        {
+            for (int i = 0; i < _columnNumber; i++)
+            {
+                var panel = new TableauColumnPanel(_cardRect.Width, _cardRect.Height, _cardBorderWidth);
+                _columnPanels.Add(panel);
+                this.Controls.Add(panel);
+            }
+        }
+    }
+
+    public class TableauColumnPanel : GeneralColumnPanel
+    {
+        public TableauColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
+        {
+            //BackColor = Color.BlueViolet;
+            BorderStyle = BorderStyle.FixedSingle;
+            Dock = DockStyle.Left;
+            BorderStyle = BorderStyle.None;
+            this.Paint += delegate (object sender, PaintEventArgs e)
+            {
+                var self = sender as Panel;
+                ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
+            };
+
+            ResizeTo(cardWidth, cardHeight, cardBorderWidth, ratio);
+        }
+
+        public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
+        {
+            Width = cardWidth;
+            Height = cardHeight;
+        }
+    }
+
     public class GeneralContainer : Panel
     {
         protected IGameForm _form;
@@ -30,6 +88,13 @@ namespace FreeCellSolitaire.UI
                 this.Left = rect.Right - (_cardRect.Width * 4);
                 this.Top = rect.Top;
                 this.Width = _cardRect.Width * 4;
+                this.Height = _cardRect.Height;
+            } 
+            else if (dock == 3)
+            {
+                this.Left = rect.Left;
+                this.Top = rect.Top + _cardRect.Height + 12;
+                this.Width = _cardRect.Width * 8;
                 this.Height = _cardRect.Height;
             }
 

@@ -137,14 +137,15 @@ namespace CoreForm.UI
             
             this._homecellsUI = new HomecellsContainer(
                 this._form, columnNumber: 4, rect, dock: 2,_cardWidth, _cardHeight);
+
+            this._tableauUI = new TableauContainer(
+                this._form, columnNumber: 8, rect, dock: 3, _cardWidth, _cardHeight);
             //this._form.SetControlReady(this._homecellsUI);
 
             //        waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             //        waitZone.HolderClick += delegate (ColumnType zoneType, Slot slot)
 
 
-            //this._tableauUI = new TableauContainer(this._form);
-            //this._homecellsUI = new HomecellsContainer(this._form);
 
         }
 
