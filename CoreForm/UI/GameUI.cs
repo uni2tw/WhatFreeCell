@@ -126,16 +126,18 @@ namespace CoreForm.UI
         {        
             int left = 0;            
             int top = _layoutMarginTop;
+            int right = _form.ClientSize.Width;
+            int bottom = _form.ClientSize.Height;
+            Rectangle rect = new Rectangle(left, top, _form.ClientSize.Width, _form.ClientSize.Height);
             this._foundationsUI = new FoundationsContainer(
-                this._form, columnNumber: 4, left, top, _cardWidth, _cardHeight);
+                this._form, columnNumber: 4, rect, dock: 1 , _cardWidth, _cardHeight);
 
             this._form.SetControlReady(this._foundationsUI);
 
-
-            left = _cardWidth * 5 ;
+            
             this._homecellsUI = new HomecellsContainer(
-                this._form, columnNumber: 4, left, top, _cardWidth, _cardHeight);
-
+                this._form, columnNumber: 4, rect, dock: 2,_cardWidth, _cardHeight);
+            //this._form.SetControlReady(this._homecellsUI);
 
             //        waitZone.Init(cardWidth, cardHeight, left , top, marginLeft, marginTop);
             //        waitZone.HolderClick += delegate (ColumnType zoneType, Slot slot)

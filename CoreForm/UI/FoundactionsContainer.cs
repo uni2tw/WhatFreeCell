@@ -6,59 +6,32 @@ using System.Windows.Forms;
 
 namespace FreeCellSolitaire.UI
 {
-    public class FoundationsContainer : Panel
+    public class GeneralContainer : Panel
     {
-        List<FoundationColumnPanel> _columnPanels;
-        IGameForm _form;
-        int _columnNumber;
-        int _top;
-        int _left;
-        int _cardWidth;
-        int _cardHeight;
-        int _cardBorderWidth = 1;
-        int _ratio = 100;
-
-        public FoundationsContainer(IGameForm form, int columnNumber,
-            int left, int top, int cardWidth, int cardHeight, int ratio = 100)
-        {            
-            this._form = form;
-            _columnNumber = columnNumber;
-            _cardWidth = cardWidth;
-            _cardHeight = cardHeight;
-
-            _columnPanels = new List<FoundationColumnPanel>(columnNumber);
-            this.BorderStyle = BorderStyle.None;                        
-            this.Name = nameof(FoundationsContainer);
-            
-           
-            SetControls();
-
-            ResizeTo(left, top, ratio);
+        protected IGameForm _form;
+        protected Rectangle _cardRect;
+        public GeneralContainer(IGameForm form, int cardWidth, int cardHeight)
+        {
+            _cardRect = new Rectangle(0, 0, cardWidth, cardHeight);
+            _form = form;
         }
 
-        public void SetControls()
+        public void ResizeTo(Rectangle rect, int dock, int ratio)
         {
-            for (int i = 0; i < _columnNumber; i++)
+            if (dock == 1)
             {
-                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
-                _columnPanels.Add(panel);
-                this.Controls.Add(panel);
+                this.Left = rect.Left;
+                this.Top = rect.Top;
+                this.Width = _cardRect.Width * 4;
+                this.Height = _cardRect.Height;
             }
-        }
-
-        public void ResizeTo(int left, int top, int ratio)
-        {
-            _left = left;
-            _top = top;
-            _ratio = ratio;
-            
-            int right = _left + (_cardWidth + _cardBorderWidth + _cardBorderWidth) * 4;
-            int bottom = _top + _cardHeight + _cardBorderWidth + _cardBorderWidth;
-
-            this.Left = _left;
-            this.Top = _top;
-            this.Width = right - _left;
-            this.Height = bottom - _top;
+            else if (dock == 2)
+            {
+                this.Left = rect.Right - (_cardRect.Width * 4);
+                this.Top = rect.Top;
+                this.Width = _cardRect.Width * 4;
+                this.Height = _cardRect.Height;
+            }
 
             if (ratio > 100)
             {
@@ -66,13 +39,43 @@ namespace FreeCellSolitaire.UI
                 this.Height = (int)(this.Height * ratio / 100);
             }
 
-            foreach (var columnPanel in _columnPanels)
-            {
-
-            }
-
-            this._form.SetControlReady(this);         
+    
+            this._form.SetControlReady(this);
         }
+    }
+    public class FoundationsContainer : GeneralContainer
+    {
+        List<FoundationColumnPanel> _columnPanels;        
+        int _columnNumber;         
+        int _cardBorderWidth = 1;
+        int _ratio = 100;
+
+        public FoundationsContainer(IGameForm form, int columnNumber,
+            Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
+            :base(form, cardWidth, cardHeight)
+        {                        
+            _columnNumber = columnNumber;
+
+            _columnPanels = new List<FoundationColumnPanel>(columnNumber);
+            this.BorderStyle = BorderStyle.None;                        
+            this.Name = nameof(FoundationsContainer);            
+           
+            SetControls();
+
+            ResizeTo(rect, dock, ratio);
+        }
+
+        public void SetControls()
+        {
+            for (int i = 0; i < _columnNumber; i++)
+            {                
+                var panel = new FoundationColumnPanel(_cardRect.Width, _cardRect.Height, _cardBorderWidth);
+                _columnPanels.Add(panel);
+                this.Controls.Add(panel);
+            }
+        }
+
+
     }
 
     public class FoundationColumnPanel : GeneralColumnPanel
@@ -94,8 +97,6 @@ namespace FreeCellSolitaire.UI
 
         public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
         {
-            //Width = cardWidth + cardBorderWidth + cardBorderWidth;
-            //Height = cardHeight + cardBorderWidth + cardBorderWidth;
             Width = cardWidth;
             Height = cardHeight;
         }
@@ -120,32 +121,23 @@ namespace FreeCellSolitaire.UI
 
         public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
         {
-            //Width = cardWidth + cardBorderWidth + cardBorderWidth;
-            //Height = cardHeight + cardBorderWidth + cardBorderWidth;
             Width = cardWidth;
             Height = cardHeight;
         }
     }
 
-    public class HomecellsContainer : Panel
+    public class HomecellsContainer : GeneralContainer
     {
-        List<HomecellColumnPanel> _columnPanels;
-        IGameForm _form;
+        List<HomecellColumnPanel> _columnPanels;        
         int _columnNumber;
-        int _top;
-        int _left;
-        int _cardWidth;
-        int _cardHeight;
         int _cardBorderWidth = 1;
         int _ratio = 100;
 
         public HomecellsContainer(IGameForm form, int columnNumber,
-            int left, int top, int cardWidth, int cardHeight, int ratio = 100)
+            Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
+            : base(form, cardWidth, cardHeight)
         {
-            this._form = form;
             _columnNumber = columnNumber;
-            _cardWidth = cardWidth;
-            _cardHeight = cardHeight;
 
             _columnPanels = new List<HomecellColumnPanel>(columnNumber);
             this.BorderStyle = BorderStyle.None;
@@ -153,45 +145,18 @@ namespace FreeCellSolitaire.UI
 
             SetControls();
 
-            ResizeTo(left, top, ratio);
+            ResizeTo(rect, dock, ratio);
         }
 
         public void SetControls()
         {
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
+                var panel = new HomecellColumnPanel(_cardRect.Width, _cardRect.Height, _cardBorderWidth);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
         }
 
-        public void ResizeTo(int left, int top, int ratio)
-        {
-            _left = left;
-            _top = top;
-            _ratio = ratio;
-
-            int right = _left + (_cardWidth + _cardBorderWidth + _cardBorderWidth) * 4;
-            int bottom = _top + _cardHeight + _cardBorderWidth + _cardBorderWidth;
-
-            this.Left = _left;
-            this.Top = _top;
-            this.Width = right - _left;
-            this.Height = bottom - _top;
-
-            if (ratio > 100)
-            {
-                this.Width = (int)(this.Width * ratio / 100);
-                this.Height = (int)(this.Height * ratio / 100);
-            }
-
-            foreach (var columnPanel in _columnPanels)
-            {
-
-            }
-
-            this._form.SetControlReady(this);
-        }
     }
 }
