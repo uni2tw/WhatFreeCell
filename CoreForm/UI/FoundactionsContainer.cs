@@ -22,7 +22,6 @@ namespace FreeCellSolitaire.UI
             _columnPanels = new List<TableauColumnPanel>(columnNumber);
             this.BorderStyle = BorderStyle.None;
             this.Name = nameof(FoundationsContainer);
-
             
             ResizeTo(rect, dock, ratio);
             SetControls();
@@ -30,9 +29,13 @@ namespace FreeCellSolitaire.UI
 
         public void SetControls()
         {
+            this.Resize += delegate (object sender, EventArgs e)
+            {
+                _columnPanels.ForEach(x => x.Height = this.Height);
+            };
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new TableauColumnPanel(_cardRect.Width, _cardRect.Height, _cardBorderWidth);
+                var panel = new TableauColumnPanel(i, _cardRect.Width, _cardRect.Height, _cardBorderWidth, _columnSpace);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
@@ -41,16 +44,18 @@ namespace FreeCellSolitaire.UI
 
     public class TableauColumnPanel : GeneralColumnPanel
     {
-        public TableauColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
+        public TableauColumnPanel(int index, int cardWidth, int cardHeight, int cardBorderWidth, int _columnSpace,
+            int ratio = 100)
         {
-            //BackColor = Color.BlueViolet;
-            BorderStyle = BorderStyle.FixedSingle;
-            Dock = DockStyle.Left;
+            this.Height = 0;
+            this.Width = cardWidth;
+            this.Left = ((index + 1) * _columnSpace) + (index * cardWidth);
             BorderStyle = BorderStyle.None;
+            Dock = DockStyle.None;
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;
-                ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
+                //ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
             };
 
             ResizeTo(cardWidth, cardHeight, cardBorderWidth, ratio);
@@ -97,8 +102,7 @@ namespace FreeCellSolitaire.UI
                 this.Left = rect.Left;
                 this.Top = rect.Top + _cardRect.Height + 12;
                 this.Width = rect.Width;
-                this.Height = rect.Height - this.Top;
-                this.BorderStyle = BorderStyle.FixedSingle;
+                this.Height = rect.Height - this.Top;                
                 this._columnSpace = (this.Width - (_cardRect.Width * _columnNumber)) / (_columnNumber + 1);
             }
 
