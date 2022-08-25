@@ -1,4 +1,5 @@
 ﻿using CoreForm.UI;
+using FreeCellSolitaire.Core.CardModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -38,6 +39,16 @@ namespace FreeCellSolitaire.UI
                 var panel = new TableauColumnPanel(i, _cardRect.Width, _cardRect.Height, _cardBorderWidth, _columnSpace);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
+            }
+        }
+
+        public void RedrawCards(int index, List<Card> cards)
+        {
+            var columnPanel = _columnPanels[index];
+            columnPanel.Controls.Clear();
+            foreach (var card in cards)
+            {
+                columnPanel.Controls.Add(new CardControl {Card = card });
             }
         }
     }
@@ -230,6 +241,10 @@ namespace FreeCellSolitaire.UI
                 this.Controls.Add(panel);
             }
         }
+    }
 
+    public class CardControl : PictureBox
+    {
+        public Card Card { get; set; }
     }
 }

@@ -17,6 +17,7 @@ public class CardView
         this.Owner = owner;
         _card = card;
     }
+    [Obsolete]
     public bool IsSelected { get; set; }
     public Column Owner { get; private set; }
     public void SetOwner(Column column)

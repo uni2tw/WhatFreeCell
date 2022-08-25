@@ -156,13 +156,42 @@ namespace CoreForm.UI
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
             var deck = Deck.Create().Shuffle(101);            
-            tableau.Init(deck); 
+            tableau.Init(deck);
+
+
+            TableauBinder tableauBinder = new TableauBinder(tableau, this._tableauUI);
+            tableauBinder.Redraw();
         }
 
         public void Start()
         {
         
         }
+    }
+
+    public class TableauBinder
+    {
+        private Tableau _tableau;
+        private TableauContainer _tableauUI;
+
+        public TableauBinder(Tableau tableau, TableauContainer tableauUI) 
+        {
+            _tableau = tableau;
+            _tableauUI = tableauUI;
+        }
+
+        public void Redraw()
+        {
+            List<Card> cards = new List<Card>();
+            for (int i = 0; i < _tableau.GetColumn(0).GetCardsCount(); i++) {
+                cards.Add(new Card {
+                    Number = _tableau.GetColumn(0).GetCard(i).Number,
+                    Suit = _tableau.GetColumn(0).GetCard(i).Suit
+                });
+            }            
+            _tableauUI.RedrawCards(0, cards);
+        }
+        
     }
 
     //public class Game
