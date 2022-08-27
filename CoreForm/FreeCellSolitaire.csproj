@@ -54,6 +54,19 @@
     <None Remove="assets\img\Heart-11.png" />
     <None Remove="assets\img\Heart-12.png" />
     <None Remove="assets\img\Heart-13.png" />
+    <None Remove="assets\img\Spade-01.png" />
+    <None Remove="assets\img\Spade-02.png" />
+    <None Remove="assets\img\Spade-03.png" />
+    <None Remove="assets\img\Spade-04.png" />
+    <None Remove="assets\img\Spade-05.png" />
+    <None Remove="assets\img\Spade-06.png" />
+    <None Remove="assets\img\Spade-07.png" />
+    <None Remove="assets\img\Spade-08.png" />
+    <None Remove="assets\img\Spade-09.png" />
+    <None Remove="assets\img\Spade-10.png" />
+    <None Remove="assets\img\Spade-11.png" />
+    <None Remove="assets\img\Spade-12.png" />
+    <None Remove="assets\img\Spade-13.png" />
     <None Remove="assets\img\Spare-01.png" />
     <None Remove="assets\img\Spare-02.png" />
     <None Remove="assets\img\Spare-03.png" />
@@ -113,19 +126,19 @@
     <EmbeddedResource Include="assets\img\Heart-11.png" />
     <EmbeddedResource Include="assets\img\Heart-12.png" />
     <EmbeddedResource Include="assets\img\Heart-13.png" />
-    <EmbeddedResource Include="assets\img\Spare-01.png" />
-    <EmbeddedResource Include="assets\img\Spare-02.png" />
-    <EmbeddedResource Include="assets\img\Spare-03.png" />
-    <EmbeddedResource Include="assets\img\Spare-04.png" />
-    <EmbeddedResource Include="assets\img\Spare-05.png" />
-    <EmbeddedResource Include="assets\img\Spare-06.png" />
-    <EmbeddedResource Include="assets\img\Spare-07.png" />
-    <EmbeddedResource Include="assets\img\Spare-08.png" />
-    <EmbeddedResource Include="assets\img\Spare-09.png" />
-    <EmbeddedResource Include="assets\img\Spare-10.png" />
-    <EmbeddedResource Include="assets\img\Spare-11.png" />
-    <EmbeddedResource Include="assets\img\Spare-12.png" />
-    <EmbeddedResource Include="assets\img\Spare-13.png" />
+    <EmbeddedResource Include="assets\img\Spade-01.png" />
+    <EmbeddedResource Include="assets\img\Spade-02.png" />
+    <EmbeddedResource Include="assets\img\Spade-03.png" />
+    <EmbeddedResource Include="assets\img\Spade-04.png" />
+    <EmbeddedResource Include="assets\img\Spade-05.png" />
+    <EmbeddedResource Include="assets\img\Spade-06.png" />
+    <EmbeddedResource Include="assets\img\Spade-07.png" />
+    <EmbeddedResource Include="assets\img\Spade-08.png" />
+    <EmbeddedResource Include="assets\img\Spade-09.png" />
+    <EmbeddedResource Include="assets\img\Spade-10.png" />
+    <EmbeddedResource Include="assets\img\Spade-11.png" />
+    <EmbeddedResource Include="assets\img\Spade-12.png" />
+    <EmbeddedResource Include="assets\img\Spade-13.png" />
   </ItemGroup>
 
   <ItemGroup>
