@@ -181,15 +181,23 @@ namespace CoreForm.UI
         }
 
         public void Redraw()
-        {
-            List<Card> cards = new List<Card>();
-            for (int i = 0; i < _tableau.GetColumn(0).GetCardsCount(); i++) {
-                cards.Add(new Card {
-                    Number = _tableau.GetColumn(0).GetCard(i).Number,
-                    Suit = _tableau.GetColumn(0).GetCard(i).Suit
-                });
-            }            
-            _tableauUI.RedrawCards(0, cards);
+        {            
+            for(int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
+            {
+                List<Card> cards = new List<Card>();
+                for (int cardIndex = 0; cardIndex < _tableau.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
+                {
+                    cards.Add(new Card
+                    {
+                        Number = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Number,
+                        Suit = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Suit
+                    });
+                }
+                _tableauUI.RedrawCards(columnIndex, cards);
+            }
+            
+            
+            
         }
         
     }

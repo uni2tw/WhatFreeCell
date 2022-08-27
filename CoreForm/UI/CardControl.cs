@@ -15,28 +15,40 @@ namespace FreeCellSolitaire.UI
 {
     public class CardControl : PictureBox
     {
-        public Card Card { get; set; }
+        Card _card;
+        int _index;
+        int _cardWidth;
+        int _cardHeight;
         
         public Image ActiveImage { get; private set; }
 
-        public CardControl(int cardWidth, int cardHeight)
+        public CardControl(int index, int cardWidth, int cardHeight, Card card)
         {
-            PictureBox viewControl = new PictureBox
-            {
-                Location = new Point(0, 0),
-                Width = cardWidth,
-                Height = cardHeight,
-                SizeMode = PictureBoxSizeMode.Normal,
-                Image = null
-            };
+            _card = card;
+            _index = index;
+            _cardWidth = cardWidth;
+            _cardHeight = cardHeight;
+
+            this.BorderStyle = BorderStyle.None;
+            this.BackColor = Color.Black;
+            this.Margin = new Padding(0);
             InitImage();
+            ResizeTo();
+        }
+
+        private void ResizeTo()
+        {
+            this.Location = new Point(0, _index * (int)(_cardHeight / 6.1f));
+            this.Width = _cardWidth;
+            this.Height = _cardHeight;
+            this.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void InitImage()
         {
-            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();            
             Stream resource = assembly
-                .GetManifestResourceStream("FreeCellSolitaire.assets.img." + GetImageFileName());
+                .GetManifestResourceStream("FreeCellSolitaire.assets.img." + GetImageFileName() + ".png");
             Image img = Image.FromStream(resource);
             this.Image = img;
             this.ActiveImage = img.DrawAsNegative();
@@ -44,7 +56,7 @@ namespace FreeCellSolitaire.UI
 
         private string GetImageFileName()
         {
-            return Card.Suit.ToString() + "-" + Card.Number.ToString("00");
+            return _card.Suit.ToString() + "-" + _card.Number.ToString("00");
         }
     }
 }

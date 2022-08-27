@@ -2,7 +2,10 @@
 using FreeCellSolitaire.Core.CardModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace FreeCellSolitaire.UI
@@ -11,6 +14,7 @@ namespace FreeCellSolitaire.UI
     {
 
         List<TableauColumnPanel> _columnPanels;
+        Rectangle _rect;
         int _columnNumber;
         int _cardBorderWidth = 1;
         int _ratio = 100;        
@@ -21,6 +25,7 @@ namespace FreeCellSolitaire.UI
         {
             _columnNumber = columnNumber;            
             _columnPanels = new List<TableauColumnPanel>(columnNumber);
+            _rect = rect;
             this.BorderStyle = BorderStyle.None;
             this.Name = nameof(FoundationsContainer);
             
@@ -36,7 +41,7 @@ namespace FreeCellSolitaire.UI
             };
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new TableauColumnPanel(i, _cardRect.Width, _cardRect.Height, _cardBorderWidth, _columnSpace);
+                var panel = new TableauColumnPanel(i, _cardWidth, _cardHeight, _cardBorderWidth, _columnSpace, _rect);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
@@ -46,49 +51,57 @@ namespace FreeCellSolitaire.UI
         {
             var columnPanel = _columnPanels[index];
             columnPanel.Controls.Clear();
-            foreach (var card in cards)
+            for (int i = 0; i < cards.Count; i++)
             {
-                columnPanel.Controls.Add(new CardControl {Card = card });
+                var card = cards[i];
+                var cardControl = new CardControl(i, _cardWidth, _cardHeight, card);
+                columnPanel.Controls.Add(cardControl);
+                cardControl.BringToFront();
             }
         }
     }
 
     public class TableauColumnPanel : GeneralColumnPanel
-    {
-        public TableauColumnPanel(int index, int cardWidth, int cardHeight, int cardBorderWidth, int _columnSpace,
+    {        
+        public TableauColumnPanel(int index, int cardWidth, int cardHeight, 
+            int cardBorderWidth, int columnSpace,
+            Rectangle rectParent,
             int ratio = 100)
         {
-            this.Height = 0;
-            this.Width = cardWidth;
-            this.Left = ((index + 1) * _columnSpace) + (index * cardWidth);
-            BorderStyle = BorderStyle.None;
-            Dock = DockStyle.None;
+
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;
                 //ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
             };
-
-            ResizeTo(cardWidth, cardHeight, cardBorderWidth, ratio);
+            
+            ResizeTo(index, cardWidth, cardHeight, cardBorderWidth, columnSpace, rectParent.Height, ratio);
         }
 
-        public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
+        public void ResizeTo(int index, int cardWidth, int cardHeight, int cardBorderWidth, int columnSpace, 
+            int height,
+            int ratio)
         {
-            Width = cardWidth;
-            Height = cardHeight;
+            this.Width = cardWidth;
+            this.Height = height;            
+            this.Left = ((index + 1) * columnSpace) + (index * cardWidth);
+            BorderStyle = BorderStyle.None;
+            Dock = DockStyle.None;
         }
     }
 
     public class GeneralContainer : Panel
     {
-        protected IGameForm _form;
-        protected Rectangle _cardRect;
+        protected IGameForm _form;        
+        protected int _cardWidth;
+        protected int _cardHeight;
         protected int _columnNumber;
         protected int _columnSpace;
         public GeneralContainer(IGameForm form, int cardWidth, int cardHeight, int columnNumber)
         {
-            _form = form;
-            _cardRect = new Rectangle(0, 0, cardWidth, cardHeight);            
+            _form = form;            
+            _cardWidth = cardWidth;
+            _cardHeight = cardHeight;
             _columnNumber = columnNumber;
         }
 
@@ -98,23 +111,23 @@ namespace FreeCellSolitaire.UI
             {
                 this.Left = rect.Left;
                 this.Top = rect.Top;
-                this.Width = _cardRect.Width * _columnNumber;
-                this.Height = _cardRect.Height;
+                this.Width = _cardWidth * _columnNumber;
+                this.Height = _cardHeight;
             }
             else if (dock == 2)
             {
-                this.Left = rect.Right - (_cardRect.Width * 4);
+                this.Left = rect.Right - (_cardWidth * 4);
                 this.Top = rect.Top;
-                this.Width = _cardRect.Width * _columnNumber;
-                this.Height = _cardRect.Height;
+                this.Width = _cardWidth * _columnNumber;
+                this.Height = _cardHeight;
             } 
             else if (dock == 3)
             {
                 this.Left = rect.Left;
-                this.Top = rect.Top + _cardRect.Height + 12;
+                this.Top = rect.Top + _cardHeight + 12;
                 this.Width = rect.Width;
                 this.Height = rect.Height - this.Top;                
-                this._columnSpace = (this.Width - (_cardRect.Width * _columnNumber)) / (_columnNumber + 1);
+                this._columnSpace = (this.Width - (_cardWidth * _columnNumber)) / (_columnNumber + 1);
             }
 
             if (ratio > 100)
@@ -153,7 +166,7 @@ namespace FreeCellSolitaire.UI
         {
             for (int i = 0; i < _columnNumber; i++)
             {                
-                var panel = new FoundationColumnPanel(_cardRect.Width, _cardRect.Height, _cardBorderWidth);
+                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
@@ -236,15 +249,12 @@ namespace FreeCellSolitaire.UI
         {
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new HomecellColumnPanel(_cardRect.Width, _cardRect.Height, _cardBorderWidth);
+                var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
         }
     }
 
-    public class CardControl : PictureBox
-    {
-        public Card Card { get; set; }
-    }
+
 }
