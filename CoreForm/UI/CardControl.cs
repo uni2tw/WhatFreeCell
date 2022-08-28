@@ -50,9 +50,9 @@ namespace FreeCellSolitaire.UI
             return _card.Equals(card);
         }
 
-        public void Redraw()
+        public void Redraw(int cardTop)
         {
-            this.Location = new Point(0, _index * (int)(_cardHeight / 6.1f));
+            this.Location = new Point(0, cardTop);
             this.Width = _cardWidth;
             this.Height = _cardHeight;
             this.SizeMode = PictureBoxSizeMode.StretchImage;

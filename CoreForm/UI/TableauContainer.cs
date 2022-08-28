@@ -33,7 +33,10 @@ namespace FreeCellSolitaire.UI
                 this.Controls.Remove(cardControl);
             }
         }
-
+        public int GetCardControlCount()
+        {
+            return CardControls.Count;
+        }
 
         public CardControl GetCardControl(int i)
         {
