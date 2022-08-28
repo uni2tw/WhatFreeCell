@@ -24,6 +24,9 @@ namespace CoreForm.UI
         void Reset();
         void Start();
         void InitEvents();
+        void Redraw();
+        void Move(string notation);
+
         bool IsPlaying { get; }
     }
 
@@ -35,6 +38,8 @@ namespace CoreForm.UI
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
         private FoundationsContainer _foundationsUI;
+
+        TableauBinder _tableauBinder;
 
         public GameUI(IGameForm form)
         {
@@ -149,18 +154,27 @@ namespace CoreForm.UI
 
         }
 
+        public void Redraw()
+        {            
+            _tableauBinder.Redraw();
+        }
+
+        public void Move(string notation)
+        {
+            _game.Move(notation);
+            Redraw();
+        }
+
         public void Reset()
         {
-            _game = new Game();
+            _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
-            var deck = Deck.Create().Shuffle(101);            
+            var deck = Deck.Create().Shuffle(26458);
             tableau.Init(deck);
 
-
-            TableauBinder tableauBinder = new TableauBinder(tableau, this._tableauUI);
-            tableauBinder.Redraw();
+            _tableauBinder = new TableauBinder(tableau, this._tableauUI);
         }
 
         public void Start()
@@ -194,12 +208,8 @@ namespace CoreForm.UI
                     });
                 }
                 _tableauUI.RedrawCards(columnIndex, cards);
-            }
-            
-            
-            
+            }            
         }
-        
     }
 
     //public class Game

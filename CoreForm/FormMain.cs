@@ -1,6 +1,7 @@
 ﻿using CoreForm.UI;
 using FreeCellSolitaire.Core.GameModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +19,7 @@ namespace CoreForm
     {
         IGameUI gui;
         public const string _GAME_TITLE = "新接龍";
+        Queue<string> scripts = new Queue<string>();
 
         public FormMain()
         {
@@ -32,7 +34,35 @@ namespace CoreForm
             gui.Reset();
             gui.Start();
 
+            gui.Redraw();
+
+            scripts.Enqueue("t1h0");
+            scripts.Enqueue("t2t0");
+            scripts.Enqueue("t7t3");
+            scripts.Enqueue("t7t1");
+            scripts.Enqueue("t7f0");
+            scripts.Enqueue("t7t2");
+            scripts.Enqueue("t7f1");
+
+            this.DoubleBuffered = true;
+            this.KeyPress += FormMain_KeyPress;
+            this.Load += FormMain_Load;
             this.FormClosing += Form1_FormClosing;
+        }
+
+        private void FormMain_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string notation;
+            if (scripts.TryDequeue(out notation))
+            {
+                gui.Move(notation);
+            }
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+
+
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

@@ -61,5 +61,13 @@
             }
             return string.Empty;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            Card castObj = obj as Card;
+            if (castObj == null) return false;
+            return castObj.Number == this.Number && castObj.Suit == this.Suit;
+        }
     }
 }

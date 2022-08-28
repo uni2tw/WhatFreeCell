@@ -50,13 +50,24 @@ namespace FreeCellSolitaire.UI
         public void RedrawCards(int index, List<Card> cards)
         {
             var columnPanel = _columnPanels[index];
-            columnPanel.Controls.Clear();
+            List<Card> newCards = new List<Card>();
             for (int i = 0; i < cards.Count; i++)
             {
-                var card = cards[i];
-                var cardControl = new CardControl(i, _cardWidth, _cardHeight, card);
-                columnPanel.Controls.Add(cardControl);
-                cardControl.BringToFront();
+                var cardControl = columnPanel.GetCardControl(i);
+                if (cardControl == null || cardControl.IsAssignedCard(cards[i]) == false)
+                {
+                    newCards = cards.Skip(i).ToList();
+                    break;
+                }
+            }
+            columnPanel.RemoveCardControlsAfter(cards.Count);
+
+            for (int i = 0; i < newCards.Count; i++)
+            {
+                var card = newCards[i];
+                var cardControl = new CardControl(_cardWidth, _cardHeight, card);
+                columnPanel.AddCardControl(cardControl);
+                cardControl.Redraw();
             }
         }
     }

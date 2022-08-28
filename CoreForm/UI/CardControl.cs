@@ -22,21 +22,35 @@ namespace FreeCellSolitaire.UI
         
         public Image ActiveImage { get; private set; }
 
-        public CardControl(int index, int cardWidth, int cardHeight, Card card)
+        public Card Card { get
+            {
+                return _card;
+            } 
+        }
+
+        public void SetIndex(int index)
         {
-            _card = card;
             _index = index;
+        }
+
+        public CardControl(int cardWidth, int cardHeight, Card card)
+        {
+            _card = card;            
             _cardWidth = cardWidth;
             _cardHeight = cardHeight;
 
             this.BorderStyle = BorderStyle.None;
             this.BackColor = Color.Black;
             this.Margin = new Padding(0);
-            InitImage();
-            ResizeTo();
+            InitImage();            
         }
 
-        private void ResizeTo()
+        public bool IsAssignedCard(Card card)
+        {
+            return _card.Equals(card);
+        }
+
+        public void Redraw()
         {
             this.Location = new Point(0, _index * (int)(_cardHeight / 6.1f));
             this.Width = _cardWidth;
@@ -58,5 +72,7 @@ namespace FreeCellSolitaire.UI
         {
             return _card.Suit.ToString() + "-" + _card.Number.ToString("00");
         }
+
+
     }
 }

@@ -32,8 +32,8 @@ namespace CoreForm
         {
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -55,14 +55,6 @@ namespace CoreForm
             this.panel1.Size = new System.Drawing.Size(420, 194);
             this.panel1.TabIndex = 8;
             // 
-            // panel2
-            // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(139, 194);
-            this.panel2.TabIndex = 9;
-            // 
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
@@ -72,6 +64,14 @@ namespace CoreForm
             this.panel3.Padding = new System.Windows.Forms.Padding(30);
             this.panel3.Size = new System.Drawing.Size(137, 194);
             this.panel3.TabIndex = 9;
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(139, 194);
+            this.panel2.TabIndex = 9;
             // 
             // FormMain
             // 
