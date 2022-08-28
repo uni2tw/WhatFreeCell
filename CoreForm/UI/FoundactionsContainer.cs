@@ -21,14 +21,18 @@ namespace FreeCellSolitaire.UI
             Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
             : base(form, cardWidth, cardHeight, columnNumber)
         {
-            _columnNumber = columnNumber;            
-            _columnPanels = new List<TableauColumnPanel>(columnNumber);
+            _columnNumber = columnNumber;                        
             _rect = rect;            
             this.BorderStyle = BorderStyle.None;
-            this.Name = nameof(FoundationsContainer);
-            
+            this.Name = nameof(FoundationsContainer);            
+
             ResizeTo(rect, dock, ratio);
             SetControls();
+        }
+
+        public override int GetCardSpacing()
+        {
+            return (int)(_cardHeight / 6.1f);
         }
 
         public void SetControls()
@@ -77,10 +81,10 @@ namespace FreeCellSolitaire.UI
         }
     }
 
-    public class GeneralContainer : Panel
+    public abstract class GeneralContainer : Panel
     {
         protected IGameForm _form;
-        protected List<TableauColumnPanel> _columnPanels;
+        protected List<GeneralColumnPanel> _columnPanels;
         protected int _cardWidth;
         protected int _cardHeight;
         protected int _columnNumber;
@@ -88,12 +92,15 @@ namespace FreeCellSolitaire.UI
         protected int _cardSpacing;
         public GeneralContainer(IGameForm form, int cardWidth, int cardHeight, int columnNumber)
         {
-            _form = form;            
+            _form = form;
+            _columnPanels = new List<GeneralColumnPanel>(columnNumber);
             _cardWidth = cardWidth;
             _cardHeight = cardHeight;
             _columnNumber = columnNumber;
-            _cardSpacing = (int)(cardHeight / 6.1f);
+            _cardSpacing = GetCardSpacing();            
         }
+
+        public abstract int GetCardSpacing();
 
         public void ResizeTo(Rectangle rect, int dock, int ratio)
         {
@@ -186,7 +193,10 @@ namespace FreeCellSolitaire.UI
                 this.Controls.Add(panel);
             }
         }
-
+        public override int GetCardSpacing()
+        {
+            return 0;
+        }
 
     }
 
@@ -239,8 +249,7 @@ namespace FreeCellSolitaire.UI
     }
 
     public class HomecellsContainer : GeneralContainer
-    {
-        List<HomecellColumnPanel> _columnPanels;        
+    {        
         int _columnNumber;
         int _cardBorderWidth = 1;
         int _ratio = 100;
@@ -250,8 +259,7 @@ namespace FreeCellSolitaire.UI
             : base(form, cardWidth, cardHeight, columnNumber)
         {
             _columnNumber = columnNumber;
-
-            _columnPanels = new List<HomecellColumnPanel>(columnNumber);
+            
             this.BorderStyle = BorderStyle.None;
             this.Name = nameof(FoundationsContainer);
 
@@ -264,10 +272,15 @@ namespace FreeCellSolitaire.UI
         {
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
+                var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);                
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);
             }
+        }
+
+        public override int GetCardSpacing()
+        {
+            return 0;
         }
     }
 

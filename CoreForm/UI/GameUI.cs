@@ -40,6 +40,7 @@ namespace CoreForm.UI
         private FoundationsContainer _foundationsUI;
 
         TableauBinder _tableauBinder;
+        HomecellsBinder _homecellsBinder;
 
         public GameUI(IGameForm form)
         {
@@ -157,6 +158,7 @@ namespace CoreForm.UI
         public void Redraw()
         {            
             _tableauBinder.Redraw();
+            _homecellsBinder.Redraw();
         }
 
         public void Move(string notation)
@@ -175,11 +177,41 @@ namespace CoreForm.UI
             tableau.Init(deck);
 
             _tableauBinder = new TableauBinder(tableau, this._tableauUI);
+            _homecellsBinder = new HomecellsBinder(homecells, this._homecellsUI);
         }
 
         public void Start()
         {
         
+        }
+    }
+
+    public class HomecellsBinder
+    {
+        Homecells _homecells;
+        HomecellsContainer _homecellsUI;
+
+        public HomecellsBinder(Homecells homecells, HomecellsContainer homecellsUI)
+        {
+            _homecells = homecells;
+            _homecellsUI = homecellsUI;
+        }
+
+        public void Redraw()
+        {
+            for (int columnIndex = 0; columnIndex < _homecells.ColumnCount; columnIndex++)
+            {
+                List<Card> cards = new List<Card>();
+                for (int cardIndex = 0; cardIndex < _homecells.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
+                {
+                    cards.Add(new Card
+                    {
+                        Number = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Number,
+                        Suit = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Suit
+                    });
+                }
+                _homecellsUI.RedrawCards(columnIndex, cards);
+            }
         }
     }
 
