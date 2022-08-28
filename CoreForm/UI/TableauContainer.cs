@@ -1,50 +1,77 @@
 ﻿using CoreForm.UI;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FreeCellSolitaire.UI
 {
-
-    public class GeneralColumnPanel : Panel
+    public class TableauContainer : GeneralContainer
     {
-        public List<CardControl> CardControls { get; set; }
-        public GeneralColumnPanel()
+        Rectangle _rect;
+        int _columnNumber;
+        int _cardBorderWidth = 1;
+        int _ratio = 100;        
+
+        public TableauContainer(IGameForm form, int columnNumber,
+            Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
+            : base(form, cardWidth, cardHeight, columnNumber)
         {
-            CardControls = new List<CardControl>();
-        }        
-        public void AddCardControl(CardControl cardControl)
-        {
-            cardControl.SetIndex(CardControls.Count);
-            CardControls.Add(cardControl);
-            this.Controls.Add(cardControl);
-            cardControl.BringToFront();
-        }
-        public void RemoveCardControlsAfter(int index)
-        {            
-            while (this.Controls.Count > index)
-            {
-                var cardControl = CardControls[index];
-                CardControls.Remove(cardControl);
-                this.Controls.Remove(cardControl);
-            }
-        }
-        public int GetCardControlCount()
-        {
-            return CardControls.Count;
+            _columnNumber = columnNumber;                        
+            _rect = rect;            
+            this.BorderStyle = BorderStyle.None;
+            this.Name = nameof(FoundationsContainer);            
+
+            ResizeTo(rect, dock, ratio);
+            SetControls();
         }
 
-        public CardControl GetCardControl(int i)
+        public override int GetCardSpacing()
         {
-            if (CardControls.Count > i)
+            return (int)(_cardHeight / 6.1f);
+        }
+
+        public void SetControls()
+        {
+            this.Resize += delegate (object sender, EventArgs e)
             {
-                return CardControls[i];
+                _columnPanels.ForEach(x => x.Height = this.Height);
+            };
+            for (int i = 0; i < _columnNumber; i++)
+            {
+                var panel = new TableauColumnPanel(i, _cardWidth, _cardHeight, _cardBorderWidth, _columnSpace, _rect);
+                _columnPanels.Add(panel);
+                this.Controls.Add(panel);
             }
-            return null;
+        }
+
+    }
+
+    public class TableauColumnPanel : GeneralColumnPanel
+    {
+        public TableauColumnPanel(int index, int cardWidth, int cardHeight,
+            int cardBorderWidth, int columnSpace,
+            Rectangle rectParent,
+            int ratio = 100)
+        {
+
+            this.Paint += delegate (object sender, PaintEventArgs e)
+            {
+                var self = sender as Panel;
+                //ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
+            };
+
+            ResizeTo(index, cardWidth, cardHeight, cardBorderWidth, columnSpace, rectParent.Height, ratio);
+        }
+
+        public void ResizeTo(int index, int cardWidth, int cardHeight, int cardBorderWidth, int columnSpace,
+            int height,
+            int ratio)
+        {
+            this.Width = cardWidth;
+            this.Height = height;
+            this.Left = ((index + 1) * columnSpace) + (index * cardWidth);
+            BorderStyle = BorderStyle.None;
+            Dock = DockStyle.None;
         }
     }
 
