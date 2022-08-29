@@ -189,8 +189,20 @@ namespace CoreForm
 
         public void ConfirmNewGame()
         {
-            MessageBox.Show(@"恭喜，您贏了!
-您想再玩一次?", "本局結束", MessageBoxButtons.YesNo);
+            Form frmDailog = new Form();
+            frmDailog.StartPosition = FormStartPosition.CenterParent;
+            
+            frmDailog.Width = 200;
+            frmDailog.Height = 100;
+            frmDailog.ShowIcon = false;
+            frmDailog.MinimizeBox = false;
+            frmDailog.MaximizeBox = false;
+            frmDailog.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            frmDailog.ShowDialog(this);
+            frmDailog.Close();
+//            MessageBox.Show(@"恭喜，您贏了!
+//您想再玩一次?", "本局結束", MessageBoxButtons.YesNo);
         }
     }
 }
