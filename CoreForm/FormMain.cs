@@ -43,6 +43,44 @@ namespace CoreForm
             scripts.Enqueue("t7f0");
             scripts.Enqueue("t7t2");
             scripts.Enqueue("t7f1");
+            scripts.Enqueue("t6f2");
+            scripts.Enqueue("t2h3");
+            scripts.Enqueue("t1h3");
+            scripts.Enqueue("t2f0");
+            scripts.Enqueue("f2t7");
+            scripts.Enqueue("t2t7");
+            scripts.Enqueue("t2t3");
+            scripts.Enqueue("t2t5");       
+            scripts.Enqueue("t5f2");
+            scripts.Enqueue("t5t7");
+            scripts.Enqueue("f2t7");
+            scripts.Enqueue("t0h2");
+            scripts.Enqueue("t6f2");
+            scripts.Enqueue("t5f3");
+            scripts.Enqueue("t5t2");
+            scripts.Enqueue("t5t2");
+            scripts.Enqueue("t5h2");
+            scripts.Enqueue("t4f0");
+            scripts.Enqueue("t4t1");
+            scripts.Enqueue("f2t5");
+            scripts.Enqueue("t4f2");
+            scripts.Enqueue("t4t5");
+            scripts.Enqueue("t4t2");
+            scripts.Enqueue("t6t2");
+            scripts.Enqueue("f0t4");
+            scripts.Enqueue("t0t4");
+            scripts.Enqueue("t0t4");
+            scripts.Enqueue("t0t6");
+            scripts.Enqueue("f2h1");
+            scripts.Enqueue("f3h2");
+            scripts.Enqueue("f1t6");
+            scripts.Enqueue("t3t4");
+            scripts.Enqueue("t3h2");
+            scripts.Enqueue("t3t2");
+            scripts.Enqueue("t3f0");
+            scripts.Enqueue("t3f1");              
+            scripts.Enqueue("t1f0");
+            scripts.Enqueue("t1f1");
 
             this.DoubleBuffered = true;
             this.KeyPress += FormMain_KeyPress;
@@ -107,7 +145,7 @@ namespace CoreForm
 
             //    if (targetCardView.Data == null)
             //    {
-            //        game.MoveCardToTemp(cardView, targetCardView);
+            //        scripts.EnqueueCardToTemp(cardView, targetCardView);
             //    } 
             //    else
             //    {
@@ -127,7 +165,7 @@ namespace CoreForm
 
             //    if (targetCardView.Data == null)
             //    {
-            //        game.MoveCardToTemp(cardView, targetCardView);
+            //        scripts.EnqueueCardToTemp(cardView, targetCardView);
             //    }
             //    else
             //    {
@@ -149,5 +187,10 @@ namespace CoreForm
             this.Controls.Add(control);
         }
 
+        public void ConfirmNewGame()
+        {
+            MessageBox.Show(@"恭喜，您贏了!
+您想再玩一次?", "本局結束", MessageBoxButtons.YesNo);
+        }
     }
 }

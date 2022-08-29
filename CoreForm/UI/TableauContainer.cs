@@ -67,8 +67,7 @@ namespace FreeCellSolitaire.UI
             int ratio)
         {
             this.Width = cardWidth;
-            this.Height = height;
-            //this.Left = ((index + 1) * columnSpace) + (index * cardWidth);                        
+            this.Height = height;                  
             if (index == 0)
             {
                 this.Margin = new Padding(columnSpace, 0, columnSpace / 2, 0);
@@ -77,7 +76,6 @@ namespace FreeCellSolitaire.UI
             {
                 this.Margin = new Padding(columnSpace / 2, 0, columnSpace / 2, 0);
             }
-
             Dock = DockStyle.None;
         }
     }

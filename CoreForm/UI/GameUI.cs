@@ -167,6 +167,7 @@ namespace CoreForm.UI
         {
             _game.Move(notation);
             Redraw();
+            CheckCompleted();
         }
 
         public void Reset()
@@ -181,6 +182,11 @@ namespace CoreForm.UI
             _tableauBinder = new TableauBinder(tableau, this._tableauUI);
             _homecellsBinder = new HomecellsBinder(homecells, this._homecellsUI);
             _foundationBinder = new FoundationBinder(foundations, this._foundationsUI);
+        }
+
+        private void CheckCompleted()
+        {
+            _form.ConfirmNewGame();
         }
 
         public void Start()

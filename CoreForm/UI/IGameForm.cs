@@ -12,6 +12,8 @@ namespace CoreForm.UI
         public int Height { get; set; }
         public Size ClientSize { get;  }
         public Color BackColor { get; set; }
+
+        void ConfirmNewGame();
         void Quit();
         void SetControl(Control control);
         void SetControlReady(Control control);
