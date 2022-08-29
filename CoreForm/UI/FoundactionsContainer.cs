@@ -48,11 +48,10 @@ namespace FreeCellSolitaire.UI
     public class FoundationColumnPanel : GeneralColumnPanel
     {
         public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
-        {          
-            //BackColor = Color.BlueViolet;
-            BorderStyle = BorderStyle.FixedSingle;
-            Dock = DockStyle.Left;
-            BorderStyle = BorderStyle.None;            
+        {
+            BorderStyle = BorderStyle.None;
+            this.Margin = new Padding(0);
+            
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;
@@ -109,10 +108,9 @@ namespace FreeCellSolitaire.UI
     {
         public HomecellColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
         {
-            //BackColor = Color.BlueViolet;
-            BorderStyle = BorderStyle.FixedSingle;
-            Dock = DockStyle.Left;
             BorderStyle = BorderStyle.None;
+            this.Margin = new Padding(0);
+
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;

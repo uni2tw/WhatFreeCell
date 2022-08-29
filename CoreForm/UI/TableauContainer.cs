@@ -19,8 +19,7 @@ namespace FreeCellSolitaire.UI
             _columnNumber = columnNumber;                        
             _rect = rect;            
             this.BorderStyle = BorderStyle.None;
-            this.Name = nameof(FoundationsContainer);            
-
+            this.Name = nameof(FoundationsContainer);                        
             ResizeTo(rect, dock, ratio);
             SetControls();
         }
@@ -52,8 +51,8 @@ namespace FreeCellSolitaire.UI
             int cardBorderWidth, int columnSpace,
             Rectangle rectParent,
             int ratio = 100)
-        {
-
+        {            
+            BorderStyle = BorderStyle.None;
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;
@@ -69,8 +68,16 @@ namespace FreeCellSolitaire.UI
         {
             this.Width = cardWidth;
             this.Height = height;
-            this.Left = ((index + 1) * columnSpace) + (index * cardWidth);
-            BorderStyle = BorderStyle.None;
+            //this.Left = ((index + 1) * columnSpace) + (index * cardWidth);                        
+            if (index == 0)
+            {
+                this.Margin = new Padding(columnSpace, 0, columnSpace / 2, 0);
+            }
+            else
+            {
+                this.Margin = new Padding(columnSpace / 2, 0, columnSpace / 2, 0);
+            }
+
             Dock = DockStyle.None;
         }
     }

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace FreeCellSolitaire.UI
 {
-    public abstract class GeneralContainer : Panel
+    public abstract class GeneralContainer : FlowLayoutPanel
     {
         protected IGameForm _form;
         protected List<GeneralColumnPanel> _columnPanels;
@@ -84,7 +84,7 @@ namespace FreeCellSolitaire.UI
             for (int i = 0; i < newCards.Count; i++)
             {
                 var card = newCards[i];
-                var cardControl = new CardControl(_cardWidth, _cardHeight, card);
+                var cardControl = new CardControl(_cardWidth, _cardHeight, card);                
                 columnPanel.AddCardControl(cardControl);
                 int cardTop = columnPanel.GetCardControlCount() * _cardSpacing;
                 cardControl.Redraw(cardTop);
@@ -103,7 +103,8 @@ namespace FreeCellSolitaire.UI
         {
             cardControl.SetIndex(CardControls.Count);
             CardControls.Add(cardControl);
-            this.Controls.Add(cardControl);
+            
+            this.Controls.Add(cardControl);            
             cardControl.BringToFront();
         }
         public void RemoveCardControlsAfter(int index)
