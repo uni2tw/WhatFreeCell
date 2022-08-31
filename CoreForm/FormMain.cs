@@ -20,18 +20,19 @@ namespace CoreForm
         IGameUI gui;
         public const string _GAME_TITLE = "新接龍";
         Queue<string> scripts = new Queue<string>();
-
+        private int _ratio = 100;
         public FormMain()
         {
             InitializeComponent();
             
             this.Text = _GAME_TITLE;
 
+            this._ratio = 160;
             gui = new GameUI(this);
-            gui.InitScreen();
+            gui.InitScreen(_ratio);
             gui.InitEvents();
 
-            gui.Reset();
+            gui.Reset(26458);
             gui.Start();
 
             gui.Redraw();
@@ -124,11 +125,6 @@ namespace CoreForm
         }
 
 
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             //if (e.KeyCode == Keys.F3)
@@ -187,22 +183,91 @@ namespace CoreForm
             this.Controls.Add(control);
         }
 
-        public void ConfirmNewGame()
+        public void ShowNewGameDialog()
         {
-            Form frmDailog = new Form();
-            frmDailog.StartPosition = FormStartPosition.CenterParent;
-            
-            frmDailog.Width = 200;
-            frmDailog.Height = 100;
-            frmDailog.ShowIcon = false;
-            frmDailog.MinimizeBox = false;
-            frmDailog.MaximizeBox = false;
-            frmDailog.FormBorderStyle = FormBorderStyle.FixedSingle;
+            Form frmDialog = new Form();
+            frmDialog.StartPosition = FormStartPosition.CenterParent;
 
-            frmDailog.ShowDialog(this);
-            frmDailog.Close();
-//            MessageBox.Show(@"恭喜，您贏了!
-//您想再玩一次?", "本局結束", MessageBoxButtons.YesNo);
+            frmDialog.Width = 210 * _ratio / 100;
+            frmDialog.Height = 140 * _ratio / 100;
+            frmDialog.ShowIcon = false;
+            frmDialog.MinimizeBox = false;
+            frmDialog.MaximizeBox = false;
+            frmDialog.FormBorderStyle = FormBorderStyle.FixedSingle;
+            frmDialog.StartPosition = FormStartPosition.CenterParent;
+            frmDialog.Text = "本局結束";
+            frmDialog.Font = new Font("新細明體", frmDialog.Width / 24);
+            frmDialog.ControlBox = false;
+
+            FlowLayoutPanel container = new FlowLayoutPanel();
+            container.Dock = DockStyle.Fill;
+            container.FlowDirection = FlowDirection.TopDown;
+            frmDialog.Controls.Add(container);
+
+            Label lb1 = new Label();
+            lb1.Text = "\r\n恭喜，您贏了!\r\n\r\n您想再玩一次?";
+            lb1.Width = container.Width;
+            lb1.Height = container.Height * 6 / 12;
+            lb1.TextAlign = ContentAlignment.TopCenter;
+            lb1.Margin = new Padding(0);
+            container.Controls.Add(lb1);
+
+            CheckBox ch1 = new CheckBox();
+            ch1.Text = "選擇牌局";
+
+            ch1.Width = container.Width;
+            ch1.Height = container.Height * 3 / 12;
+            ch1.Margin = new Padding(0);
+            container.Controls.Add(ch1);
+
+            FlowLayoutPanel buttonGroupPanel = new FlowLayoutPanel
+            {
+                Width = container.Width,
+                Height = container.Height * 3 / 12,
+                FlowDirection = FlowDirection.LeftToRight,
+                BorderStyle = BorderStyle.None,
+                Margin = new Padding(0)
+            };
+            container.Controls.Add(buttonGroupPanel);
+            Button btnYes = new Button
+            {
+                Text = "確定",
+                Width = 60 * _ratio / 100,
+                Height = 24 * _ratio / 100
+            };
+            Button btnNo = new Button
+            {
+                Text = "取消",
+                Width = 60 * _ratio / 100,
+                Height = 24 * _ratio / 100
+            };
+            btnYes.Click += delegate (object sender, EventArgs e)
+            {
+                frmDialog.Close();
+            };
+            btnNo.Click += delegate (object sender, EventArgs e)
+            {
+                frmDialog.Close();
+            };
+            buttonGroupPanel.Controls.Add(btnYes);
+            buttonGroupPanel.Controls.Add(btnNo);
+
+            frmDialog.ShowDialog(this);
+            frmDialog.Close();         
+        }
+    }
+}
+
+public class NewGameDialogForm : Form
+{
+    private const int CP_NOCLOSE_BUTTON = 0x200;
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            CreateParams myCp = base.CreateParams;
+            myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+            return myCp;
         }
     }
 }

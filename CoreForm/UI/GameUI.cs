@@ -20,8 +20,8 @@ namespace CoreForm.UI
     /// </summary>
     public interface IGameUI
     {
-        void InitScreen();
-        void Reset();
+        void InitScreen(int ratio);
+        void Reset(int deckNo);
         void Start();
         void InitEvents();
         void Redraw();
@@ -42,6 +42,10 @@ namespace CoreForm.UI
         TableauBinder _tableauBinder;
         HomecellsBinder _homecellsBinder;
         FoundationBinder _foundationBinder;
+
+        int _defaultWidth = 800;
+        int _defaultHeight = 600;
+        int _ratio;
 
         public GameUI(IGameForm form)
         {
@@ -64,11 +68,13 @@ namespace CoreForm.UI
         /// 初始空畫面
         /// </summary>
         /// <param name="menuHeight"></param>
-        public void InitScreen()
+        public void InitScreen(int ratio)
         {
+            int width = _defaultWidth * ratio / 100;
+            int height = _defaultHeight * ratio / 100;
+            _ratio = ratio;
             //空畫面            
-            //InitBoardScreen(800,600);
-            InitBoardScreen(1280,960);
+            InitBoardScreen(width, height);
             //功能表單
             InitializeMenu();
 
@@ -170,7 +176,7 @@ namespace CoreForm.UI
             CheckCompleted();
         }
 
-        public void Reset()
+        public void Reset(int deckNo)
         {
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
@@ -186,7 +192,7 @@ namespace CoreForm.UI
 
         private void CheckCompleted()
         {
-            _form.ConfirmNewGame();
+            _form.ShowNewGameDialog();
         }
 
         public void Start()

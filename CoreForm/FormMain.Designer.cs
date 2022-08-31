@@ -54,7 +54,7 @@ namespace CoreForm
             this.flowLayoutPanel1.Controls.Add(this.panel2);
             this.flowLayoutPanel1.Controls.Add(this.panel3);
             this.flowLayoutPanel1.Controls.Add(this.panel4);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(304, 164);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(304, 244);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.flowLayoutPanel1.Size = new System.Drawing.Size(600, 150);
@@ -106,7 +106,6 @@ namespace CoreForm
             this.KeyPreview = true;
             this.Name = "FormMain";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
