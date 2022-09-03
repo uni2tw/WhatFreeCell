@@ -185,6 +185,17 @@ namespace CoreForm
 
         public void ShowNewGameDialog()
         {
+            var frm = ConfirmDialogForm.CreateGameoverContinueDialog(210 * _ratio / 100);
+            var dialogResult = frm.ShowDialog(this);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bool sameGame = frm.RetrySameGame;
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                this.Close();
+            }
+            return;
             Form frmDialog = new Form();
             frmDialog.StartPosition = FormStartPosition.CenterParent;
 
@@ -243,10 +254,12 @@ namespace CoreForm
             };
             btnYes.Click += delegate (object sender, EventArgs e)
             {
+                
                 frmDialog.Close();
             };
             btnNo.Click += delegate (object sender, EventArgs e)
             {
+                
                 frmDialog.Close();
             };
             buttonGroupPanel.Controls.Add(btnYes);
@@ -258,16 +271,139 @@ namespace CoreForm
     }
 }
 
-public class NewGameDialogForm : Form
-{
-    private const int CP_NOCLOSE_BUTTON = 0x200;
-    protected override CreateParams CreateParams
+public class ConfirmDialogForm : Form
+{    
+    protected FlowLayoutPanel container;
+    protected FlowLayoutPanel btnGroup;
+    protected FlowLayoutPanel confirmPanel;
+    protected FlowLayoutPanel messagePanel;
+
+    protected Button btnYes;
+    protected Button btnNo;
+    protected Label lbMessage;
+    protected CheckBox chkConfirm = new CheckBox();
+    public bool RetrySameGame
     {
         get
         {
-            CreateParams myCp = base.CreateParams;
-            myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
-            return myCp;
+            return chkConfirm.Checked;
         }
     }
+    public static ConfirmDialogForm CreateGameoverContinueDialog(int width)
+    {
+        return new ConfirmDialogForm(width, (int)(width * 0.618f))
+        {
+            YesText = "是(&Y)",
+            NoText = "否(&N)",
+            Caption = "本局結束",
+            Message = "後抱歉，這局您輸了，您不能再移動任何一張牌。\r\n您想再玩一次？",
+            MessageTextAlign = ContentAlignment.TopLeft,
+            ConfirmText = "相同牌局(&S)"
+        };
+    }
+
+    public ConfirmDialogForm(int width, int height)
+    {
+        this.Width = width;
+        this.Height = height;
+        this.ShowIcon = false;
+        this.ControlBox = false;
+        this.StartPosition = FormStartPosition.CenterParent;
+        this.Padding = new Padding(0);
+        this.Font = new Font("新細明體", this.Width / 24);        
+    }
+
+    protected override void OnLoad(EventArgs e)
+    {
+        this.Text = this.Caption;
+
+        base.OnLoad(e);
+
+        container = new FlowLayoutPanel();
+        container.Margin = new Padding(0);
+        container.Padding = new Padding(0);
+        container.Dock = DockStyle.Fill;
+        container.Width = this.ClientSize.Width;
+        container.Height = this.ClientSize.Height;
+
+        
+        int fullWidth = container.ClientSize.Width;
+        int fullHeight = container.ClientSize.Height;
+        int cellWidth = fullWidth / 15;
+        int cellHeight = fullHeight / 15;        
+ 
+        container.FlowDirection = FlowDirection.TopDown;
+        
+        this.Controls.Add(container);        
+
+        messagePanel = new FlowLayoutPanel
+        {
+            Margin = new Padding(0),
+            Padding = new Padding(cellWidth, cellHeight, cellWidth, cellHeight),
+            FlowDirection = FlowDirection.TopDown,
+            Height = cellHeight * 8
+        };        
+        confirmPanel = new FlowLayoutPanel
+        {
+            Margin = new Padding(0),
+            Padding = new Padding(cellWidth, cellHeight, cellWidth, cellHeight),
+            FlowDirection = FlowDirection.TopDown,
+            Height = cellHeight * 3
+        };        
+        btnGroup = new FlowLayoutPanel
+        {
+            Margin = new Padding(0),
+            Padding = new Padding(cellWidth, cellHeight, cellWidth, 0),
+            FlowDirection = FlowDirection.LeftToRight,
+            Height = cellHeight * 4
+        };
+        messagePanel.Width = container.ClientRectangle.Width;        
+        confirmPanel.Width = container.ClientRectangle.Width;
+        btnGroup.Width = container.ClientRectangle.Width;
+        container.Controls.Add(messagePanel);
+        container.Controls.Add(confirmPanel);
+        container.Controls.Add(btnGroup);
+
+
+        lbMessage = new Label { Text = Message, Margin = new Padding(0), TextAlign = MessageTextAlign };        
+        lbMessage.AutoSize = true;
+        messagePanel.Controls.Add(lbMessage);
+
+        chkConfirm = new CheckBox { Text = ConfirmText, Margin = new Padding(0) };
+        chkConfirm.AutoSize = true;
+        confirmPanel.Controls.Add(chkConfirm);
+
+
+
+        btnYes = new Button { Text = YesText, Margin = new Padding(0) };
+        btnNo = new Button { Text = NoText, Margin = new Padding(0) };
+
+        btnYes.AutoSize = true;
+        btnNo.AutoSize = true;
+        btnGroup.Controls.Add(btnYes);
+        btnGroup.Controls.Add(btnNo);
+        btnNo.Margin = new(btnNo.Width / 4, 0, 0, 0);
+
+        btnNo.Click += delegate (object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.No;
+            this.Close();            
+        };
+
+        btnYes.Click += delegate (object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Yes;
+            this.Close();
+        };
+
+    }
+
+
+    public string Caption { get; set; }
+    public ContentAlignment MessageTextAlign {get;set;}
+    public string Message { get; set; }
+    public string ConfirmText { get; set; }
+    public string YesText { get; set; }
+    public string NoText { get; set; }
+    public bool ConfirmResult { get; set; }
 }
