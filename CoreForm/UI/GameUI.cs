@@ -119,8 +119,14 @@ namespace CoreForm.UI
                 }
                 //this.Init();
             };
-            menuItem0.DropDownItems.Add("選擇牌局", null);
-            menuItem0.DropDownItems.Add("重啟牌局", null);
+            menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
+            {
+                _form.ShowSelectGameNumberDialog();
+            };
+            menuItem0.DropDownItems.Add("重啟牌局", null).Click += delegate (object sender, EventArgs e)
+            {
+                _form.RestartGame();
+            };
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
             menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
             {
@@ -182,7 +188,7 @@ namespace CoreForm.UI
             var tableau = new Tableau(_game);
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
-            var deck = Deck.Create().Shuffle(26458);
+            var deck = Deck.Create().Shuffle(deckNo);
             tableau.Init(deck);
 
             _tableauBinder = new TableauBinder(tableau, this._tableauUI);
@@ -192,7 +198,7 @@ namespace CoreForm.UI
 
         private void CheckCompleted()
         {
-            _form.ShowNewGameDialog();
+            
         }
 
         public void Start()
@@ -214,6 +220,7 @@ namespace CoreForm.UI
 
         public void Redraw()
         {
+            _foundationsUI.Clear();
             for (int columnIndex = 0; columnIndex < _foundations.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
@@ -243,6 +250,7 @@ namespace CoreForm.UI
 
         public void Redraw()
         {
+            _homecellsUI.Clear();
             for (int columnIndex = 0; columnIndex < _homecells.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
@@ -253,7 +261,7 @@ namespace CoreForm.UI
                         Number = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Number,
                         Suit = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Suit
                     });
-                }
+                }                
                 _homecellsUI.RedrawCards(columnIndex, cards);
             }
         }
@@ -271,8 +279,9 @@ namespace CoreForm.UI
         }
 
         public void Redraw()
-        {            
-            for(int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
+        {
+            _tableauUI.Clear();            
+            for (int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
                 for (int cardIndex = 0; cardIndex < _tableau.GetColumn(columnIndex).GetCardsCount(); cardIndex++)

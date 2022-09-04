@@ -185,13 +185,19 @@ namespace CoreForm
             this.Controls.Add(control);
         }
 
-        public void ShowNewGameDialog()
+        public void ShowSelectGameNumberDialog()
         {
-            var dialogResult = _dialog.ShowCancelGameDialog();
+            var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
-                this.Close();
+                gui.Reset(int.Parse(dialogResult.ReturnText));
+                gui.Redraw();
             }
+        }
+
+        public void RestartGame()
+        {
+            
         }
     }
 }

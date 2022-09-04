@@ -66,6 +66,12 @@ namespace FreeCellSolitaire.UI
             this._form.SetControlReady(this);
         }
 
+        public void Clear()
+        {
+            _columnPanels.ForEach(x => x.Controls.Clear()) ;
+            _columnPanels.ForEach(x => x.CardControls.Clear());
+        }
+
         public void RedrawCards(int index, List<Card> cards)
         {
             var columnPanel = _columnPanels[index];

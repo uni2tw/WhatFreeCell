@@ -67,6 +67,13 @@ public class DialogForms
             btn.Margin = new Padding(
                 (int)((btn.Parent.Width - btn.Width) / 2), 0, 0, 0);
 
+            btn.Click += delegate (object sender, EventArgs e)
+            {
+                this.DialogResult = DialogResult.Yes;
+                this.InputText = tbNumber.Text;
+                this.Close();
+            };
+
             base.OnLoad(e);
         }
 
