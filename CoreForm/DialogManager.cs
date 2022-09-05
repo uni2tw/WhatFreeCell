@@ -45,12 +45,12 @@ public class DialogManager
             YesText = "確定",
             Caption = "牌局編號",
             Message = "\r\n請選擇牌局編號\r\n從 1 到10000\r\n",
-            ConfirmText = "23613"
+            InputText = "23613"
         };
         var dialogResult = frm.ShowDialog(_owner);
         FormDialogResult result = new FormDialogResult(dialogResult)
         {
-            ReturnText = frm.ConfirmText
+            ReturnText = frm.InputText
         };
         return result;
     }

@@ -26,10 +26,9 @@ public class DialogForms
                 this.Text = value;
             }
         }
-        public string InputText { get; set; }
 
         public string Message { get; set; }
-        public string ConfirmText { get; set; }
+        public string InputText { get; set; }
 
 
         protected override void OnLoad(EventArgs e)
@@ -54,7 +53,7 @@ public class DialogForms
             container.Controls.Add(lbMessage, 0, 0);
 
             TextBox tbNumber = new TextBox();
-            tbNumber.Text = this.ConfirmText;
+            tbNumber.Text = this.InputText;
             container.Controls.Add(tbNumber, 0, 1);
             tbNumber.MaxLength = 10;
             tbNumber.Margin = new Padding(

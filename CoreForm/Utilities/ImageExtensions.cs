@@ -11,6 +11,20 @@ namespace CoreForm.Utilities
     /// </summary>
     public static class ImageExtensions
     {
+        public static Bitmap DrawAsBlueLight(this Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                           {
+                                new float[] {-1, 0, 0, 0, 0},
+                                new float[] {0, 1, 0, 0, 0},
+                                new float[] {0, 0, 1, 0, 0},
+                                new float[] {0, 0, 0, 1, 0},
+                                new float[] {1, 1, 1, 0, 1}
+                           });
+
+
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
         public static Bitmap DrawAsNegative(this Image sourceImage)
         {
             ColorMatrix colorMatrix = new ColorMatrix(new float[][]
@@ -34,7 +48,7 @@ namespace CoreForm.Utilities
             using (Graphics graphics = Graphics.FromImage(bmp32BppDest))
             {
                 ImageAttributes bmpAttributes = new ImageAttributes();
-                bmpAttributes.SetColorMatrix(colorMatrix);
+                bmpAttributes.SetColorMatrix(colorMatrix);                
 
                 graphics.DrawImage(bmp32BppSource, new Rectangle(0, 0, bmp32BppSource.Width, bmp32BppSource.Height),
                                     0, 0, bmp32BppSource.Width, bmp32BppSource.Height, GraphicsUnit.Pixel, bmpAttributes);

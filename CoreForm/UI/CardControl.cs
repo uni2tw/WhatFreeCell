@@ -65,7 +65,15 @@ namespace FreeCellSolitaire.UI
                 .GetManifestResourceStream("FreeCellSolitaire.assets.img." + GetImageFileName() + ".png");
             Image img = Image.FromStream(resource);
             this.Image = img;
-            this.ActiveImage = img.DrawAsNegative();
+            if (_card.IsBlack())
+            {
+                this.ActiveImage = img.DrawAsBlueLight();
+            }
+            else
+            {
+                this.ActiveImage = img.DrawAsNegative();
+            }            
+            this.Image = ActiveImage;
         }
 
         private string GetImageFileName()
