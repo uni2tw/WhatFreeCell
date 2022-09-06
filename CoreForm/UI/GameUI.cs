@@ -27,7 +27,6 @@ namespace CoreForm.UI
         void Redraw();
         void Move(string notation);
 
-        bool IsPlaying { get; }
     }
 
 
@@ -50,13 +49,6 @@ namespace CoreForm.UI
         public GameUI(IGameForm form)
         {
             this._form = form;            
-        }
-        public bool IsPlaying
-        {
-            get
-            {
-                return true;
-            }
         }
 
         public void InitEvents()
@@ -112,11 +104,12 @@ namespace CoreForm.UI
             menu.Items.Add(menuItem0);
             menuItem0.DropDownItems.Add("新遊戲", null).Click += delegate (object sender, EventArgs e)
             {
-                if (this.IsPlaying &&
+                if (_game.IsPlaying() &&
                     MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     return;
                 }
+                this.Reset(null)
                 //this.Init();
             };
             menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)

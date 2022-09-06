@@ -417,6 +417,20 @@ namespace FreeCellSolitaire.Tests
             Assert.IsTrue(game.IsCompleted(), "¹CÀ¸§¹¦¨");
 
         }
+        [Test]
+        public void GameIsPlaying()
+        {
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+
+            Assert.IsFalse(game.IsPlaying());
+            tableau.GetColumn(0).AddCards("s1");
+            Assert.IsTrue(game.IsPlaying());
+            game.Move("t0h0");
+            Assert.IsFalse(game.IsPlaying());
+        }
 
         [Test]
         public void GameCloneTest()

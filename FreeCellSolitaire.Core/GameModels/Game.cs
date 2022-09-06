@@ -165,6 +165,16 @@ public class Game : IGame
         return sb.ToString();
     }
 
+    public bool IsPlaying()
+    {
+        int unfinish = 0;
+        for(int i = 0; i < Tableau.ColumnCount; i++)
+        {
+            unfinish += Tableau.GetColumn(i).GetCardsCount();
+        }
+        return unfinish > 0;
+    }
+
     public bool IsCompleted()
     {
         if (Homecells.GetColumn(0).GetCardsCount() +
