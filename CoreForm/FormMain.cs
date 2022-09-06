@@ -190,7 +190,7 @@ namespace CoreForm
             var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
-                gui.Reset(int.Parse(dialogResult.ReturnText));
+                gui.Reset(int.Parse(dialogResult.ReturnText));                
                 gui.Redraw();
             }
         }

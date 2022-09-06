@@ -191,6 +191,10 @@ namespace CoreForm.UI
             var deck = Deck.Create().Shuffle(deckNo);
             tableau.Init(deck);
 
+            _tableauUI.Clear();
+            _homecellsUI.Clear();
+            _foundationsUI.Clear();
+
             _tableauBinder = new TableauBinder(tableau, this._tableauUI);
             _homecellsBinder = new HomecellsBinder(homecells, this._homecellsUI);
             _foundationBinder = new FoundationBinder(foundations, this._foundationsUI);
@@ -220,7 +224,6 @@ namespace CoreForm.UI
 
         public void Redraw()
         {
-            _foundationsUI.Clear();
             for (int columnIndex = 0; columnIndex < _foundations.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
@@ -250,7 +253,6 @@ namespace CoreForm.UI
 
         public void Redraw()
         {
-            _homecellsUI.Clear();
             for (int columnIndex = 0; columnIndex < _homecells.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
@@ -279,8 +281,7 @@ namespace CoreForm.UI
         }
 
         public void Redraw()
-        {
-            _tableauUI.Clear();            
+        {       
             for (int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();

@@ -69,5 +69,22 @@
             if (castObj == null) return false;
             return castObj.Number == this.Number && castObj.Suit == this.Suit;
         }
+
+        public bool IsRed()
+        {
+            if (this.Suit == CardSuit.Heart || this.Suit == CardSuit.Diamond)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool IsBlack()
+        {
+            if (this.Suit == CardSuit.Spade || this.Suit == CardSuit.Club)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

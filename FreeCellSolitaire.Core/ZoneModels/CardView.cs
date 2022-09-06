@@ -218,18 +218,10 @@ public class CardView
 
     public bool IsRed()
     {
-        if (this._card.Suit == CardSuit.Heart || this._card.Suit == CardSuit.Diamond )
-        {
-            return true;             
-        }
-        return false;
+        return this._card.IsRed();
     }
     public bool IsBlack()
     {
-        if (this._card.Suit == CardSuit.Spade || this._card.Suit == CardSuit.Club)
-        {
-            return true;
-        }
-        return false;
+        return this._card.IsBlack();
     }
 }

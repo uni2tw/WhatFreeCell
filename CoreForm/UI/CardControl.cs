@@ -73,7 +73,7 @@ namespace FreeCellSolitaire.UI
             {
                 this.ActiveImage = img.DrawAsNegative();
             }            
-            this.Image = ActiveImage;
+            //this.Image = ActiveImage;
         }
 
         private string GetImageFileName()
