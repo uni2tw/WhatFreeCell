@@ -82,5 +82,24 @@ namespace FreeCellSolitaire.Tests
             };
             Assert.Greater((double)adjacentSumScore / adjacentCount, 2);
         }
+
+        [Test(Description = "每次開新局，自動產生亂數編號，以產生遊戲")]
+        public void ShuffleByRandomTest()
+        {
+            var deck = Deck.Create().Shuffle(null);
+            Assert.IsTrue(deck.Number >= 1);
+            Assert.IsTrue(deck.Number <= Deck.MaxNumber);
+
+            int testTimes = 10;
+            HashSet<int> samples = new HashSet<int>();
+            for (int i = 0; i < testTimes; i++)
+            {
+                int num = Deck.Create().Shuffle(null).Number;
+                samples.Add(num);
+            }
+            
+            Console.WriteLine($"產生不同的 {samples.Count}/{testTimes} 遊戲，小於10即可");
+            Assert.IsTrue(samples.Count > 1);
+        }
     }
 }

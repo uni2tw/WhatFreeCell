@@ -21,7 +21,7 @@ namespace CoreForm.UI
     public interface IGameUI
     {
         void InitScreen(int ratio);
-        void Reset(int deckNo);
+        int Reset(int? deckNo);
         void Start();
         void InitEvents();
         void Redraw();
@@ -104,13 +104,14 @@ namespace CoreForm.UI
             menu.Items.Add(menuItem0);
             menuItem0.DropDownItems.Add("新遊戲", null).Click += delegate (object sender, EventArgs e)
             {
-                if (_game.IsPlaying() &&
+                if (_game.IsPlaying() &&                
                     MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     return;
                 }
-                this.Reset(null)
-                //this.Init();
+                int gameNumber = this.Reset(null);
+                this.Redraw();
+                _form.SetCaption(gameNumber.ToString());
             };
             menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
             {
@@ -123,6 +124,11 @@ namespace CoreForm.UI
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
             menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
             {
+                if (_game.IsPlaying() &&
+                    MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
                 _form.Quit();
             };
 
@@ -175,12 +181,13 @@ namespace CoreForm.UI
             CheckCompleted();
         }
 
-        public void Reset(int deckNo)
+        public int Reset(int? deckNo)
         {
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
+          
             var deck = Deck.Create().Shuffle(deckNo);
             tableau.Init(deck);
 
@@ -191,6 +198,7 @@ namespace CoreForm.UI
             _tableauBinder = new TableauBinder(tableau, this._tableauUI);
             _homecellsBinder = new HomecellsBinder(homecells, this._homecellsUI);
             _foundationBinder = new FoundationBinder(foundations, this._foundationsUI);
+            return deck.Number;
         }
 
         private void CheckCompleted()

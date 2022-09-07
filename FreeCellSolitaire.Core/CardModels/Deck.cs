@@ -12,6 +12,8 @@ namespace FreeCellSolitaire.Core.CardModels
     /// </summary>
     public class Deck
     {
+        public const int MaxNumber = 10000;
+        public int Number { get; set; }
         public Deck(int cardCount)
         {
             _cards = new Card[cardCount];
@@ -91,13 +93,19 @@ namespace FreeCellSolitaire.Core.CardModels
         /// </summary>
         /// <param name="seed"></param>
         /// <returns></returns>
-        public Deck Shuffle(int seed)
+        public Deck Shuffle(int? number)
         {
-            if (OriginalDeck(seed))
+            if (number == null)
+            {
+                Random seedRand = new Random();
+                number = seedRand.Next(10000) + 1;
+            }
+            this.Number = number.Value;
+            if (DebugDeck(number.Value))
             {
                 return this;
             }
-            Random rand = new Random(seed);
+            Random rand = new Random(number.Value);
             List<Card> temp = new List<Card>(_cards);
             int pos = 0;
             while (temp.Count > 0)
@@ -106,11 +114,11 @@ namespace FreeCellSolitaire.Core.CardModels
                 _cards[pos] = temp[from];
                 pos++;
                 temp.RemoveAt(from);
-            }
+            }            
             return this;
         }
 
-        private bool OriginalDeck(int seed)
+        private bool DebugDeck(int seed)
         {
             if (seed == 26458)
             {
@@ -180,6 +188,7 @@ namespace FreeCellSolitaire.Core.CardModels
             }
             return false;
         }
+
     }
 
 }

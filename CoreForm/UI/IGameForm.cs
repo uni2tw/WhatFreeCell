@@ -18,6 +18,7 @@ namespace CoreForm.UI
         void SetControl(Control control);
         void SetControlReady(Control control);
         void RestartGame();
+        void SetCaption(string text);
     }
     //public class Game
     //{
