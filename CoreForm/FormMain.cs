@@ -34,8 +34,8 @@ namespace CoreForm
             gui.InitScreen(_ratio);
             gui.InitEvents();
 
-            int gameNumber = gui.Reset(26458);
-            this.SetCaption(gameNumber.ToString());
+            gui.Reset(26458);
+            this.SetCaption(gui.GameNumber.ToString());
 
             gui.Start();
 

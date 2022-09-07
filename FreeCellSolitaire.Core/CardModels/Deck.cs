@@ -97,8 +97,7 @@ namespace FreeCellSolitaire.Core.CardModels
         {
             if (number == null)
             {
-                Random seedRand = new Random();
-                number = seedRand.Next(10000) + 1;
+                number = GetRandom();
             }
             this.Number = number.Value;
             if (DebugDeck(number.Value))
@@ -189,6 +188,11 @@ namespace FreeCellSolitaire.Core.CardModels
             return false;
         }
 
+        public int GetRandom()
+        {
+            Random seedRand = new Random();
+            return seedRand.Next(10000) + 1;
+        }
     }
 
 }
