@@ -1,4 +1,5 @@
-﻿using FreeCellSolitaire.Entities.GameEntities;
+﻿using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Entities.GameEntities;
 
 namespace FreeCellSolitaire.Core.GameModels;
 
@@ -10,6 +11,7 @@ public interface IGame
     Foundations Foundations { get; set; }
     Tableau Tableau { get; set; }
 
+    Deck Deck { get; }
     void Move(string notation);
     void DebugInfo(string stepNum = "", bool enabled = true);
     void DebugInfo(int stepNum, bool enabled = true);

@@ -1,4 +1,5 @@
-﻿using FreeCellSolitaire.Entities.GameEntities;
+﻿using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Entities.GameEntities;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,11 +13,13 @@ public class Game : IGame
     public Foundations Foundations { get; set; }
 
     public Tableau Tableau { get; set; }
+    public Deck Deck { get; private set; }
 
     public bool EnableAssist { get; set; }
 
     public Game()
     {
+        Deck = Deck.Create();
     }
 
     public int GetExtraMobility()

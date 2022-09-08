@@ -187,9 +187,9 @@ namespace CoreForm
             this.Controls.Add(control);
         }
 
-        public void ShowSelectGameNumberDialog()
+        public void ShowSelectGameNumberDialog(int gameNumber)
         {
-            var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100);
+            var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100,  gameNumber);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
                 gui.Reset(int.Parse(dialogResult.ReturnText));                

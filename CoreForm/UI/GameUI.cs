@@ -117,7 +117,7 @@ namespace CoreForm.UI
             };
             menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
             {
-                _form.ShowSelectGameNumberDialog();
+                _form.ShowSelectGameNumberDialog(_game.Deck.GetRandom());
             };
             menuItem0.DropDownItems.Add("重啟牌局", null).Click += delegate (object sender, EventArgs e)
             {
@@ -195,7 +195,7 @@ namespace CoreForm.UI
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
           
-            var deck = Deck.Create().Shuffle(deckNo);
+            var deck = _game.Deck.Shuffle(deckNo);
             tableau.Init(deck);
             this.GameNumber = deck.Number;
 
