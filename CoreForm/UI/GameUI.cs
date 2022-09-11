@@ -40,10 +40,6 @@ namespace CoreForm.UI
         private HomecellsContainer _homecellsUI;
         private FoundationsContainer _foundationsUI;
 
-        TableauBinder _tableauBinder;
-        HomecellsBinder _homecellsBinder;
-        FoundationBinder _foundationBinder;
-
         int _defaultWidth = 800;
         int _defaultHeight = 600;
         int _ratio;
@@ -174,13 +170,6 @@ namespace CoreForm.UI
 
         }
 
-        public void Redraw()
-        {            
-            _tableauBinder.Redraw();
-            _homecellsBinder.Redraw();
-            _foundationBinder.Redraw();
-        }
-
         public void Move(string notation)
         {
             _game.Move(notation);
@@ -202,10 +191,7 @@ namespace CoreForm.UI
             _tableauUI.Clear();
             _homecellsUI.Clear();
             _foundationsUI.Clear();
-
-            _tableauBinder = new TableauBinder(tableau, this._tableauUI);
-            _homecellsBinder = new HomecellsBinder(homecells, this._homecellsUI);
-            _foundationBinder = new FoundationBinder(foundations, this._foundationsUI);            
+        
         }
 
         private void CheckCompleted()
@@ -219,21 +205,36 @@ namespace CoreForm.UI
         }
 
         public int? GameNumber { get; set; }
-    }
-
-    public class FoundationBinder
-    {
-        private Foundations _foundations;
-        private FoundationsContainer _foundationsUI;
-
-        public FoundationBinder(Foundations foundations, FoundationsContainer foundationsUI)
-        {
-            this._foundations = foundations;
-            this._foundationsUI = foundationsUI;
-        }
 
         public void Redraw()
         {
+            RedrawTableau();
+            RedrawHomecells();
+            RedrawFoundations();
+        }
+
+
+        private void RedrawTableau()
+        {
+            var _tableau = _game.Tableau;
+            for (int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
+            {
+                List<Card> cards = new List<Card>();
+                for (int cardIndex = 0; cardIndex < _tableau.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
+                {
+                    cards.Add(new Card
+                    {
+                        Number = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Number,
+                        Suit = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Suit
+                    });
+                }
+                _tableauUI.RedrawCards(columnIndex, cards);
+            }
+        }
+
+        private void RedrawFoundations()
+        {
+            var _foundations = _game.Foundations;
             for (int columnIndex = 0; columnIndex < _foundations.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
@@ -248,21 +249,10 @@ namespace CoreForm.UI
                 _foundationsUI.RedrawCards(columnIndex, cards);
             }
         }
-    }
 
-    public class HomecellsBinder
-    {
-        Homecells _homecells;
-        HomecellsContainer _homecellsUI;
-
-        public HomecellsBinder(Homecells homecells, HomecellsContainer homecellsUI)
+        private void RedrawHomecells()
         {
-            _homecells = homecells;
-            _homecellsUI = homecellsUI;
-        }
-
-        public void Redraw()
-        {
+            var _homecells = _game.Homecells;
             for (int columnIndex = 0; columnIndex < _homecells.ColumnCount; columnIndex++)
             {
                 List<Card> cards = new List<Card>();
@@ -273,38 +263,9 @@ namespace CoreForm.UI
                         Number = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Number,
                         Suit = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Suit
                     });
-                }                
+                }
                 _homecellsUI.RedrawCards(columnIndex, cards);
             }
-        }
-    }
-
-    public class TableauBinder
-    {
-        private Tableau _tableau;
-        private TableauContainer _tableauUI;
-
-        public TableauBinder(Tableau tableau, TableauContainer tableauUI) 
-        {
-            _tableau = tableau;
-            _tableauUI = tableauUI;
-        }
-
-        public void Redraw()
-        {       
-            for (int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
-            {
-                List<Card> cards = new List<Card>();
-                for (int cardIndex = 0; cardIndex < _tableau.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
-                {
-                    cards.Add(new Card
-                    {
-                        Number = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Number,
-                        Suit = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Suit
-                    });
-                }
-                _tableauUI.RedrawCards(columnIndex, cards);
-            }            
         }
     }
 
