@@ -25,7 +25,7 @@ namespace CoreForm
         public FormMain()
         {
             InitializeComponent();
-            
+
             this.Text = _GAME_TITLE;
             _dialog = new DialogManager(this);
 
@@ -34,11 +34,26 @@ namespace CoreForm
             gui.InitScreen(_ratio);
             gui.InitEvents();
 
-            gui.Reset(26458);
             this.SetCaption(gui.GameNumber.ToString());
 
-            gui.Start();
+            this.DoubleBuffered = true;
+            this.KeyPress += FormMain_KeyPress;
+            this.Load += FormMain_Load;
+            this.FormClosing += Form1_FormClosing;
+        }
 
+        private void FormMain_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string notation;
+            if (scripts.TryDequeue(out notation))
+            {
+                gui.Move(notation);
+            }
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            gui.Start(26458);
             gui.Redraw();
 
             scripts.Enqueue("t1h0");
@@ -55,7 +70,7 @@ namespace CoreForm
             scripts.Enqueue("f2t7");
             scripts.Enqueue("t2t7");
             scripts.Enqueue("t2t3");
-            scripts.Enqueue("t2t5");       
+            scripts.Enqueue("t2t5");
             scripts.Enqueue("t5f2");
             scripts.Enqueue("t5t7");
             scripts.Enqueue("f2t7");
@@ -83,28 +98,9 @@ namespace CoreForm
             scripts.Enqueue("t3h2");
             scripts.Enqueue("t3t2");
             scripts.Enqueue("t3f0");
-            scripts.Enqueue("t3f1");              
+            scripts.Enqueue("t3f1");
             scripts.Enqueue("t1f0");
             scripts.Enqueue("t1f1");
-
-            this.DoubleBuffered = true;
-            this.KeyPress += FormMain_KeyPress;
-            this.Load += FormMain_Load;
-            this.FormClosing += Form1_FormClosing;
-        }
-
-        private void FormMain_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            string notation;
-            if (scripts.TryDequeue(out notation))
-            {
-                gui.Move(notation);
-            }
-        }
-
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-
 
         }
 
@@ -192,7 +188,7 @@ namespace CoreForm
             var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100,  gameNumber);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
-                gui.Reset(int.Parse(dialogResult.ReturnText));                
+                gui.Start(int.Parse(dialogResult.ReturnText));                
                 gui.Redraw();
             }
         }

@@ -21,16 +21,13 @@ namespace CoreForm.UI
     public interface IGameUI
     {
         void InitScreen(int ratio);
-        void Reset(int? deckNo);
-        void Start();
+        void Start(int? deckNo);
         void InitEvents();
         void Redraw();
         void Move(string notation);
 
         public int? GameNumber { get; set; }
-
     }
-
 
     public class GameUI : IGameUI
     {
@@ -107,7 +104,7 @@ namespace CoreForm.UI
                 {
                     return;
                 }
-                this.Reset(null);
+                this.Start(null);
                 this.Redraw();
                 _form.SetCaption(this.GameNumber.ToString());
             };
@@ -121,7 +118,7 @@ namespace CoreForm.UI
                 {
                     return;
                 }
-                Reset(GameNumber);
+                Start(GameNumber);
                 Redraw();
             };
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
@@ -177,7 +174,7 @@ namespace CoreForm.UI
             CheckCompleted();
         }
 
-        public void Reset(int? deckNo)
+        public void Start(int? deckNo)
         {
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
@@ -197,11 +194,6 @@ namespace CoreForm.UI
         private void CheckCompleted()
         {
             
-        }
-
-        public void Start()
-        {
-        
         }
 
         public int? GameNumber { get; set; }
