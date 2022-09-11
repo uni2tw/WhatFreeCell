@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms;
 
 namespace CoreForm.UI
@@ -22,6 +23,7 @@ namespace CoreForm.UI
     {
         void InitScreen(int ratio);
         void Start(int? deckNo);
+        bool QuitGame();
         void InitEvents();
         void Redraw();
         void Move(string notation);
@@ -32,6 +34,7 @@ namespace CoreForm.UI
     public class GameUI : IGameUI
     {
         IGameForm _form;
+        DialogManager _dialog;
         IGame _game;
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
@@ -41,9 +44,10 @@ namespace CoreForm.UI
         int _defaultHeight = 600;
         int _ratio;
 
-        public GameUI(IGameForm form)
+        public GameUI(IGameForm form, DialogManager dialog)
         {
-            this._form = form;            
+            this._form = form;
+            this._dialog = dialog;
         }
 
         public void InitEvents()
@@ -124,12 +128,7 @@ namespace CoreForm.UI
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
             menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
             {
-                if (_game.IsPlaying() &&
-                    MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
-                {
-                    return;
-                }
-                _form.Quit();
+                _form.Close();
             };
 
             var menuItem1 = new ToolStripMenuItem();
@@ -141,7 +140,7 @@ namespace CoreForm.UI
             };
 
             _form.SetControl(menu);
-        }
+        }        
 
         private void InitControls()
         {        
@@ -189,6 +188,16 @@ namespace CoreForm.UI
             _homecellsUI.Clear();
             _foundationsUI.Clear();
         
+        }
+
+        public bool QuitGame()
+        {
+            if (_game.IsPlaying() &&
+                MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                return false;
+            }
+            return true;
         }
 
         private void CheckCompleted()

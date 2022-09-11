@@ -30,7 +30,7 @@ namespace CoreForm
             _dialog = new DialogManager(this);
 
             this._ratio = 160;
-            gui = new GameUI(this);
+            gui = new GameUI(this, _dialog);
             gui.InitScreen(_ratio);
             gui.InitEvents();
 
@@ -106,69 +106,10 @@ namespace CoreForm
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /*
-            if (this.gui.IsPlaying)
+            if (gui.QuitGame() == false)
             {
-                if (MessageBox.Show("是否放棄這一局", _GAME_TITLE, MessageBoxButtons.YesNo) == DialogResult.No) {
-                    e.Cancel = true;
-                }
-            } 
-            */
-        }
-
-        /// <summary>
-        /// 結束遊戲
-        /// </summary>
-        public void Quit()
-        {
-            this.Close();
-        }
-
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            //if (e.KeyCode == Keys.F3)
-            //{
-            //    //game.DeselectTempCard();
-            //    game.DeselectWaitingCard();
-            //    CardView cardView = game.SelectWaitingCard(0);
-            //    if (cardView != null)
-            //    {
-            //        cardView.Actived = true;
-            //    }
-
-            //    CardView targetCardView = game.SelectTempCard(0);
-
-            //    if (targetCardView.Data == null)
-            //    {
-            //        scripts.EnqueueCardToTemp(cardView, targetCardView);
-            //    } 
-            //    else
-            //    {
-            //        MessageBox.Show("此步犯規");
-            //    }
-            //} 
-            //else if (e.KeyCode == Keys.F4)
-            //{
-            //    game.DeselectWaitingCard();
-            //    CardView cardView = game.SelectWaitingCard(1);
-            //    if (cardView != null)
-            //    {
-            //        cardView.Actived = true;
-            //    }
-
-            //    CardView targetCardView = game.SelectTempCard(0);
-
-            //    if (targetCardView.Data == null)
-            //    {
-            //        scripts.EnqueueCardToTemp(cardView, targetCardView);
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("此步犯規");
-            //        game.DeselectWaitingCard();
-            //    }
-            //}
+                e.Cancel = true;
+            }            
         }
 
         public void SetControlReady(Control control)

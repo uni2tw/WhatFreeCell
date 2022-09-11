@@ -14,7 +14,7 @@ namespace CoreForm.UI
         public Color BackColor { get; set; }
 
         void ShowSelectGameNumberDialog(int gameNumber);
-        void Quit();
+        void Close();
         void SetControl(Control control);
         void SetControlReady(Control control);
         void RestartGame();
