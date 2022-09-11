@@ -12,16 +12,14 @@ namespace FreeCellSolitaire.UI
 {
     public abstract class GeneralContainer : FlowLayoutPanel
     {
-        protected IGameForm _form;
         protected List<GeneralColumnPanel> _columnPanels;
         protected int _cardWidth;
         protected int _cardHeight;
         protected int _columnNumber;
         protected int _columnSpace;
         protected int _cardSpacing;
-        public GeneralContainer(IGameForm form, int cardWidth, int cardHeight, int columnNumber)
+        public GeneralContainer(int cardWidth, int cardHeight, int columnNumber)
         {
-            _form = form;
             _columnPanels = new List<GeneralColumnPanel>(columnNumber);
             _cardWidth = cardWidth;
             _cardHeight = cardHeight;
@@ -61,9 +59,6 @@ namespace FreeCellSolitaire.UI
                 this.Width = (int)(this.Width * ratio / 100);
                 this.Height = (int)(this.Height * ratio / 100);
             }
-
-
-            this._form.SetControlReady(this);
         }
 
         public void Clear()

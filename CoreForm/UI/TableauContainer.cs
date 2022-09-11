@@ -12,9 +12,9 @@ namespace FreeCellSolitaire.UI
         int _cardBorderWidth = 1;
         int _ratio = 100;        
 
-        public TableauContainer(IGameForm form, int columnNumber,
+        public TableauContainer(int columnNumber,
             Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
-            : base(form, cardWidth, cardHeight, columnNumber)
+            : base(cardWidth, cardHeight, columnNumber)
         {
             _columnNumber = columnNumber;                        
             _rect = rect;            
