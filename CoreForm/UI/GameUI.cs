@@ -142,7 +142,10 @@ namespace CoreForm.UI
             var menuItem1 = new ToolStripMenuItem();
             menuItem1.Text = "說明(&H))";
             menu.Items.Add(menuItem1);
-            menuItem1.DropDownItems.Add("關於新接龍", null);
+            menuItem1.DropDownItems.Add("關於新接龍", null).Click += delegate (object sender, EventArgs e)
+            {
+                
+            };
 
             _form.SetControl(menu);
         }
