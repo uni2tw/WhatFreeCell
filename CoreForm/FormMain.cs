@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.AxHost;
 
 namespace CoreForm
 {
@@ -34,13 +35,59 @@ namespace CoreForm
             gui.InitScreen(_ratio);
             gui.InitEvents();
 
-            this.SetCaption(gui.GameNumber.ToString());
+            InitializeMenu();
 
             this.DoubleBuffered = true;
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
             this.FormClosing += Form1_FormClosing;
         }
+
+        /// <summary>
+        /// 初始化功能表單
+        /// </summary>
+        private void InitializeMenu()
+        {
+            var self = this;
+
+            var menu = new System.Windows.Forms.MenuStrip();
+
+            menu.Dock = DockStyle.Top;
+            menu.BackColor = Color.Silver;
+
+
+            var menuItem0 = new ToolStripMenuItem();
+            menuItem0.Text = "遊戲(&G)";
+            menu.Items.Add(menuItem0);
+            menuItem0.DropDownItems.Add("新遊戲", null).Click += delegate (object sender, EventArgs e)
+            {
+                gui.StartGame();
+            };
+            menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
+            {
+                gui.PickNumberStartGame();
+            };
+            menuItem0.DropDownItems.Add("重啟牌局", null).Click += delegate (object sender, EventArgs e)
+            {
+                gui.RestartGame();
+            };
+            menuItem0.DropDownItems.Add(new ToolStripSeparator());
+            menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
+            {
+                gui.CloseGame();
+            };
+
+            var menuItem1 = new ToolStripMenuItem();
+            menuItem1.Text = "說明(&H))";
+            menu.Items.Add(menuItem1);
+            menuItem1.DropDownItems.Add("關於新接龍", null).Click += delegate (object sender, EventArgs e)
+            {
+                gui.AbouteGame();
+            };
+
+            SetControl(menu);
+        }
+
 
         private void FormMain_KeyPress(object sender, KeyPressEventArgs e)
         {

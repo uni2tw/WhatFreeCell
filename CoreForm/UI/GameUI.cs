@@ -27,6 +27,12 @@ namespace CoreForm.UI
         void InitEvents();
         void Redraw();
         void Move(string notation);
+        
+        void StartGame();
+        void PickNumberStartGame();
+        void RestartGame();
+        void CloseGame();
+        void AbouteGame();
 
         public int? GameNumber { get; set; }
     }
@@ -66,8 +72,6 @@ namespace CoreForm.UI
             _ratio = ratio;
             //空畫面            
             InitBoardScreen(width, height);
-            //功能表單
-            InitializeMenu();
 
             InitControls();
         }
@@ -84,61 +88,6 @@ namespace CoreForm.UI
             _cardWidth = (int)(Math.Floor((decimal)_form.ClientSize.Width / 9));
             _cardHeight = (int)(_cardWidth * 1.38);
         }
-
-        /// <summary>
-        /// 初始化功能表單
-        /// </summary>
-        private void InitializeMenu()
-        {
-            var self = this;
-
-            var menu = new System.Windows.Forms.MenuStrip();
-
-            menu.Dock = DockStyle.Top;
-            menu.BackColor = Color.Silver;
-
-
-            var menuItem0 = new ToolStripMenuItem();
-            menuItem0.Text = "遊戲(&G)";
-            menu.Items.Add(menuItem0);
-            menuItem0.DropDownItems.Add("新遊戲", null).Click += delegate (object sender, EventArgs e)
-            {
-                if (_game.IsPlaying() &&                
-                    MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
-                {
-                    return;
-                }
-                this.Start(null);
-                _form.SetCaption(this.GameNumber.ToString());
-            };
-            menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
-            {
-                _form.ShowSelectGameNumberDialog(_game.Deck.GetRandom());
-            };
-            menuItem0.DropDownItems.Add("重啟牌局", null).Click += delegate (object sender, EventArgs e)
-            {
-                if (MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
-                {
-                    return;
-                }
-                Start(GameNumber);
-            };
-            menuItem0.DropDownItems.Add(new ToolStripSeparator());
-            menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
-            {
-                _form.Close();
-            };
-
-            var menuItem1 = new ToolStripMenuItem();
-            menuItem1.Text = "說明(&H))";
-            menu.Items.Add(menuItem1);
-            menuItem1.DropDownItems.Add("關於新接龍", null).Click += delegate (object sender, EventArgs e)
-            {
-                
-            };
-
-            _form.SetControl(menu);
-        }        
 
         private void InitControls()
         {        
@@ -187,6 +136,8 @@ namespace CoreForm.UI
             _foundationsUI.Clear();
 
             this.Redraw();
+
+            _form.SetCaption(this.GameNumber.ToString());
         }
 
         public bool QuitGame()
@@ -266,6 +217,46 @@ namespace CoreForm.UI
                 }
                 _homecellsUI.RedrawCards(columnIndex, cards);
             }
+        }
+
+        public void StartGame()
+        {
+            if (_game.IsPlaying() &&
+                MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                return;
+            }
+            this.Start(null);            
+        }
+
+        public void PickNumberStartGame()
+        {
+            var gameNumber = _game.Deck.GetRandom();
+            var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100, gameNumber);
+            if (dialogResult.Reuslt == DialogResult.Yes)
+            {
+                Start(int.Parse(dialogResult.ReturnText));
+                Redraw();
+            }
+        }
+
+        public void RestartGame()
+        {
+            if (MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                return;
+            }
+            Start(GameNumber);
+        }
+
+        public void CloseGame()
+        {
+            _form.Close();
+        }
+
+        public void AbouteGame()
+        {
+            MessageBox.Show("2022的計劃");
         }
     }
 
