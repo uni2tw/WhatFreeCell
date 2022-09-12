@@ -54,7 +54,6 @@ namespace CoreForm
         private void FormMain_Load(object sender, EventArgs e)
         {
             gui.Start(26458);
-            gui.Redraw();
 
             scripts.Enqueue("t1h0");
             scripts.Enqueue("t2t0");

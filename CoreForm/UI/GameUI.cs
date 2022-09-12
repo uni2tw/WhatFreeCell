@@ -109,7 +109,6 @@ namespace CoreForm.UI
                     return;
                 }
                 this.Start(null);
-                this.Redraw();
                 _form.SetCaption(this.GameNumber.ToString());
             };
             menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
@@ -123,7 +122,6 @@ namespace CoreForm.UI
                     return;
                 }
                 Start(GameNumber);
-                Redraw();
             };
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
             menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
@@ -187,7 +185,8 @@ namespace CoreForm.UI
             _tableauUI.Clear();
             _homecellsUI.Clear();
             _foundationsUI.Clear();
-        
+
+            this.Redraw();
         }
 
         public bool QuitGame()
