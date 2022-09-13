@@ -22,17 +22,17 @@ namespace CoreForm.UI
     public interface IGameUI
     {
         void InitScreen(int ratio);
-        void Start(int? deckNo);
-        bool QuitGame();
+        void Start(int? deckNo);        
         void InitEvents();
-        void Redraw();
         void Move(string notation);
         
         void StartGame();
         void PickNumberStartGame();
-        void RestartGame();
-        void CloseGame();
+        void RestartGame();        
+        void QuitGame();
+        bool QuitGameConfirm();
         void AbouteGame();
+        int CreateScripts(out Queue<string> scripts);
 
         public int? GameNumber { get; set; }
     }
@@ -140,16 +140,6 @@ namespace CoreForm.UI
             _form.SetCaption(this.GameNumber.ToString());
         }
 
-        public bool QuitGame()
-        {
-            if (_game.IsPlaying() &&
-                MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
-            {
-                return false;
-            }
-            return true;
-        }
-
         private void CheckCompleted()
         {
             
@@ -157,7 +147,7 @@ namespace CoreForm.UI
 
         public int? GameNumber { get; set; }
 
-        public void Redraw()
+        private void Redraw()
         {
             RedrawTableau();
             RedrawHomecells();
@@ -249,7 +239,19 @@ namespace CoreForm.UI
             Start(GameNumber);
         }
 
-        public void CloseGame()
+
+        public bool QuitGameConfirm()
+        {
+            if (_game.IsPlaying() &&
+                MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public void QuitGame()
         {
             _form.Close();
         }
@@ -257,6 +259,57 @@ namespace CoreForm.UI
         public void AbouteGame()
         {
             MessageBox.Show("2022的計劃");
+        }
+
+        public int CreateScripts(out Queue<string> scripts)
+        {
+            scripts = new Queue<string>();
+            scripts.Enqueue("t1h0");
+            scripts.Enqueue("t2t0");
+            scripts.Enqueue("t7t3");
+            scripts.Enqueue("t7t1");
+            scripts.Enqueue("t7f0");
+            scripts.Enqueue("t7t2");
+            scripts.Enqueue("t7f1");
+            scripts.Enqueue("t6f2");
+            scripts.Enqueue("t2h3");
+            scripts.Enqueue("t1h3");
+            scripts.Enqueue("t2f0");
+            scripts.Enqueue("f2t7");
+            scripts.Enqueue("t2t7");
+            scripts.Enqueue("t2t3");
+            scripts.Enqueue("t2t5");
+            scripts.Enqueue("t5f2");
+            scripts.Enqueue("t5t7");
+            scripts.Enqueue("f2t7");
+            scripts.Enqueue("t0h2");
+            scripts.Enqueue("t6f2");
+            scripts.Enqueue("t5f3");
+            scripts.Enqueue("t5t2");
+            scripts.Enqueue("t5t2");
+            scripts.Enqueue("t5h2");
+            scripts.Enqueue("t4f0");
+            scripts.Enqueue("t4t1");
+            scripts.Enqueue("f2t5");
+            scripts.Enqueue("t4f2");
+            scripts.Enqueue("t4t5");
+            scripts.Enqueue("t4t2");
+            scripts.Enqueue("t6t2");
+            scripts.Enqueue("f0t4");
+            scripts.Enqueue("t0t4");
+            scripts.Enqueue("t0t4");
+            scripts.Enqueue("t0t6");
+            scripts.Enqueue("f2h1");
+            scripts.Enqueue("f3h2");
+            scripts.Enqueue("f1t6");
+            scripts.Enqueue("t3t4");
+            scripts.Enqueue("t3h2");
+            scripts.Enqueue("t3t2");
+            scripts.Enqueue("t3f0");
+            scripts.Enqueue("t3f1");
+            scripts.Enqueue("t1f0");
+            scripts.Enqueue("t1f1");
+            return 1;            
         }
     }
 

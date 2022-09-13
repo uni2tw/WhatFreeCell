@@ -13,7 +13,6 @@ namespace CoreForm.UI
         public Size ClientSize { get;  }
         public Color BackColor { get; set; }
 
-        void ShowSelectGameNumberDialog(int gameNumber);
         void Close();
         void SetControl(Control control);
         void SetControlReady(Control control);

@@ -74,7 +74,7 @@ namespace CoreForm
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
             menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
             {
-                gui.CloseGame();
+                gui.QuitGame();
             };
 
             var menuItem1 = new ToolStripMenuItem();
@@ -101,58 +101,12 @@ namespace CoreForm
         private void FormMain_Load(object sender, EventArgs e)
         {
             gui.Start(26458);
-
-            scripts.Enqueue("t1h0");
-            scripts.Enqueue("t2t0");
-            scripts.Enqueue("t7t3");
-            scripts.Enqueue("t7t1");
-            scripts.Enqueue("t7f0");
-            scripts.Enqueue("t7t2");
-            scripts.Enqueue("t7f1");
-            scripts.Enqueue("t6f2");
-            scripts.Enqueue("t2h3");
-            scripts.Enqueue("t1h3");
-            scripts.Enqueue("t2f0");
-            scripts.Enqueue("f2t7");
-            scripts.Enqueue("t2t7");
-            scripts.Enqueue("t2t3");
-            scripts.Enqueue("t2t5");
-            scripts.Enqueue("t5f2");
-            scripts.Enqueue("t5t7");
-            scripts.Enqueue("f2t7");
-            scripts.Enqueue("t0h2");
-            scripts.Enqueue("t6f2");
-            scripts.Enqueue("t5f3");
-            scripts.Enqueue("t5t2");
-            scripts.Enqueue("t5t2");
-            scripts.Enqueue("t5h2");
-            scripts.Enqueue("t4f0");
-            scripts.Enqueue("t4t1");
-            scripts.Enqueue("f2t5");
-            scripts.Enqueue("t4f2");
-            scripts.Enqueue("t4t5");
-            scripts.Enqueue("t4t2");
-            scripts.Enqueue("t6t2");
-            scripts.Enqueue("f0t4");
-            scripts.Enqueue("t0t4");
-            scripts.Enqueue("t0t4");
-            scripts.Enqueue("t0t6");
-            scripts.Enqueue("f2h1");
-            scripts.Enqueue("f3h2");
-            scripts.Enqueue("f1t6");
-            scripts.Enqueue("t3t4");
-            scripts.Enqueue("t3h2");
-            scripts.Enqueue("t3t2");
-            scripts.Enqueue("t3f0");
-            scripts.Enqueue("t3f1");
-            scripts.Enqueue("t1f0");
-            scripts.Enqueue("t1f1");
-
+            gui.CreateScripts(out scripts);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (gui.QuitGame() == false)
+            if (gui.QuitGameConfirm() == false)
             {
                 e.Cancel = true;
             }            
@@ -164,20 +118,9 @@ namespace CoreForm
             control.BringToFront();
         }
 
-
         public void SetControl(Control control)
         {
             this.Controls.Add(control);
-        }
-
-        public void ShowSelectGameNumberDialog(int gameNumber)
-        {
-            var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100,  gameNumber);
-            if (dialogResult.Reuslt == DialogResult.Yes)
-            {
-                gui.Start(int.Parse(dialogResult.ReturnText));                
-                gui.Redraw();
-            }
         }
 
         public void RestartGame()
