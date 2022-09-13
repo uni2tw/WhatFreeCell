@@ -13,13 +13,13 @@ public class Game : IGame
     public Foundations Foundations { get; set; }
 
     public Tableau Tableau { get; set; }
-    public Deck Deck { get; private set; }
+
 
     public bool EnableAssist { get; set; }
 
     public Game()
     {
-        Deck = Deck.Create();
+        
     }
 
     public int GetExtraMobility()
@@ -272,6 +272,79 @@ public class Game : IGame
         }
         return samples;        
     }
+
+    public int FindTheEnd()
+    {
+        Queue<IGame> queueItems = new Queue<IGame>();
+        HashSet<IGame> samples = new HashSet<IGame>();
+        queueItems.Enqueue(this.Clone());
+        int depth = 0;
+        while (queueItems.Count > 0)
+        {
+            var data = GetPossibleSituations2(queueItems.Dequeue(), ref depth);
+
+            foreach (var datum in data)
+            {
+                if (samples.Contains(datum) == false)
+                {
+                    queueItems.Enqueue(datum);
+                    samples.Add(datum);
+                    datum.DebugInfo($"s-{samples.Count}", true);
+                }
+            }
+        };        
+        return samples.Count;
+    }
+
+    public List<IGame> GetPossibleSituations2(IGame game, ref int depth)
+    {
+        depth++;
+        List<IGame> samples = new List<IGame>();
+        for (int src = 0; src < game.Tableau.ColumnCount + game.Foundations.ColumnCount; src++)
+        {
+            for (int dest = 0; dest < game.Tableau.ColumnCount + game.Foundations.ColumnCount+game.Homecells.ColumnCount; dest++)
+            {
+                var clone = game.Clone();
+
+                Column srcColumn;
+                if (src < clone.Tableau.ColumnCount)
+                {
+                    srcColumn = clone.Tableau.GetColumn(src);
+                }
+                else
+                {
+                    srcColumn = clone.Foundations.GetColumn(src - clone.Tableau.ColumnCount);
+                }
+
+                var srcCard = srcColumn.GetLastCard();
+                if (srcCard == null)
+                {
+                    continue;
+                }
+                Column destColumn;
+                if (dest < clone.Tableau.ColumnCount)
+                {
+                    destColumn = clone.Tableau.GetColumn(dest);
+                }
+                else if (dest < game.Tableau.ColumnCount + game.Foundations.ColumnCount)
+                {
+                    destColumn = clone.Foundations.GetColumn(dest - clone.Tableau.ColumnCount);
+                }
+                else
+                {
+                    destColumn = clone.Homecells.GetColumn(dest - clone.Tableau.ColumnCount - game.Foundations.ColumnCount);
+                }
+
+                if (srcCard.Move(destColumn))
+                {
+                    samples.Add(clone);
+                    continue;
+                }
+            }
+        }
+        return samples;
+    }
+
 
     public override bool Equals(object? obj)
     {

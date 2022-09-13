@@ -609,5 +609,21 @@ namespace FreeCellSolitaire.Tests
             game.DebugInfo(0);
             Assert.IsTrue(game.EstimateGameover(debug: true));
         }
+
+        [Test]
+        public void FindTheEnd()
+        {
+            IGame game = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            //origin-26458
+            tableau.GetColumn(0).AddCards("s13");
+
+            int possibilities = (game as Game).FindTheEnd();
+            Console.WriteLine("possibilities: " + possibilities);
+
+            Assert.True(possibilities > 0);
+        }
     }
 }

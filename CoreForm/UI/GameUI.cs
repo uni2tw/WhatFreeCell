@@ -42,6 +42,7 @@ namespace CoreForm.UI
         IGameForm _form;
         DialogManager _dialog;
         IGame _game;
+        Deck _deck;
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
         private FoundationsContainer _foundationsUI;
@@ -121,15 +122,15 @@ namespace CoreForm.UI
         }
 
         public void Start(int? deckNo)
-        {
+        {            
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
             var homecells = new Homecells(_game);
             var foundations = new Foundations(_game);
           
-            var deck = _game.Deck.Shuffle(deckNo);
-            tableau.Init(deck);
-            this.GameNumber = deck.Number;
+            _deck = Deck.Create().Shuffle(deckNo);
+            tableau.Init(_deck);
+            this.GameNumber = _deck.Number;
 
             _tableauUI.Clear();
             _homecellsUI.Clear();
@@ -221,7 +222,7 @@ namespace CoreForm.UI
 
         public void PickNumberStartGame()
         {
-            var gameNumber = _game.Deck.GetRandom();
+            var gameNumber = _deck.GetRandom();
             var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100, gameNumber);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {

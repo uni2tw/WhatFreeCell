@@ -11,7 +11,6 @@ public interface IGame
     Foundations Foundations { get; set; }
     Tableau Tableau { get; set; }
 
-    Deck Deck { get; }
     void Move(string notation);
     void DebugInfo(string stepNum = "", bool enabled = true);
     void DebugInfo(int stepNum, bool enabled = true);
