@@ -180,14 +180,16 @@ public class Game : IGame
 
     public bool IsCompleted()
     {
-        if (Homecells.GetColumn(0).GetCardsCount() +
-            Homecells.GetColumn(1).GetCardsCount() +
-            Homecells.GetColumn(2).GetCardsCount() +
-            Homecells.GetColumn(3).GetCardsCount() == 52)
+        int todoCount = 0;
+        for(int i = 0; i < Foundations.ColumnCount; i++)
         {
-            return true;
+            todoCount += Foundations.GetColumn(i).GetCardsCount();
         }
-        return false;
+        for (int i = 0; i < Tableau.ColumnCount; i++)
+        {
+            todoCount += Tableau.GetColumn(i).GetCardsCount();
+        }
+        return todoCount == 0;
     }
 
     public IGame Clone()
@@ -289,7 +291,7 @@ public class Game : IGame
                 {
                     queueItems.Enqueue(datum);
                     samples.Add(datum);
-                    datum.DebugInfo($"s-{samples.Count}", true);
+                    Console.WriteLine(datum.GetDebugInfo($"s-{samples.Count}") + $" - completed is {datum.IsCompleted()}");
                 }
             }
         };        

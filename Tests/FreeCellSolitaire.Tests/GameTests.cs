@@ -171,6 +171,34 @@ namespace FreeCellSolitaire.Tests
             Assert.AreEqual("±öªá 2", homecells.GetColumn(1).GetLastCard().ToString());
         }
 
+        [Test]
+        public void IsCompleted()
+        {
+            {
+                IGame game = new Game() { EnableAssist = true };
+                var tableau = new Tableau(game);
+                var homecells = new Homecells(game);
+                var foundations = new Foundations(game);
+                homecells.GetColumn(0).AddCards("s1");
+                Assert.IsTrue(game.IsCompleted());
+            }
+            {
+                IGame game = new Game() { EnableAssist = true };
+                var tableau = new Tableau(game);
+                var homecells = new Homecells(game);
+                var foundations = new Foundations(game);
+                tableau.GetColumn(0).AddCards("s1");
+                Assert.IsFalse(game.IsCompleted());
+            }
+            {
+                IGame game = new Game() { EnableAssist = true };
+                var tableau = new Tableau(game);
+                var homecells = new Homecells(game);
+                var foundations = new Foundations(game);
+                foundations.GetColumn(0).AddCards("s1");
+                Assert.IsFalse(game.IsCompleted());
+            }
+        }
 
         [Test]
         public void FullGameMove()
@@ -613,17 +641,24 @@ namespace FreeCellSolitaire.Tests
         [Test]
         public void FindTheEnd()
         {
-            IGame game = new Game() { EnableAssist = true };
-            var tableau = new Tableau(game);
-            var homecells = new Homecells(game);
-            var foundations = new Foundations(game);
-            //origin-26458
-            tableau.GetColumn(0).AddCards("s13");
+            IGame game0 = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game0);
+            var homecells = new Homecells(game0);
+            var foundations = new Foundations(game0);
 
-            int possibilities = (game as Game).FindTheEnd();
-            Console.WriteLine("possibilities: " + possibilities);
-
-            Assert.True(possibilities > 0);
+            {
+                var game = game0.Clone();
+                game.Tableau.GetColumn(0).AddCards("s1");                
+                int possibilities = (game as Game).FindTheEnd();
+                Assert.AreEqual(16, possibilities);
+            }
+            {
+                var game = game0.Clone();
+                game.Tableau.GetColumn(0).AddCards("s13");
+                int possibilities = (game as Game).FindTheEnd();
+                Assert.AreEqual(12, possibilities);
+            }
+            
         }
     }
 }
