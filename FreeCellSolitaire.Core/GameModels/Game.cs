@@ -16,6 +16,7 @@ public class Game : IGame
 
 
     public bool EnableAssist { get; set; }
+    private List<string> _tracks = new List<string>();
 
     public Game()
     {
@@ -74,6 +75,8 @@ public class Game : IGame
         {
             Debug.Assert(card.Move(Homecells.GetColumn(destColumn)));
         }
+
+        _tracks.Add(notation);
 
         if (EnableAssist)
         {
@@ -142,6 +145,11 @@ public class Game : IGame
         Console.Write(GetDebugInfo(stepNum, enabled));
     }
 
+    public List<string> GetTracks()
+    {
+        return _tracks;
+    }
+
     public string GetDebugInfo(string stepNum = "", bool enabled = true)
     {
         if (enabled == false)
@@ -153,6 +161,9 @@ public class Game : IGame
         {
             sb.AppendLine($"=== {stepNum} ===");
         }
+        
+        sb.AppendLine($"-- tracks: {string.Join(',',_tracks)}");
+        
         if (this.Tableau != null)
         {
             sb.Append(this.Tableau.GetDebugInfo(false));
@@ -198,6 +209,7 @@ public class Game : IGame
         clone.Tableau = this.Tableau.Clone() as Tableau;
         clone.Homecells = this.Homecells.Clone() as Homecells;
         clone.Foundations = this.Foundations.Clone() as Foundations;
+        clone._tracks = new List<string>(this._tracks);
         return clone;
     }
 

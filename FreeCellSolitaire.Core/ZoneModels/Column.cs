@@ -130,12 +130,13 @@ namespace FreeCellSolitaire.Core.GameModels
 
 
         //AddCards("s1,s2,s3");
-        public void AddCards(string cardExpressions)
-        {
+        public int AddCards(string cardExpressions)
+        {            
             if (string.IsNullOrEmpty(cardExpressions))
             {
-                return;
+                return 0;
             }
+            int result = 0;
             string[] exprs = cardExpressions.Split(',');
             foreach(var expr in exprs)
             {
@@ -160,8 +161,12 @@ namespace FreeCellSolitaire.Core.GameModels
                     card.Suit = CardSuit.Club;
                     card.Number = Convert.ToInt32(expr.Substring(1));
                 }
-                this.AddCards(card);
+                if (this.AddCards(card))
+                {
+                    result++;
+                }
             }
+            return result;
         }
         
     }

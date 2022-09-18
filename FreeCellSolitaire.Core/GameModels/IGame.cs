@@ -9,7 +9,7 @@ public interface IGame
     int GetExtraMobility();
     Homecells Homecells { get; set; }
     Foundations Foundations { get; set; }
-    Tableau Tableau { get; set; }
+    Tableau Tableau { get; set; }    
 
     void Move(string notation);
     void DebugInfo(string stepNum = "", bool enabled = true);
@@ -21,5 +21,6 @@ public interface IGame
     bool EnableAssist { get; set; }
     void TryAssistMove();
     IGame Clone();
+    List<string> GetTracks();
 }
 
