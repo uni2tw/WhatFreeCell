@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace FreeCellSolitaire.Core.GameModels;
 
 public class Game : IGame
-{        
+{
     public Homecells Homecells { get; set; }
 
     public Foundations Foundations { get; set; }
@@ -16,11 +16,10 @@ public class Game : IGame
 
 
     public bool EnableAssist { get; set; }
-    private List<string> _tracks = new List<string>();
 
     public Game()
     {
-        
+        Tracks = new TrackList();
     }
 
     public int GetExtraMobility()
@@ -57,7 +56,7 @@ public class Game : IGame
         if (srcZone == "t")
         {
             card = this.Tableau.GetColumn(srcColumn).GetLastCard();
-        } 
+        }
         else if (srcZone == "f")
         {
             card = this.Foundations.GetColumn(srcColumn).GetLastCard();
@@ -76,20 +75,21 @@ public class Game : IGame
             Debug.Assert(card.Move(Homecells.GetColumn(destColumn)));
         }
 
-        _tracks.Add(notation);
+        Tracks.Add(notation);
 
         if (EnableAssist)
         {
             TryAssistMove();
         }
     }
+
     public void TryAssistMove()
     {
         bool anything;
         do
         {
             anything = false;
-     
+
 
             Func<CardView, bool> TryMoveToHomecells = delegate (CardView theCard)
             {
@@ -145,12 +145,9 @@ public class Game : IGame
         Console.Write(GetDebugInfo(stepNum, enabled));
     }
 
-    public List<string> GetTracks()
-    {
-        return _tracks;
-    }
+    public TrackList Tracks { get; set; }
 
-    public string GetDebugInfo(string stepNum = "", bool enabled = true)
+    public string GetDebugInfo(string stepNum = "", bool enabled = true, bool trackInfo = true)
     {
         if (enabled == false)
         {
@@ -161,8 +158,10 @@ public class Game : IGame
         {
             sb.AppendLine($"=== {stepNum} ===");
         }
-        
-        sb.AppendLine($"-- tracks: {string.Join(',',_tracks)}");
+        if (trackInfo)
+        {
+            sb.AppendLine($"-- tracks: {string.Join(',', Tracks)}");
+        }
         
         if (this.Tableau != null)
         {
@@ -209,7 +208,7 @@ public class Game : IGame
         clone.Tableau = this.Tableau.Clone() as Tableau;
         clone.Homecells = this.Homecells.Clone() as Homecells;
         clone.Foundations = this.Foundations.Clone() as Foundations;
-        clone._tracks = new List<string>(this._tracks);
+        clone.Tracks = new TrackList(this.Tracks);
         return clone;
     }
 
@@ -272,13 +271,15 @@ public class Game : IGame
                 {
                     destColumn = clone.Foundations.GetColumn(j - clone.Tableau.ColumnCount);
                 }
-                
-                if (srcCard.Move(destColumn))
-                {
+
+                string notation;
+                if (srcCard.Move(destColumn, out notation))
+                {                                    
                     if (EnableAssist)
                     {
                         clone.TryAssistMove();
                     }
+                    Tracks.Add(notation);
                     samples.Add(clone);
                     continue;
                 }
@@ -287,7 +288,7 @@ public class Game : IGame
         return samples;        
     }
 
-    public int FindTheEnd()
+    public bool FindTheEnd(out int total, out List<TrackList> completions)
     {
         Queue<IGame> queueItems = new Queue<IGame>();
         HashSet<IGame> samples = new HashSet<IGame>();
@@ -303,11 +304,20 @@ public class Game : IGame
                 {
                     queueItems.Enqueue(datum);
                     samples.Add(datum);
-                    Console.WriteLine(datum.GetDebugInfo($"s-{samples.Count}") + $" - completed is {datum.IsCompleted()}");
+                    //Console.WriteLine(datum.GetDebugInfo($"s-{samples.Count}") + $" - completed is {datum.IsCompleted()}");
                 }
             }
         };        
-        return samples.Count;
+        total = samples.Count;
+        completions = new List<TrackList>();
+        foreach (var sample in samples)
+        {
+            if (sample.IsCompleted())
+            {
+                completions.Add(sample.Tracks);
+            }
+        }
+        return completions.Count > 0;
     }
 
     public List<IGame> GetPossibleSituations2(IGame game, ref int depth)
@@ -348,9 +358,14 @@ public class Game : IGame
                 {
                     destColumn = clone.Homecells.GetColumn(dest - clone.Tableau.ColumnCount - game.Foundations.ColumnCount);
                 }
-
-                if (srcCard.Move(destColumn))
+                string notation;
+                if (srcCard.Move(destColumn, out notation))
                 {
+                    if (EnableAssist)
+                    {
+                        clone.TryAssistMove();
+                    }
+                    clone.Tracks.Add(notation);
                     samples.Add(clone);
                     continue;
                 }
@@ -358,7 +373,6 @@ public class Game : IGame
         }
         return samples;
     }
-
 
     public override bool Equals(object? obj)
     {
@@ -374,13 +388,14 @@ public class Game : IGame
         if (castObj == null)
         {
             return false;
-        }
-        return castObj.GetDebugInfo() == this.GetDebugInfo();
+        }        
+        return castObj.GetDebugInfo("", true, false) == this.GetDebugInfo("", true, false);        
     }
 
     public override int GetHashCode()
     {
-        return GetDebugInfo().GetHashCode();
+        return GetDebugInfo("", true, false).GetHashCode();
+        
     }
 
 }

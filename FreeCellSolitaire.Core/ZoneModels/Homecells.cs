@@ -66,6 +66,8 @@ namespace FreeCellSolitaire.Entities.GameEntities
 
         public int ColumnCount => 4;
 
+        public string NotationCode => "h";
+
         public bool MoveCard(int sourceIndex, IZone target, int targetIndex)
         {
             return true;

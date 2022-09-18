@@ -9,6 +9,8 @@
         int ColumnCapacity { get; }
         int ColumnCount { get; }
 
+        string NotationCode { get; }
+
         bool MoveCard(int sourceIndex, IZone target, int targetIndex);
 
         Column GetColumn(int columnIndex);

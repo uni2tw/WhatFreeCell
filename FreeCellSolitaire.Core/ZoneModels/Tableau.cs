@@ -65,6 +65,8 @@ namespace FreeCellSolitaire.Core.GameModels
 
         public int ColumnCount => 8;
 
+        public string NotationCode => "t";
+
         public void Init(Deck deck)
         {            
             _columns = new Column[ColumnCount];

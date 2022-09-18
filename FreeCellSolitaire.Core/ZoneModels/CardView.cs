@@ -25,6 +25,17 @@ public class CardView
         this.Owner = column;
     }
 
+    public bool Move(Column destColumn, out string notation)
+    {
+        notation = "";
+
+        notation += this.Owner.Owner.NotationCode;
+        notation += this.Owner.Index.ToString();
+        notation += destColumn.Owner.NotationCode;
+        notation += destColumn.Index.ToString();
+
+        return Move(destColumn);
+    }
     public bool Move(Column destColumn)
     {
         if (this.Moveable(destColumn) == false)

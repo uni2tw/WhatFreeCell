@@ -60,6 +60,7 @@ namespace FreeCellSolitaire.Core.GameModels
         public int ColumnCapacity => 1;
 
         public int ColumnCount => 4;
+        public string NotationCode => "f";
 
         public bool MoveCard(int sourceIndex, IZone target, int targetIndex)
         {
