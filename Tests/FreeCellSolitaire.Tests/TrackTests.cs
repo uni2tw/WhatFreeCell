@@ -26,18 +26,18 @@ namespace FreeCellSolitaire.Tests
             var game = game0.Clone();
             game.Tableau.GetColumn(0).AddCards("s1,s2,s3");
             game.DebugInfo("step 0");
-            Assert.AreEqual(0, game.GetTracks().Count);
+            Assert.AreEqual(0, (game as Game).GetTracks().Count);
             game.Move("t0f0");
             game.DebugInfo("step 1");
-            Assert.AreEqual(1, game.GetTracks().Count);
+            Assert.AreEqual(1, (game as Game).GetTracks().Count);
             game.Move("t0f1");
             game.DebugInfo("step 2");
-            Assert.AreEqual(2, game.GetTracks().Count);
+            Assert.AreEqual(2, (game as Game).GetTracks().Count);
 
             // clone test
             var game2 = game.Clone();
             game.DebugInfo("clone");
-            Assert.AreEqual(2, game2.GetTracks().Count);
+            Assert.AreEqual(2, (game as Game).GetTracks().Count);
         }
     }
 }

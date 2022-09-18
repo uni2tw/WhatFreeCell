@@ -21,6 +21,5 @@ public interface IGame
     bool EnableAssist { get; set; }
     void TryAssistMove();
     IGame Clone();
-    List<string> GetTracks();
 }
 

@@ -140,7 +140,7 @@ public class Game : IGame
     {
         Console.Write(GetDebugInfo(stepNum.ToString(), enabled));
     }
-    public void DebugInfo(string stepNum = "", bool enabled=true)
+    public void DebugInfo(string stepNum = "", bool enabled = true)
     {
         Console.Write(GetDebugInfo(stepNum, enabled));
     }
