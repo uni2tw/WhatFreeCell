@@ -1,5 +1,6 @@
 ﻿using FreeCellSolitaire.Core.GameModels;
 using FreeCellSolitaire.Entities.GameEntities;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FreeCellSolitaire.Tests
 {
@@ -63,23 +64,53 @@ namespace FreeCellSolitaire.Tests
 
         [Test]
         public void ThreeCardsAtTableau()
-        {
-            throw new NotImplementedException();
+        {            
             IGame game0 = new Game() { EnableAssist = true };
             var tableau = new Tableau(game0);
             var homecells = new Homecells(game0);
             var foundations = new Foundations(game0);
 
             {
+                DateTime now = DateTime.Now;
                 var game = game0.Clone();
-                game.Tableau.GetColumn(0).AddCards("s1,s2");
+                game.Tableau.GetColumn(0).AddCards("s1,s2,s3,s4");
                 Console.WriteLine(game.GetDebugInfo($"s-0") + $" - completed is {game.IsCompleted()}");
 
                 int total;
                 List<TrackList> completions;
                 bool doable = (game as Game).FindTheEnd(out total, out completions);
                 Assert.IsTrue(doable);
-                Console.WriteLine("Successful Steps:" + completions.First().ToString());
+                Console.WriteLine($"Total samples: {total}");
+                Console.WriteLine("Successful steps:" + completions.First().ToString());
+                Assert.Less((DateTime.Now - now).TotalSeconds, 0.5,"執行速度太慢");
+
+            }
+
+            
+        }
+        [Test]
+        public void GameCloneSpeedTest()
+        {
+            IGame game0 = new Game() { EnableAssist = true };
+            var tableau = new Tableau(game0);
+            var homecells = new Homecells(game0);
+            var foundations = new Foundations(game0);
+
+            {
+                DateTime now = DateTime.Now;
+                var game = game0.Clone();
+                game.Tableau.GetColumn(0).AddCards("s1,s2,s3,s4");
+                Console.WriteLine(game.GetDebugInfo($"s-0") + $" - completed is {game.IsCompleted()}");
+
+                
+                
+
+                for (int i = 0; i < 200; i++)
+                {
+                    game.Clone();
+                }
+
+                Assert.Less((DateTime.Now - now).TotalSeconds, 0.5, "執行速度太慢");
             }
 
         }
