@@ -199,8 +199,12 @@ public class Game : IGame
         return clone;
     }
 
-    public bool EstimateGameover(bool debug = false)
+    public GameStatus EstimateGameover(bool debug = false)
     {
+        if (IsCompleted())
+        {
+            return GameStatus.Completed;
+        }
         bool gameove = false;
         Queue<IGame> queueItems = new Queue<IGame>();
         HashSet<IGame> samples = new HashSet<IGame>();
@@ -211,17 +215,30 @@ public class Game : IGame
             var data = GetPossibleSituations(queueItems.Dequeue(), ref depth);
 
             foreach (var datum in data)
-            {                
+            {
                 if (samples.Contains(datum) == false)
-                {                    
+                {
                     queueItems.Enqueue(datum);
                     samples.Add(datum);
                     datum.DebugInfo($"s-{samples.Count}", debug);
                 }
             }
+
+            if (samples.Count >= 2)
+            {
+                return GameStatus.Playable;
+            }
         };
-        gameove = samples.Count <= 2;
-        return gameove;
+
+        if (samples.Count == 0)
+        {
+            return GameStatus.DeadEnd;
+        }
+        else if (samples.Count <= 2)
+        {
+            return GameStatus.Checkmate;
+        }
+        return GameStatus.Playable;
     }
 
     public List<IGame> GetPossibleSituations(IGame game, ref int depth)
@@ -296,5 +313,10 @@ public class Game : IGame
         return GetDebugInfo().GetHashCode();
     }
 
+}
+
+public enum GameStatus
+{
+    Playable, Completed, Checkmate, DeadEnd
 }
 

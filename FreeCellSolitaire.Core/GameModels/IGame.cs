@@ -18,7 +18,7 @@ public interface IGame
     string GetDebugInfo(string stepNum = "", bool enabled = true);
     bool IsCompleted();
     bool IsPlaying();
-    bool EstimateGameover(bool debug = false);
+    GameStatus EstimateGameover(bool debug = false);
     bool EnableAssist { get; set; }
     void TryAssistMove();
     IGame Clone();
