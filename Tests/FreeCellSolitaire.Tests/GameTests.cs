@@ -570,7 +570,7 @@ namespace FreeCellSolitaire.Tests
             game.Move("t1f2");
             game.Move("t1f3");
             game.DebugInfo(2);
-            Assert.Equals(GameStatus.Playable, game.EstimateGameover(debug: false));
+            Assert.AreEqual(GameStatus.Playable, game.EstimateGameover(debug: false));
 
 
             game.Move("t7t3");

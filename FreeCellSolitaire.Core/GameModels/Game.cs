@@ -224,7 +224,7 @@ public class Game : IGame
                 }
             }
 
-            if (samples.Count >= 2)
+            if (samples.Count > 2)
             {
                 return GameStatus.Playable;
             }
