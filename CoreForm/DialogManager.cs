@@ -44,7 +44,7 @@ public class DialogManager
         {
             YesText = "確定",
             Caption = "牌局編號",
-            Message = "\r\n請選擇牌局編號\r\n從 1 到10000\r\n",
+            Message = "\r\n請選擇牌局編號\r\n從 1 到9999\r\n",
             InputText = gameNumber.ToString()
         };
         var dialogResult = frm.ShowDialog(_owner);
