@@ -598,13 +598,13 @@ namespace FreeCellSolitaire.Tests
             game.Move("t1f2");
             game.Move("t1f3");
             game.DebugInfo(2);
-            Assert.IsFalse(game.EstimateGameover(debug: false));
+            Assert.AreEqual(GameStatus.Playable, game.EstimateGameover(debug: false));
 
 
             game.Move("t7t3");
             game.DebugInfo(3);
 
-            Assert.IsTrue(game.EstimateGameover(debug: true));
+            Assert.AreEqual(GameStatus.Checkmate, game.EstimateGameover(debug: true));
         }
 
         [Test]
@@ -635,7 +635,7 @@ namespace FreeCellSolitaire.Tests
             homecells.GetColumn(3).AddCards("c1");
 
             game.DebugInfo(0);
-            Assert.IsTrue(game.EstimateGameover(debug: true));
+            Assert.AreEqual(GameStatus.Checkmate, game.EstimateGameover(debug: true));
         }
     }
 }

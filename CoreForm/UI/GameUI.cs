@@ -37,6 +37,7 @@ namespace CoreForm.UI
         public int? GameNumber { get; set; }
     }
 
+
     public class GameUI : IGameUI
     {
         IGameForm _form;
@@ -117,8 +118,8 @@ namespace CoreForm.UI
         public void Move(string notation)
         {
             _game.Move(notation);
-            Redraw();
-            CheckCompleted();
+            Redraw();            
+            CheckStatus();
         }
 
         public void Start(int? deckNo)
@@ -140,10 +141,25 @@ namespace CoreForm.UI
 
             _form.SetCaption(this.GameNumber.ToString());
         }
-
-        private void CheckCompleted()
+        
+        private void CheckStatus()
         {
-            
+            GameStatus stats = _game.EstimateGameover(false);
+            if (stats == GameStatus.Completed)
+            {
+                var choice = _dialog.ShowYouWinContinueDialog(210 * _ratio / 100);
+                if (choice.Reuslt == DialogResult.Yes)
+                {
+                    if (choice.CheckedYes)
+                    {
+                        PickNumberStartGame();
+                    }
+                    else
+                    {
+                        StartGame();
+                    }
+                }
+            } 
         }
 
         public int? GameNumber { get; set; }
