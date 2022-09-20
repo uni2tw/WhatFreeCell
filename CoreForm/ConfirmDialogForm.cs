@@ -51,13 +51,21 @@ public class DialogForms
             lbMessage.Dock = DockStyle.Fill;
             lbMessage.AutoSize = true;
             container.Controls.Add(lbMessage, 0, 0);
-
+            
             TextBox tbNumber = new TextBox();
             tbNumber.Text = this.InputText;
-            container.Controls.Add(tbNumber, 0, 1);
-            tbNumber.MaxLength = 10;
+            tbNumber.MaxLength = 4;
+            tbNumber.KeyPress += delegate (object sender, KeyPressEventArgs e)
+            {
+                if (char.IsDigit(e.KeyChar) == false)
+                {
+                    e.Handled = true;
+                }
+            };
+            container.Controls.Add(tbNumber, 0, 1);            
             tbNumber.Margin = new Padding(
                 (int)((tbNumber.Parent.Width - tbNumber.Width) / 2), 0, 0, 0);
+            tbNumber.TextAlign = HorizontalAlignment.Center;
 
             Button btn = new Button();
             btn.Text = this.YesText;
