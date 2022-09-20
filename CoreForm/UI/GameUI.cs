@@ -144,14 +144,21 @@ namespace CoreForm.UI
         private void CheckStatus()
         {
             GameStatus stats = _game.EstimateGameover(false);
-            if (stats == GameStatus.Completed) 
+            if (stats == GameStatus.Completed)
             {
                 var choice = _dialog.ShowYouWinContinueDialog(210 * _ratio / 100);
                 if (choice.Reuslt == DialogResult.Yes)
                 {
-
+                    if (choice.CheckedYes)
+                    {
+                        PickNumberStartGame();
+                    }
+                    else
+                    {
+                        StartGame();
+                    }
                 }
-            }             
+            } 
         }
 
         public int? GameNumber { get; set; }

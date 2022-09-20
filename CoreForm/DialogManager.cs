@@ -22,7 +22,7 @@ public class DialogManager
         var dialogResult = frm.ShowDialog(_owner);
         FormDialogResult result = new FormDialogResult(dialogResult)
         {            
-            ReturnYes = frm.ConfirmYes
+            CheckedYes = frm.ConfirmYes
         };
         return result;
     }
@@ -33,7 +33,7 @@ public class DialogManager
         var dialogResult = frm.ShowDialog(_owner);
         FormDialogResult result = new FormDialogResult(dialogResult)
         {
-            ReturnYes = frm.ConfirmYes
+            CheckedYes = frm.ConfirmYes
         };
         return result;
     }
@@ -65,5 +65,5 @@ public class FormDialogResult
 
     public DialogResult Reuslt { get; set; }
     public string ReturnText { get; set; }
-    public bool ReturnYes { get; set; }
+    public bool CheckedYes { get; set; }
 }
