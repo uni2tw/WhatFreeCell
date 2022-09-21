@@ -170,6 +170,10 @@ public class Game : IGame
 
     public bool IsPlaying()
     {
+        if (Tableau == null)
+        {
+            return false;
+        }
         int unfinish = 0;
         for(int i = 0; i < Tableau.ColumnCount; i++)
         {

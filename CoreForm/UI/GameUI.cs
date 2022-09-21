@@ -55,6 +55,7 @@ namespace CoreForm.UI
         {
             this._form = form;
             this._dialog = dialog;
+            this._game = new Game { EnableAssist = true };
         }
 
         public void InitEvents()

@@ -72,6 +72,11 @@ namespace CoreForm
                 gui.RestartGame();
             };
             menuItem0.DropDownItems.Add(new ToolStripSeparator());
+            menuItem0.DropDownItems.Add("復原", null).Click += delegate (object sender, EventArgs e)
+            {
+                //gui.BackToPreviousStep();
+            };
+            menuItem0.DropDownItems.Add(new ToolStripSeparator());
             menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
             {
                 gui.QuitGame();
@@ -100,8 +105,8 @@ namespace CoreForm
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            gui.Start(26458);
-            gui.CreateScripts(out scripts);
+            //gui.Start(26458);
+            //gui.CreateScripts(out scripts);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
