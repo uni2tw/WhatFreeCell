@@ -63,7 +63,7 @@ namespace FreeCellSolitaire.Tests
         }
 
         [Test]
-        public void ThreeCardsAtTableau()
+        public void ManyCardsAtTableau()
         {            
             IGame game0 = new Game() { EnableAssist = true };
             var tableau = new Tableau(game0);
@@ -73,7 +73,7 @@ namespace FreeCellSolitaire.Tests
             {
                 DateTime now = DateTime.Now;
                 var game = game0.Clone();
-                game.Tableau.GetColumn(0).AddCards("s1,s2,s3,s4");
+                game.Tableau.GetColumn(0).AddCards("s1,s2,s3,s4,s5");
                 Console.WriteLine(game.GetDebugInfo($"s-0") + $" - completed is {game.IsCompleted()}");
 
                 int total;
@@ -101,16 +101,15 @@ namespace FreeCellSolitaire.Tests
                 var game = game0.Clone();
                 game.Tableau.GetColumn(0).AddCards("s1,s2,s3,s4");
                 Console.WriteLine(game.GetDebugInfo($"s-0") + $" - completed is {game.IsCompleted()}");
+              
 
-                
-                
-
-                for (int i = 0; i < 200; i++)
+                for (int i = 0; i < 2000; i++)
                 {
                     game.Clone();
                 }
-
-                Assert.Less((DateTime.Now - now).TotalSeconds, 0.5, "執行速度太慢");
+                var elapsedSecs = (DateTime.Now - now).TotalSeconds;
+                Console.WriteLine($"elapsed secs: {elapsedSecs.ToString("0.00")}");
+                Assert.Less(elapsedSecs, 0.5, "執行速度太慢");
             }
 
         }

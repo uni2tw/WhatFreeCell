@@ -45,19 +45,19 @@
         {
             if (Suit == CardSuit.Spade)
             {
-                return "s" + Number;
+                return $"s{Number}";
             }
             if (Suit == CardSuit.Heart)
             {
-                return "h" + Number;
+                return $"h{Number}";
             }
             if (Suit == CardSuit.Diamond)
             {
-                return "d" + Number;
+                return $"d{Number}";
             }
             if (Suit == CardSuit.Club)
             {
-                return "c" + Number;
+                return $"c{Number}";
             }
             return string.Empty;
         }

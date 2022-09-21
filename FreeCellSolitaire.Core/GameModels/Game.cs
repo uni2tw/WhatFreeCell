@@ -42,7 +42,7 @@ public class Game : IGame
         return result;
     }
 
-    Regex regNotation = new Regex(@"([ft])(\d{1,2})([fth])(\d{1,2})", RegexOptions.Singleline | RegexOptions.Compiled);
+    static Regex regNotation = new Regex(@"([ft])(\d{1,2})([fth])(\d{1,2})", RegexOptions.Singleline | RegexOptions.Compiled);
     public void Move(string notation)
     {
         Match match = regNotation.Match(notation);
