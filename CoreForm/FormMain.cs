@@ -1,4 +1,5 @@
 ﻿using CoreForm.UI;
+using CoreForm.Utilities;
 using FreeCellSolitaire.Core.GameModels;
 using System;
 using System.Collections;
@@ -56,39 +57,75 @@ namespace CoreForm
             menu.BackColor = Color.Silver;
 
 
-            var menuItem0 = new ToolStripMenuItem();
-            menuItem0.Text = "遊戲(&G)";
-            menu.Items.Add(menuItem0);
-            menuItem0.DropDownItems.Add("新遊戲", null).Click += delegate (object sender, EventArgs e)
-            {
-                gui.StartGame();
-            };
-            menuItem0.DropDownItems.Add("選擇牌局", null).Click += delegate (object sender, EventArgs e)
-            {
-                gui.PickNumberStartGame();
-            };
-            menuItem0.DropDownItems.Add("重啟牌局", null).Click += delegate (object sender, EventArgs e)
-            {
-                gui.RestartGame();
-            };
-            menuItem0.DropDownItems.Add(new ToolStripSeparator());
-            menuItem0.DropDownItems.Add("復原", null).Click += delegate (object sender, EventArgs e)
-            {
-                //gui.BackToPreviousStep();
-            };
-            menuItem0.DropDownItems.Add(new ToolStripSeparator());
-            menuItem0.DropDownItems.Add("結束(&X)", null).Click += delegate (object sender, EventArgs e)
-            {
-                gui.QuitGame();
-            };
+            var menuItemGame = new ToolStripMenuItem();
 
-            var menuItem1 = new ToolStripMenuItem();
-            menuItem1.Text = "說明(&H))";
-            menu.Items.Add(menuItem1);
-            menuItem1.DropDownItems.Add("關於新接龍", null).Click += delegate (object sender, EventArgs e)
-            {
-                gui.AbouteGame();
-            };
+            menuItemGame.Text = "遊戲(&G)";
+            menu.Items.Add(menuItemGame);
+
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    ShortcutKeys = Keys.F2,
+                    Text = "新遊戲(&N)"
+                }
+                .AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.StartGame();
+                })
+            );
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    ShortcutKeys = Keys.F3,
+                    Text = "選擇牌局(&S)"
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.PickNumberStartGame();
+                })
+            );
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    Text = "重啟牌局(&R)"
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.RestartGame();
+                })
+            );
+            menuItemGame.DropDownItems.Add(new ToolStripSeparator());
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    ShortcutKeys = Keys.F10,
+                    Text = "復原"
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    //gui.BackToPreviousStep();
+                })
+            );
+            menuItemGame.DropDownItems.Add(new ToolStripSeparator());
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    Text = "結束(&X)"
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.QuitGame();
+                })
+            );
+
+            var menuItemHelp = new ToolStripMenuItem();
+            menuItemHelp.Text = "說明(&H)";
+            menu.Items.Add(menuItemHelp);
+            menuItemHelp.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    Text = "關於新接龍"
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.AbouteGame();
+                })
+            );
 
             SetControl(menu);
         }

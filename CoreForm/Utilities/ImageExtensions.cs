@@ -3,9 +3,22 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using System.Windows.Forms;
 
 namespace CoreForm.Utilities
 {
+    public static class ControlExtensions
+    {
+        public static ToolStripItem AddEvent(this ToolStripItem control, string eventName, EventHandler handler)
+        {
+            var evt = control.GetType().GetEvent(eventName);
+            if (evt != null)
+            {
+                evt.AddEventHandler(control, handler);
+            }
+            return control;
+        }
+    }
     /// <summary>
     /// see https://softwarebydefault.com/2013/03/03/colomatrix-image-filters/
     /// </summary>
