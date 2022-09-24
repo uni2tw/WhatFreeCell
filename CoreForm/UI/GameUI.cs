@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms;
 
@@ -33,8 +34,10 @@ namespace CoreForm.UI
         bool QuitGameConfirm();
         void AbouteGame();
         int CreateScripts(out Queue<string> scripts);
+        void SetMovedCallback(Action act);
 
         public int? GameNumber { get; set; }
+        int SteppingNumber { get; }
     }
 
 
@@ -43,6 +46,7 @@ namespace CoreForm.UI
         IGameForm _form;
         DialogManager _dialog;
         IGame _game;
+        Queue<IGame> _previousGames = new Queue<IGame>();
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
         private FoundationsContainer _foundationsUI;
@@ -50,6 +54,8 @@ namespace CoreForm.UI
         int _defaultWidth = 800;
         int _defaultHeight = 600;
         int _ratio;
+
+        Action _movedCallback;
 
         public GameUI(IGameForm form, DialogManager dialog)
         {
@@ -117,9 +123,19 @@ namespace CoreForm.UI
 
         public void Move(string notation)
         {
+            bool moved = false;
+            var clone = _game.Clone();            
             _game.Move(notation);
+            moved = _game.Equals(clone) == false;
+            if (moved) { 
+                _previousGames.Enqueue(clone);
+                if (_movedCallback != null)
+                {
+                    _movedCallback();
+                }
+            }
             Redraw();            
-            CheckStatus();
+            CheckStatus();            
         }
 
         public void Start(int? deckNo)
@@ -163,6 +179,14 @@ namespace CoreForm.UI
         }
 
         public int? GameNumber { get; set; }
+
+        public int SteppingNumber
+        {
+            get
+            {
+                return _previousGames.Count;
+            }
+        }
 
         private void Redraw()
         {
@@ -327,6 +351,11 @@ namespace CoreForm.UI
             scripts.Enqueue("t1f0");
             scripts.Enqueue("t1f1");
             return 1;            
+        }
+
+        public void SetMovedCallback(Action act)
+        {
+            _movedCallback = act;
         }
     }
 

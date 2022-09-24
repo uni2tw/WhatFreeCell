@@ -24,6 +24,8 @@ namespace CoreForm
         public const string _GAME_TITLE = "新接龍";
         Queue<string> scripts = new Queue<string>();
         private int _ratio = 100;
+        MenuStrip _menu;
+
         public FormMain()
         {
             InitializeComponent();
@@ -34,7 +36,7 @@ namespace CoreForm
             this._ratio = 160;
             gui = new GameUI(this, _dialog);
             gui.InitScreen(_ratio);
-            gui.InitEvents();
+            gui.InitEvents();            
 
             InitializeMenu();
 
@@ -51,16 +53,16 @@ namespace CoreForm
         {
             var self = this;
 
-            var menu = new System.Windows.Forms.MenuStrip();
+            _menu = new System.Windows.Forms.MenuStrip();
 
-            menu.Dock = DockStyle.Top;
-            menu.BackColor = Color.Silver;
+            _menu.Dock = DockStyle.Top;
+            _menu.BackColor = Color.Silver;
 
 
             var menuItemGame = new ToolStripMenuItem();
-
+            
             menuItemGame.Text = "遊戲(&G)";
-            menu.Items.Add(menuItemGame);
+            _menu.Items.Add(menuItemGame);
 
             menuItemGame.DropDownItems.Add(
                 new ToolStripMenuItem()
@@ -96,10 +98,13 @@ namespace CoreForm
             menuItemGame.DropDownItems.Add(
                 new ToolStripMenuItem()
                 {
+                    Name = "BackToPreviousStep",
                     ShortcutKeys = Keys.F10,
+                    Enabled = false,
                     Text = "復原"
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
                 {
+                    MessageBox.Show("b");
                     //gui.BackToPreviousStep();
                 })
             );
@@ -116,7 +121,7 @@ namespace CoreForm
 
             var menuItemHelp = new ToolStripMenuItem();
             menuItemHelp.Text = "說明(&H)";
-            menu.Items.Add(menuItemHelp);
+            _menu.Items.Add(menuItemHelp);
             menuItemHelp.DropDownItems.Add(
                 new ToolStripMenuItem()
                 {
@@ -127,7 +132,12 @@ namespace CoreForm
                 })
             );
 
-            SetControl(menu);
+            gui.SetMovedCallback(delegate ()
+            {
+                _menu.Items.Find("BackToPreviousStep", true).First().Enabled = gui.SteppingNumber > 0;
+            });
+
+            SetControl(_menu);
         }
 
 
@@ -142,8 +152,8 @@ namespace CoreForm
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            //gui.Start(26458);
-            //gui.CreateScripts(out scripts);
+            gui.Start(26458);
+            gui.CreateScripts(out scripts);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
