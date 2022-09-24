@@ -1,6 +1,7 @@
 ﻿using CoreForm.UI;
 using CoreForm.Utilities;
 using FreeCellSolitaire.Core.GameModels;
+using FreeCellSolitaire.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
+using static System.Windows.Forms.DataFormats;
 
 namespace CoreForm
 {
@@ -47,7 +49,8 @@ namespace CoreForm
             this.DoubleBuffered = true;
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
-            this.FormClosing += Form1_FormClosing;
+            this.FormClosing += Form1_FormClosing;            
+
         }
 
         /// <summary>
@@ -108,8 +111,7 @@ namespace CoreForm
                     Text = "復原"
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
                 {
-                    MessageBox.Show("b");
-                    //gui.BackToPreviousStep();
+                    gui.BackToPreviousStep();
                 })
             );
             menuItemGame.DropDownItems.Add(new ToolStripSeparator());

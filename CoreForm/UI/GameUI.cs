@@ -35,6 +35,7 @@ namespace CoreForm.UI
         void AbouteGame();
         int CreateScripts(out Queue<string> scripts);
         void SetMovedCallback(Action act);
+        void BackToPreviousStep();
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -46,7 +47,7 @@ namespace CoreForm.UI
         IGameForm _form;
         DialogManager _dialog;
         IGame _game;
-        Queue<IGame> _previousGames = new Queue<IGame>();
+        Queue<IGame> _archives = new Queue<IGame>();
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
         private FoundationsContainer _foundationsUI;
@@ -128,7 +129,7 @@ namespace CoreForm.UI
             _game.Move(notation);
             moved = _game.Equals(clone) == false;
             if (moved) { 
-                _previousGames.Enqueue(clone);
+                _archives.Enqueue(clone);
                 if (_movedCallback != null)
                 {
                     _movedCallback();
@@ -184,7 +185,7 @@ namespace CoreForm.UI
         {
             get
             {
-                return _previousGames.Count;
+                return _archives.Count;
             }
         }
 
@@ -356,6 +357,14 @@ namespace CoreForm.UI
         public void SetMovedCallback(Action act)
         {
             _movedCallback = act;
+        }
+
+        public void BackToPreviousStep()
+        {
+            var archive = _archives.Dequeue();
+            _game = archive;
+            Redraw();
+            CheckStatus();
         }
     }
 
