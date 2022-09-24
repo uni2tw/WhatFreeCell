@@ -19,7 +19,7 @@ namespace FreeCellSolitaire.UI
         int _index;
         int _cardWidth;
         int _cardHeight;
-        
+        public GeneralColumnPanel Owner { get; private set; }
         public Image ActiveImage { get; private set; }
 
         public Card Card { get
@@ -33,12 +33,13 @@ namespace FreeCellSolitaire.UI
             _index = index;
         }
 
-        public CardControl(int cardWidth, int cardHeight, Card card)
+        public CardControl(GeneralColumnPanel owner, int cardWidth, int cardHeight, Card card)
         {
-            _card = card;            
+            _card = card;
+            Owner = owner;
             _cardWidth = cardWidth;
             _cardHeight = cardHeight;
-
+            
             this.BorderStyle = BorderStyle.None;
             this.BackColor = Color.Black;
             this.Margin = new Padding(0);

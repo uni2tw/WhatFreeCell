@@ -159,7 +159,7 @@ namespace CoreForm
         private void FormMain_Load(object sender, EventArgs e)
         {
             gui.Start(26458);
-            gui.CreateScripts(out scripts);
+            //gui.CreateScripts(out scripts);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

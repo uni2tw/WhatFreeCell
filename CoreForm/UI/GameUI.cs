@@ -36,6 +36,7 @@ namespace CoreForm.UI
         int CreateScripts(out Queue<string> scripts);
         void SetMovedCallback(Action act);
         void BackToPreviousStep();
+        void SelectColumn(string code);
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -47,7 +48,7 @@ namespace CoreForm.UI
         IGameForm _form;
         DialogManager _dialog;
         IGame _game;
-        Queue<IGame> _archives = new Queue<IGame>();
+        Stack<IGame> _archives = new Stack<IGame>();
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
         private FoundationsContainer _foundationsUI;
@@ -105,38 +106,64 @@ namespace CoreForm.UI
             int right = _form.ClientSize.Width;
             int bottom = _form.ClientSize.Height;
             Rectangle rect = new Rectangle(left, top, _form.ClientSize.Width, _form.ClientSize.Height);
-            this._foundationsUI = new FoundationsContainer(
+            this._foundationsUI = new FoundationsContainer(this,
                 columnNumber: 4, rect, dock: 1 , _cardWidth, _cardHeight);
 
             this._form.SetControlReady(this._foundationsUI);
             
-            this._homecellsUI = new HomecellsContainer(
+            this._homecellsUI = new HomecellsContainer(this,
                 columnNumber: 4, rect, dock: 2,_cardWidth, _cardHeight);
 
             this._form.SetControlReady(this._homecellsUI);
 
-            this._tableauUI = new TableauContainer(
+            this._tableauUI = new TableauContainer(this,
                 columnNumber: 8, rect, dock: 3, _cardWidth, _cardHeight);
 
             this._form.SetControlReady(this._tableauUI);
 
         }
 
+        string notation = "";
+        public void SelectColumn(string code)
+        {
+            if (notation == "" && code[0] == 'h')
+            {
+                return;
+            }
+            notation += code;
+            if (notation.Length == 2)
+            {
+                Select(notation);
+            }
+            else if (notation.Length == 4)
+            {
+                Move(notation);
+                notation = "";
+            }
+            //MessageBox.Show("gui: " + code);
+        }
+
+        public void Select(string notation)
+        {
+      
+        }
+
         public void Move(string notation)
         {
             bool moved = false;
-            var clone = _game.Clone();            
+            var clone = _game.Clone();
             _game.Move(notation);
             moved = _game.Equals(clone) == false;
-            if (moved) { 
-                _archives.Enqueue(clone);
+            if (moved)
+            {
+                _archives.Push(clone);
                 if (_movedCallback != null)
                 {
                     _movedCallback();
                 }
                 Redraw();
                 CheckStatus();
-            }        
+            }
         }
 
         public void Start(int? deckNo)
@@ -361,8 +388,16 @@ namespace CoreForm.UI
 
         public void BackToPreviousStep()
         {
-            var archive = _archives.Dequeue();
+            if (_archives.Count == 0)
+            {
+                return;
+            }
+            var archive = _archives.Pop();
             _game = archive;
+            if (_movedCallback != null)
+            {
+                _movedCallback();
+            }
             Redraw();
             CheckStatus();
         }

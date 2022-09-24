@@ -18,8 +18,10 @@ namespace FreeCellSolitaire.UI
         protected int _columnNumber;
         protected int _columnSpace;
         protected int _cardSpacing;
-        public GeneralContainer(int cardWidth, int cardHeight, int columnNumber)
+        protected IGameUI _gameUI;
+        public GeneralContainer(IGameUI gameUI, int cardWidth, int cardHeight, int columnNumber)
         {
+            _gameUI = gameUI;
             _columnPanels = new List<GeneralColumnPanel>(columnNumber);
             _cardWidth = cardWidth;
             _cardHeight = cardHeight;
@@ -85,7 +87,11 @@ namespace FreeCellSolitaire.UI
             for (int i = 0; i < newCards.Count; i++)
             {
                 var card = newCards[i];
-                var cardControl = new CardControl(_cardWidth, _cardHeight, card);                
+                var cardControl = new CardControl(columnPanel, _cardWidth, _cardHeight, card);                
+                cardControl.Click += delegate (object sender, System.EventArgs e)
+                {
+                    _gameUI.SelectColumn(((CardControl)sender).Owner.Code);                    
+                };
                 columnPanel.AddCardControl(cardControl);
                 int cardTop = columnPanel.GetCardControlCount() * _cardSpacing;
                 cardControl.Redraw(cardTop);
@@ -95,9 +101,11 @@ namespace FreeCellSolitaire.UI
 
     public class GeneralColumnPanel : Panel
     {
+        public string Code { get; private set; }
         public List<CardControl> CardControls { get; set; }
-        public GeneralColumnPanel()
+        public GeneralColumnPanel(string code)
         {
+            Code = code;
             CardControls = new List<CardControl>();
         }        
         public void AddCardControl(CardControl cardControl)

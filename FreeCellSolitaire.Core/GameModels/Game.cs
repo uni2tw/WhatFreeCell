@@ -43,7 +43,7 @@ public class Game : IGame
     }
 
     Regex regNotation = new Regex(@"([ft])(\d{1,2})([fth])(\d{1,2})", RegexOptions.Singleline | RegexOptions.Compiled);
-    public void Move(string notation)
+    public bool Move(string notation)
     {
         Match match = regNotation.Match(notation);
 
@@ -61,24 +61,31 @@ public class Game : IGame
         {
             card = this.Foundations.GetColumn(srcColumn).GetLastCard();
         }
-        Debug.Assert(card != null);
+        if (card == null)
+        {
+            return false;
+        }
+
+        bool result = true;
         if (destZone == "t")
         {
-            Debug.Assert(card.Move(Tableau.GetColumn(destColumn)));
+            result = card.Move(Tableau.GetColumn(destColumn));
         }
         else if (destZone == "f")
         {
-            Debug.Assert(card.Move(Foundations.GetColumn(destColumn)));
+            result = card.Move(Foundations.GetColumn(destColumn));
         }
         else if (destZone == "h")
         {
-            Debug.Assert(card.Move(Homecells.GetColumn(destColumn)));
+            result = card.Move(Homecells.GetColumn(destColumn));
         }
 
         if (EnableAssist)
         {
             TryAssistMove();
         }
+
+        return result;
     }
     public void TryAssistMove()
     {

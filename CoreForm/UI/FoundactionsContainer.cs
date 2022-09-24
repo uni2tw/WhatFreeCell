@@ -11,14 +11,14 @@ namespace FreeCellSolitaire.UI
 {
     public class FoundationsContainer : GeneralContainer
     {
+        //max number of columns
         int _columnNumber;         
         int _cardBorderWidth = 1;
-        int _ratio = 100;
-
-        public FoundationsContainer(int columnNumber,
+        int _ratio = 100;        
+        public FoundationsContainer(IGameUI gameUI, int columnNumber,
             Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
-            :base(cardWidth, cardHeight, columnNumber)
-        {                        
+            :base(gameUI, cardWidth, cardHeight, columnNumber)
+        {
             _columnNumber = columnNumber;
 
             this.BorderStyle = BorderStyle.None;                        
@@ -29,12 +29,17 @@ namespace FreeCellSolitaire.UI
             ResizeTo(rect, dock, ratio);
         }
 
+
         public void SetControls()
         {
             for (int i = 0; i < _columnNumber; i++)
             {                
-                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth);
+                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth,$"f{i}");
                 _columnPanels.Add(panel);
+                panel.Click += delegate (object sender, System.EventArgs e)
+                {
+                    _gameUI.SelectColumn((sender as FoundationColumnPanel).Code);                    
+                };
                 this.Controls.Add(panel);
             }
         }
@@ -47,7 +52,8 @@ namespace FreeCellSolitaire.UI
 
     public class FoundationColumnPanel : GeneralColumnPanel
     {
-        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, int ratio = 100)
+        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code, int ratio = 100)
+            :base(code)
         {
             BorderStyle = BorderStyle.None;
             this.Margin = new Padding(0);
