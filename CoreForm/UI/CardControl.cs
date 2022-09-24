@@ -21,6 +21,7 @@ namespace FreeCellSolitaire.UI
         int _cardHeight;
         public GeneralColumnPanel Owner { get; private set; }
         public Image ActiveImage { get; private set; }
+        public Image InactivedImage { get; private set; }
 
         public Card Card { get
             {
@@ -66,6 +67,7 @@ namespace FreeCellSolitaire.UI
                 .GetManifestResourceStream("FreeCellSolitaire.assets.img." + GetImageFileName() + ".png");
             Image img = Image.FromStream(resource);
             this.Image = img;
+            this.InactivedImage = img;
             if (_card.IsBlack())
             {
                 this.ActiveImage = img.DrawAsBlueLight();
@@ -82,6 +84,16 @@ namespace FreeCellSolitaire.UI
             return _card.Suit.ToString() + "-" + _card.Number.ToString("00");
         }
 
-
+        public void SetActived(bool isActivated)
+        {
+            if (isActivated == false && this.Image != this.InactivedImage)
+            {
+                this.Image = this.InactivedImage;
+            }
+            if (isActivated && this.Image != this.ActiveImage)
+            {
+                this.Image = this.ActiveImage;
+            }
+        }
     }
 }

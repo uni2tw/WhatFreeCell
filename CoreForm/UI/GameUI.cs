@@ -128,8 +128,16 @@ namespace CoreForm.UI
         {
             if (notation == "" && code[0] == 'h')
             {
+                Select("");
                 return;
             }
+            if (code == notation)
+            {
+                notation = "";
+                Select("");
+                return;
+            }
+
             notation += code;
             if (notation.Length == 2)
             {
@@ -143,9 +151,9 @@ namespace CoreForm.UI
             //MessageBox.Show("gui: " + code);
         }
 
-        public void Select(string notation)
+        public void Select(string columnCode)
         {
-      
+            Redraw(columnCode);
         }
 
         public void Move(string notation)
@@ -216,13 +224,20 @@ namespace CoreForm.UI
             }
         }
 
-        private void Redraw()
+        private void Redraw(string columnCode = null)
         {
             RedrawTableau();
             RedrawHomecells();
             RedrawFoundations();
+            RedrawActivedCard(columnCode);
         }
 
+        private void RedrawActivedCard(string activeColumnCode)
+        {
+            _foundationsUI.SetActiveColumn(activeColumnCode);
+            _tableauUI.SetActiveColumn(activeColumnCode);
+            //throw new NotImplementedException();
+        }
 
         private void RedrawTableau()
         {

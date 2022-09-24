@@ -96,6 +96,22 @@ namespace FreeCellSolitaire.UI
                 int cardTop = columnPanel.GetCardControlCount() * _cardSpacing;
                 cardControl.Redraw(cardTop);
             }
+
+            for (int i = 0; i < columnPanel.GetCardControlCount(); i++)
+            {
+                columnPanel.GetCardControl(i).SetActived(false);
+            }
+        }
+
+        public void SetActiveColumn(string activeColumnCode)
+        {
+            foreach (var columnPanel in _columnPanels)
+            {
+                if (columnPanel.Code == activeColumnCode && columnPanel.GetCardControlCount() > 0)
+                {
+                    columnPanel.GetCardControl(columnPanel.GetCardControlCount() - 1).SetActived(true);
+                }
+            }
         }
     }
 
