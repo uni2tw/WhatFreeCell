@@ -133,9 +133,9 @@ namespace CoreForm.UI
                 {
                     _movedCallback();
                 }
-            }
-            Redraw();            
-            CheckStatus();            
+                Redraw();
+                CheckStatus();
+            }        
         }
 
         public void Start(int? deckNo)

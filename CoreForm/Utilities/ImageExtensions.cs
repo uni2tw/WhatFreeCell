@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -89,6 +90,18 @@ namespace CoreForm.Utilities
 
 
             return bmpNew;
+        }
+    }
+
+    public class ImageHelper
+    {
+        public static Image LoadFromResource(string resourceName)
+        {
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            Stream resource = assembly
+                .GetManifestResourceStream($"FreeCellSolitaire.assets.{resourceName}");
+            Image img = Image.FromStream(resource);
+            return img;
         }
     }
 }

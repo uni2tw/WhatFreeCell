@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\Icon.png" />
     <None Remove="assets\img\Club-01.png" />
     <None Remove="assets\img\Club-02.png" />
     <None Remove="assets\img\Club-03.png" />
@@ -87,6 +88,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="assets\Icon.png" />
     <EmbeddedResource Include="assets\img\Club-01.png" />
     <EmbeddedResource Include="assets\img\Club-02.png" />
     <EmbeddedResource Include="assets\img\Club-03.png" />

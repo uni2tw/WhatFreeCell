@@ -31,6 +31,10 @@ namespace CoreForm
             InitializeComponent();
 
             this.Text = _GAME_TITLE;
+
+            Bitmap bmp = (Bitmap)ImageHelper.LoadFromResource("Icon.png");
+            this.Icon = Icon.FromHandle(bmp.GetHicon());
+
             _dialog = new DialogManager(this);
 
             this._ratio = 160;
