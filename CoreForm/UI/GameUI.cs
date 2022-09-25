@@ -106,21 +106,35 @@ namespace CoreForm.UI
             int right = _form.ClientSize.Width;
             int bottom = _form.ClientSize.Height;
             Rectangle rect = new Rectangle(left, top, _form.ClientSize.Width, _form.ClientSize.Height);
-            this._foundationsUI = new FoundationsContainer(this,
-                columnNumber: 4, rect, dock: 1 , _cardWidth, _cardHeight);
 
-            this._form.SetControlReady(this._foundationsUI);
-            
-            this._homecellsUI = new HomecellsContainer(this,
-                columnNumber: 4, rect, dock: 2,_cardWidth, _cardHeight);
+            if (this._foundationsUI == null)
+            {
+                this._foundationsUI = new FoundationsContainer(this,
+                    columnNumber: 4, rect, dock: 1, _cardWidth, _cardHeight);
+                this._form.SetControlReady(this._foundationsUI);
+            } else
+            {
+                throw new NotImplementedException();
+            }
+            if (this._homecellsUI == null)
+            {
 
-            this._form.SetControlReady(this._homecellsUI);
-
-            this._tableauUI = new TableauContainer(this,
-                columnNumber: 8, rect, dock: 3, _cardWidth, _cardHeight);
-
-            this._form.SetControlReady(this._tableauUI);
-
+                this._homecellsUI = new HomecellsContainer(this,
+                    columnNumber: 4, rect, dock: 2, _cardWidth, _cardHeight);
+                this._form.SetControlReady(this._homecellsUI);
+            } else
+            {
+                throw new NotImplementedException();
+            }
+            if (this._tableauUI == null)
+            {
+                this._tableauUI = new TableauContainer(this,
+                    columnNumber: 8, rect, dock: 3, _cardWidth, _cardHeight);
+                this._form.SetControlReady(this._tableauUI);
+            } else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         string notation = "";

@@ -49,8 +49,18 @@ namespace CoreForm
             this.DoubleBuffered = true;
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
-            this.FormClosing += Form1_FormClosing;            
+            this.FormClosing += Form1_FormClosing;
 
+            this.Resize += FormMain_Resize;
+
+        }
+
+        private void FormMain_Resize(object sender, EventArgs e)
+        {
+            int r1 = this.ClientSize.Width * 100 / 800;
+            int r2 = this.ClientSize.Height * 100 / 600;
+            _ratio = r1 > r2 ? r2 : r1;
+            gui.InitScreen(_ratio);
         }
 
         /// <summary>
