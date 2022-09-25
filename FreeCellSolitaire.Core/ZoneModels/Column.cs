@@ -100,6 +100,13 @@ namespace FreeCellSolitaire.Core.GameModels
             }
         }
 
+        public string Code
+        {
+            get
+            {
+                return this.Owner.GetType().Name.ToLower().Substring(0, 1) + Index.ToString();
+            }
+        }
 
         public override string ToString()
         {

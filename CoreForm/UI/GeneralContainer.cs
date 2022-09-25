@@ -90,7 +90,11 @@ namespace FreeCellSolitaire.UI
                 var cardControl = new CardControl(columnPanel, _cardWidth, _cardHeight, card);                
                 cardControl.Click += delegate (object sender, System.EventArgs e)
                 {
-                    _gameUI.SelectColumn(((CardControl)sender).Owner.Code);                    
+                    _gameUI.SelectColumn(((CardControl)sender).Owner.Code, false);
+                };
+                cardControl.DoubleClick += delegate (object sender, System.EventArgs e)
+                {
+                    _gameUI.SelectColumn(((CardControl)sender).Owner.Code, true);
                 };
                 columnPanel.AddCardControl(cardControl);
                 int cardTop = columnPanel.GetCardControlCount() * _cardSpacing;

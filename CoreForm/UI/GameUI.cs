@@ -36,7 +36,7 @@ namespace CoreForm.UI
         int CreateScripts(out Queue<string> scripts);
         void SetMovedCallback(Action act);
         void BackToPreviousStep();
-        void SelectColumn(string code);
+        void SelectColumn(string code, bool forceMove);
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -124,14 +124,29 @@ namespace CoreForm.UI
         }
 
         string notation = "";
-        public void SelectColumn(string code)
+        public void SelectColumn(string code, bool forceMove)
         {
             if (notation == "" && code[0] == 'h')
             {
                 Select("");
                 return;
+            }                        
+
+            if (forceMove && code == notation)
+            {
+                for (int i = 0; i < _game.Foundations.ColumnCount; i++)
+                {
+                    if (_game.Foundations.GetColumn(i).GetCardsCount() == 0) {
+                        notation += _game.Foundations.GetColumn(i).Code;
+                        Move(notation);
+                        notation = "";
+                        return;
+                    }
+                }
+                
             }
-            if (code == notation)
+
+            if (forceMove == false && code == notation)
             {
                 notation = "";
                 Select("");
@@ -142,13 +157,11 @@ namespace CoreForm.UI
             if (notation.Length == 2)
             {
                 Select(notation);
+                return;
             }
-            else if (notation.Length == 4)
-            {
-                Move(notation);
-                notation = "";
-            }
-            //MessageBox.Show("gui: " + code);
+
+            Move(notation);
+            notation = "";            
         }
 
         public void Select(string columnCode)
