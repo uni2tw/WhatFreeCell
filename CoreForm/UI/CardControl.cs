@@ -38,13 +38,19 @@ namespace FreeCellSolitaire.UI
         {
             _card = card;
             Owner = owner;
-            _cardWidth = cardWidth;
-            _cardHeight = cardHeight;
             
             this.BorderStyle = BorderStyle.None;
             this.BackColor = Color.Black;
             this.Margin = new Padding(0);
+
+            ResizeTo(cardWidth, cardHeight);
             InitImage();            
+        }
+
+        public void ResizeTo(int cardWidth, int cardHeight)
+        {            
+            this.Width = cardWidth;
+            this.Height = cardHeight;
         }
 
         public bool IsAssignedCard(Card card)
@@ -55,8 +61,6 @@ namespace FreeCellSolitaire.UI
         public void Redraw(int cardTop)
         {
             this.Location = new Point(0, cardTop);
-            this.Width = _cardWidth;
-            this.Height = _cardHeight;
             this.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 

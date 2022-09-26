@@ -23,6 +23,7 @@ namespace CoreForm.UI
     public interface IGameUI
     {
         void InitScreen(int ratio);
+        void ResizeScreen(int width, int height);
         void Start(int? deckNo);        
         void InitEvents();
         void Move(string notation);
@@ -86,6 +87,19 @@ namespace CoreForm.UI
             InitControls();
         }
 
+        public void ResizeScreen(int width, int height)
+        {
+            _cardWidth = (int)(Math.Floor((decimal)_form.ClientSize.Width / 9));
+            _cardHeight = (int)(_cardWidth * 1.38);
+
+            //Resize Controls
+            Rectangle rect = new Rectangle(0, _layoutMarginTop, _form.ClientSize.Width, _form.ClientSize.Height);
+            _foundationsUI.ResizeTo(rect, dock: 1, _cardWidth, _cardHeight);
+            _homecellsUI.ResizeTo(rect, dock: 2, _cardWidth, _cardHeight);
+            _tableauUI.ResizeTo(rect, dock: 3, _cardWidth, _cardHeight);
+            this.Redraw();
+        }
+
         private int _layoutMarginTop = 24;
         private int _cardWidth;
         private int _cardHeight;
@@ -100,41 +114,22 @@ namespace CoreForm.UI
         }
 
         private void InitControls()
-        {        
-            int left = 0;            
-            int top = _layoutMarginTop;
-            int right = _form.ClientSize.Width;
-            int bottom = _form.ClientSize.Height;
-            Rectangle rect = new Rectangle(left, top, _form.ClientSize.Width, _form.ClientSize.Height);
+        {
+            Rectangle rect = new Rectangle(0, _layoutMarginTop, _form.ClientSize.Width, _form.ClientSize.Height);
 
-            if (this._foundationsUI == null)
-            {
-                this._foundationsUI = new FoundationsContainer(this,
-                    columnNumber: 4, rect, dock: 1, _cardWidth, _cardHeight);
-                this._form.SetControlReady(this._foundationsUI);
-            } else
-            {
-                throw new NotImplementedException();
-            }
-            if (this._homecellsUI == null)
-            {
+            this._foundationsUI = new FoundationsContainer(this,
+                columnNumber: 4, rect, dock: 1, _cardWidth, _cardHeight);
+            this._form.SetControlReady(this._foundationsUI);
 
-                this._homecellsUI = new HomecellsContainer(this,
-                    columnNumber: 4, rect, dock: 2, _cardWidth, _cardHeight);
-                this._form.SetControlReady(this._homecellsUI);
-            } else
-            {
-                throw new NotImplementedException();
-            }
-            if (this._tableauUI == null)
-            {
-                this._tableauUI = new TableauContainer(this,
-                    columnNumber: 8, rect, dock: 3, _cardWidth, _cardHeight);
-                this._form.SetControlReady(this._tableauUI);
-            } else
-            {
-                throw new NotImplementedException();
-            }
+
+            this._homecellsUI = new HomecellsContainer(this,
+                columnNumber: 4, rect, dock: 2, _cardWidth, _cardHeight);
+            this._form.SetControlReady(this._homecellsUI);
+
+
+            this._tableauUI = new TableauContainer(this,
+                columnNumber: 8, rect, dock: 3, _cardWidth, _cardHeight);
+            this._form.SetControlReady(this._tableauUI);
         }
 
         string notation = "";

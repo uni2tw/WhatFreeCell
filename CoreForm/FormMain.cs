@@ -46,21 +46,18 @@ namespace CoreForm
 
             InitializeMenu();
 
-            this.DoubleBuffered = true;
+            //沒有覺得有不閃畫面的效果
+            //this.DoubleBuffered = true;
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
             this.FormClosing += Form1_FormClosing;
 
-            this.Resize += FormMain_Resize;
-
+            this.Resize += FormMain_Resize;            
         }
 
         private void FormMain_Resize(object sender, EventArgs e)
         {
-            int r1 = this.ClientSize.Width * 100 / 800;
-            int r2 = this.ClientSize.Height * 100 / 600;
-            _ratio = r1 > r2 ? r2 : r1;
-            gui.InitScreen(_ratio);
+            gui.ResizeScreen(this.ClientSize.Width, this.ClientSize.Height);
         }
 
         /// <summary>

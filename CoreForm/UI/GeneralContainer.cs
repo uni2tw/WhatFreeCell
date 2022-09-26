@@ -19,20 +19,20 @@ namespace FreeCellSolitaire.UI
         protected int _columnSpace;
         protected int _cardSpacing;
         protected IGameUI _gameUI;
-        public GeneralContainer(IGameUI gameUI, int cardWidth, int cardHeight, int columnNumber)
+        public GeneralContainer(IGameUI gameUI, int columnNumber)
         {
             _gameUI = gameUI;
             _columnPanels = new List<GeneralColumnPanel>(columnNumber);
-            _cardWidth = cardWidth;
-            _cardHeight = cardHeight;
-            _columnNumber = columnNumber;
-            _cardSpacing = GetCardSpacing();
+            _columnNumber = columnNumber;            
         }
 
         public abstract int GetCardSpacing();
 
-        public void ResizeTo(Rectangle rect, int dock, int ratio)
+        public void ResizeTo(Rectangle rect, int dock, int cardWidth, int cardHeight)
         {
+            _cardWidth = cardWidth;
+            _cardHeight = cardHeight;
+            _cardSpacing = GetCardSpacing();
             if (dock == 1)
             {
                 this.Left = rect.Left;
@@ -54,12 +54,6 @@ namespace FreeCellSolitaire.UI
                 this.Width = rect.Width;
                 this.Height = rect.Height - this.Top;
                 this._columnSpace = (this.Width - (_cardWidth * _columnNumber)) / (_columnNumber + 1);
-            }
-
-            if (ratio > 100)
-            {
-                this.Width = (int)(this.Width * ratio / 100);
-                this.Height = (int)(this.Height * ratio / 100);
             }
         }
 
@@ -87,7 +81,8 @@ namespace FreeCellSolitaire.UI
             for (int i = 0; i < newCards.Count; i++)
             {
                 var card = newCards[i];
-                var cardControl = new CardControl(columnPanel, _cardWidth, _cardHeight, card);                
+                var cardControl = new CardControl(columnPanel, _cardWidth, _cardHeight, card);
+                //cardControl.ResizeTo(_cardWidth, _cardHeight);
                 cardControl.Click += delegate (object sender, System.EventArgs e)
                 {
                     _gameUI.SelectColumn(((CardControl)sender).Owner.Code, false);
@@ -103,7 +98,9 @@ namespace FreeCellSolitaire.UI
 
             for (int i = 0; i < columnPanel.GetCardControlCount(); i++)
             {
+                columnPanel.GetCardControl(i).ResizeTo(_cardWidth, _cardHeight);
                 columnPanel.GetCardControl(i).SetActived(false);
+                columnPanel.GetCardControl(i).Refresh();
             }
         }
 

@@ -17,17 +17,16 @@ namespace FreeCellSolitaire.UI
         int _cardBorderWidth = 1;
         int _ratio = 100;        
         public FoundationsContainer(IGameUI gameUI, int columnNumber,
-            Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
-            :base(gameUI, cardWidth, cardHeight, columnNumber)
+            Rectangle rect, int dock, int cardWidth, int cardHeight)
+            :base(gameUI, columnNumber)
         {
             _columnNumber = columnNumber;
 
             this.BorderStyle = BorderStyle.None;                        
             this.Name = nameof(FoundationsContainer);            
-           
+                       
+            ResizeTo(rect, dock, cardWidth, cardHeight);
             SetControls();
-
-            ResizeTo(rect, dock, ratio);
         }
 
 
@@ -43,6 +42,13 @@ namespace FreeCellSolitaire.UI
                 };
                 this.Controls.Add(panel);
             }
+            this.Resize += delegate (object sender, System.EventArgs e)
+            {
+                foreach (var panel in _columnPanels)
+                {
+                    (panel as FoundationColumnPanel).ResizeTo(_cardWidth, _cardHeight, _cardBorderWidth);
+                }
+            };
         }
         public override int GetCardSpacing()
         {
@@ -53,7 +59,7 @@ namespace FreeCellSolitaire.UI
 
     public class FoundationColumnPanel : GeneralColumnPanel
     {
-        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code, int ratio = 100)
+        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code)
             :base(code)
         {
             BorderStyle = BorderStyle.None;
@@ -65,13 +71,14 @@ namespace FreeCellSolitaire.UI
                 ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
             };            
 
-            ResizeTo(cardWidth, cardHeight, cardBorderWidth, ratio);
+            ResizeTo(cardWidth, cardHeight, cardBorderWidth);
         }
 
-        public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth, int ratio)
+        public void ResizeTo(int cardWidth, int cardHeight, int cardBorderWidth)
         {
             Width = cardWidth;
             Height = cardHeight;
+            this.Refresh();
         }
     }
 
