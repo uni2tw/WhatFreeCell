@@ -101,6 +101,8 @@ namespace FreeCellSolitaire.UI
 
             for (int i = 0; i < columnPanel.GetCardControlCount(); i++)
             {
+                int cardTop = i * _cardSpacing;
+                columnPanel.GetCardControl(i).Redraw(cardTop);
                 columnPanel.GetCardControl(i).ResizeTo(_cardWidth, _cardHeight);
                 columnPanel.GetCardControl(i).SetActived(false);
                 columnPanel.GetCardControl(i).Refresh();
