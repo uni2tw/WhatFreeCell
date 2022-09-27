@@ -6,8 +6,7 @@ using System.Windows.Forms;
 namespace FreeCellSolitaire.UI
 {
     public class TableauContainer : GeneralContainer
-    {
-        Rectangle _rect;
+    {        
         int _columnNumber;
         int _cardBorderWidth = 1;
         int _ratio = 100;        
@@ -16,8 +15,7 @@ namespace FreeCellSolitaire.UI
             Rectangle rect, int dock, int cardWidth, int cardHeight, int ratio = 100)
             : base(gameUI, columnNumber)
         {
-            _columnNumber = columnNumber;                        
-            _rect = rect;            
+            _columnNumber = columnNumber;                                    
             this.BorderStyle = BorderStyle.None;
             this.Name = nameof(FoundationsContainer);   
             

@@ -15,6 +15,7 @@ namespace FreeCellSolitaire.UI
         protected List<GeneralColumnPanel> _columnPanels;
         protected int _cardWidth;
         protected int _cardHeight;
+        protected Rectangle _rect;
         protected int _columnNumber;
         protected int _columnSpace;
         protected int _cardSpacing;
@@ -30,6 +31,7 @@ namespace FreeCellSolitaire.UI
 
         public void ResizeTo(Rectangle rect, int dock, int cardWidth, int cardHeight)
         {
+            _rect = rect;
             _cardWidth = cardWidth;
             _cardHeight = cardHeight;
             _cardSpacing = GetCardSpacing();
@@ -49,11 +51,12 @@ namespace FreeCellSolitaire.UI
             }
             else if (dock == 3)
             {
+                this._columnSpace = (rect.Width - (_cardWidth * _columnNumber)) / (_columnNumber + 1);
+
                 this.Left = rect.Left;
                 this.Top = rect.Top + _cardHeight + 12;
                 this.Width = rect.Width;
-                this.Height = rect.Height - this.Top;
-                this._columnSpace = (this.Width - (_cardWidth * _columnNumber)) / (_columnNumber + 1);
+                this.Height = rect.Height - this.Top;                
             }
         }
 
