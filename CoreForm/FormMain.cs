@@ -75,7 +75,6 @@ namespace CoreForm
                     if (child is CardControl)
                     {
                         child.Visible = true;
-                        child.Update();
                     }
                     controls.Enqueue(child);
                 }
@@ -99,7 +98,7 @@ namespace CoreForm
                     if (child is CardControl)
                     {
                         child.Visible = false;
-                        child.Update();
+
                     }
                     controls.Enqueue(child);
                 }
