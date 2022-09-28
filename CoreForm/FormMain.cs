@@ -72,7 +72,7 @@ namespace CoreForm
                     {
                         continue;
                     }
-                    if (child is CardControl)
+                    if (child is GeneralContainer)
                     {
                         child.Visible = true;
                     }
@@ -95,7 +95,7 @@ namespace CoreForm
                     {
                         continue;
                     }
-                    if (child is CardControl)
+                    if (child is GeneralContainer)
                     {
                         child.Visible = false;
 
