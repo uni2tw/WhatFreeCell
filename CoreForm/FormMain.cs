@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -52,12 +53,73 @@ namespace CoreForm
             this.Load += FormMain_Load;
             this.FormClosing += Form1_FormClosing;
 
-            this.Resize += FormMain_Resize;            
+            this.Resize += FormMain_Resize;
+
+            osize = this.ClientSize;
         }
 
+        private void ResizeEnd(object sender, EventArgs e)
+        {
+            Queue<Control> controls = new Queue<Control>();
+            controls.Enqueue(this);
+            while (controls.Count > 0)
+            {
+                var control = controls.Dequeue();
+                foreach (var c in control.Controls)
+                {
+                    var child = c as Control;
+                    if (child == null)
+                    {
+                        continue;
+                    }
+                    if (child is CardControl)
+                    {
+                        child.Visible = true;
+                        child.Update();
+                    }
+                    controls.Enqueue(child);
+                }
+            }
+        }
+
+        private void ResizeBegin(object sender, EventArgs e)
+        {
+            Queue<Control> controls = new Queue<Control>();
+            controls.Enqueue(this);
+            while (controls.Count > 0)
+            {
+                var control = controls.Dequeue();
+                foreach (var c in control.Controls)
+                {
+                    var child = c as Control;
+                    if (child == null)
+                    {
+                        continue;
+                    }
+                    if (child is CardControl)
+                    {
+                        child.Visible = false;
+                        child.Update();
+                    }
+                    controls.Enqueue(child);
+                }
+            }
+        }
+
+        Size osize;
         private void FormMain_Resize(object sender, EventArgs e)
         {
+            bool changed = osize.Equals(ClientSize) == false;
+            if (changed)
+            {
+                ResizeBegin(sender, e);
+            }
             gui.ResizeScreen(this.ClientSize.Width, this.ClientSize.Height);
+            if (changed)
+            {
+                ResizeEnd(sender, e);
+            }
+            osize = ClientSize;
         }
 
         /// <summary>
