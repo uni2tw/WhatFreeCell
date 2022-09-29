@@ -58,7 +58,7 @@ namespace CoreForm
             osize = this.ClientSize;
         }
 
-        private void ResizeEnd(object sender, EventArgs e)
+        private void SetContainersVisible(bool visible)
         {
             Queue<Control> controls = new Queue<Control>();
             controls.Enqueue(this);
@@ -74,36 +74,12 @@ namespace CoreForm
                     }
                     if (child is GeneralContainer)
                     {
-                        child.Visible = true;
+                        child.Visible = visible;
                     }
                     controls.Enqueue(child);
                 }
             }
-        }
-
-        private void ResizeBegin(object sender, EventArgs e)
-        {
-            Queue<Control> controls = new Queue<Control>();
-            controls.Enqueue(this);
-            while (controls.Count > 0)
-            {
-                var control = controls.Dequeue();
-                foreach (var c in control.Controls)
-                {
-                    var child = c as Control;
-                    if (child == null)
-                    {
-                        continue;
-                    }
-                    if (child is GeneralContainer)
-                    {
-                        child.Visible = false;
-
-                    }
-                    controls.Enqueue(child);
-                }
-            }
-        }
+        }       
 
         Size osize;
         private void FormMain_Resize(object sender, EventArgs e)
@@ -111,12 +87,12 @@ namespace CoreForm
             bool changed = osize.Equals(ClientSize) == false;
             if (changed)
             {
-                ResizeBegin(sender, e);
+                SetContainersVisible(false);
             }
             gui.ResizeScreen(this.ClientSize.Width, this.ClientSize.Height);
             if (changed)
             {
-                ResizeEnd(sender, e);
+                SetContainersVisible(true);
             }
             osize = ClientSize;
         }
