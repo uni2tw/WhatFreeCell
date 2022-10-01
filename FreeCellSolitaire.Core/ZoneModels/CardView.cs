@@ -165,7 +165,7 @@ public class CardView
     /// <param name="zoneType"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    private bool CheckLinkable(CardView destCard, Type zoneType)
+    public bool CheckLinkable(CardView destCard, Type zoneType)
     {
         var srcCard = this;
 

@@ -43,7 +43,7 @@ public class Game : IGame
     }
 
     Regex regNotation = new Regex(@"([ft])(\d{1,2})([fth])(\d{1,2})", RegexOptions.Singleline | RegexOptions.Compiled);
-    public bool Move(string notation)
+    public bool Move(string notation, bool supportMany = true)
     {
         Match match = regNotation.Match(notation);
 
@@ -51,12 +51,16 @@ public class Game : IGame
         string destZone = match.Groups[3].Value;
         int srcColumn = int.Parse(match.Groups[2].Value);
         int destColumn = int.Parse(match.Groups[4].Value);
-
+            
         CardView card = null;
-        if (srcZone == "t")
+        if (srcZone == "t" && destZone == "t")
+        {            
+            card = this.Tableau.GetColumn(srcColumn).GetLinkedWithRedAndBlackOrderlyCard(this.GetExtraMobility() + 1);
+        }
+        else if (srcZone == "t")
         {
             card = this.Tableau.GetColumn(srcColumn).GetLastCard();
-        } 
+        }
         else if (srcZone == "f")
         {
             card = this.Foundations.GetColumn(srcColumn).GetLastCard();
@@ -221,7 +225,7 @@ public class Game : IGame
         HashSet<IGame> samples = new HashSet<IGame>();
         queueItems.Enqueue(this.Clone());
         int depth = 0;
-        while (queueItems.Count > 0 || depth <= 2)
+        while (queueItems.Count > 0 && depth <= 2)
         {
             var data = GetPossibleSituations(queueItems.Dequeue(), ref depth);
 

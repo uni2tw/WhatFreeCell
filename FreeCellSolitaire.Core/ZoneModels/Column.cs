@@ -80,6 +80,37 @@ namespace FreeCellSolitaire.Core.GameModels
             return _cards.LastOrDefault();
         }
 
+        public CardView GetLinkedWithRedAndBlackOrderlyCard(int maxNumber)
+        {            
+            if (_cards.Count == 0)
+            {
+                return null;
+            }
+            if (_cards.Count == 1)
+            {
+                return _cards[0];
+            }
+            List<CardView> result = new List<CardView>();
+                       
+            for (int i = _cards.Count - 1 ; i >= 1; i--)
+            {
+                var srcCard = _cards[i];
+                var destCard = _cards[i - 1];
+                result.Add(srcCard);                
+                if (srcCard.CheckLinkable(destCard, typeof(Tableau)) == false)
+                {
+                    break;
+                }
+            }
+
+            if (result.Count > maxNumber) {
+                result = result.Take(maxNumber).ToList();
+            }
+            result.Reverse();
+            
+            return result.FirstOrDefault();
+        }
+
         private IZone _owner;
         public IZone Owner
         {
@@ -170,6 +201,6 @@ namespace FreeCellSolitaire.Core.GameModels
                 this.AddCards(card);
             }
         }
-        
+
     }
 }
