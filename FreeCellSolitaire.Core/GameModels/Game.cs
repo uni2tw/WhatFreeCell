@@ -54,8 +54,17 @@ public class Game : IGame
             
         CardView card = null;
         if (srcZone == "t" && destZone == "t")
-        {            
-            card = this.Tableau.GetColumn(srcColumn).GetLinkedWithRedAndBlackOrderlyCard(this.GetExtraMobility() + 1);
+        {
+            var cards = this.Tableau.GetColumn(srcColumn).GetTableauLinkedCards(this.GetExtraMobility() + 1);
+            var destCard = Tableau.GetColumn(destColumn).GetLastCard();
+            if (destCard == null)
+            {
+                card = cards.FirstOrDefault();
+            }
+            else
+            {
+                card = cards.FirstOrDefault(x => x.CheckLinkable(destCard, typeof(Tableau)));
+            }
         }
         else if (srcZone == "t")
         {
@@ -69,7 +78,6 @@ public class Game : IGame
         {
             return false;
         }
-
         bool result = true;
         if (destZone == "t")
         {

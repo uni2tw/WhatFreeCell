@@ -79,8 +79,7 @@ namespace FreeCellSolitaire.Core.GameModels
         {
             return _cards.LastOrDefault();
         }
-
-        public CardView GetLinkedWithRedAndBlackOrderlyCard(int maxNumber)
+        public List<CardView> GetTableauLinkedCards(int maxNumber)
         {            
             if (_cards.Count == 0)
             {
@@ -88,16 +87,16 @@ namespace FreeCellSolitaire.Core.GameModels
             }
             if (_cards.Count == 1)
             {
-                return _cards[0];
+                return _cards;
             }
             List<CardView> result = new List<CardView>();
                        
             for (int i = _cards.Count - 1 ; i >= 1; i--)
             {
                 var srcCard = _cards[i];
-                var destCard = _cards[i - 1];
+                var prevCard = _cards[i - 1];                
                 result.Add(srcCard);                
-                if (srcCard.CheckLinkable(destCard, typeof(Tableau)) == false)
+                if (srcCard.CheckLinkable(prevCard, typeof(Tableau)) == false)
                 {
                     break;
                 }
@@ -108,7 +107,7 @@ namespace FreeCellSolitaire.Core.GameModels
             }
             result.Reverse();
             
-            return result.FirstOrDefault();
+            return result;
         }
 
         private IZone _owner;
