@@ -12,7 +12,7 @@ public interface IGame
     Tableau Tableau { get; set; }
 
     Deck Deck { get; }
-    bool Move(string notation, bool supportMany = true);
+    bool Move(string notation);
     void DebugInfo(string stepNum = "", bool enabled = true);
     void DebugInfo(int stepNum, bool enabled = true);
     string GetDebugInfo(string stepNum = "", bool enabled = true);

@@ -43,7 +43,7 @@ public class Game : IGame
     }
 
     Regex regNotation = new Regex(@"([ft])(\d{1,2})([fth])(\d{1,2})", RegexOptions.Singleline | RegexOptions.Compiled);
-    public bool Move(string notation, bool supportMany = true)
+    public bool Move(string notation)
     {
         Match match = regNotation.Match(notation);
 

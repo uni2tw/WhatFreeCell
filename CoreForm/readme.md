@@ -1,7 +1,5 @@
-﻿GetLastLinkedCard
-修正release mode 卡片移動有殘影(或資料有問題非殘影)
-一次移動多張
-
+﻿# TODO
+* 修正release mode 卡片移動有殘影(或資料有問題非殘影)
 
 
 deck card images from 
