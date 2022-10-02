@@ -38,7 +38,8 @@ public class CardView
             //move
             if (destColumn.AddCards(card))
             {
-                Debug.Assert(card.Owner.RemoveCard(card));
+                bool removed = card.Owner.RemoveCard(card);
+                Debug.Assert(removed);
                 card.SetOwner(destColumn);                
             }
         }        
