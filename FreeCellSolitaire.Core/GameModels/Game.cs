@@ -55,7 +55,13 @@ public class Game : IGame
         CardView card = null;
         if (srcZone == "t" && destZone == "t")
         {
-            var cards = this.Tableau.GetColumn(srcColumn).GetTableauLinkedCards(this.GetExtraMobility() + 1);
+            int mobility = this.GetExtraMobility() + 1;
+            //移到空的column，那可騰挪用的column會少1
+            if (Tableau.GetColumn(destColumn).GetCardsCount() == 0)
+            {
+                mobility--;
+            }
+            var cards = this.Tableau.GetColumn(srcColumn).GetTableauLinkedCards(mobility);
             var destCard = Tableau.GetColumn(destColumn).GetLastCard();
             if (destCard == null)
             {

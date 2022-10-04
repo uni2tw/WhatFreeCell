@@ -109,7 +109,57 @@ namespace FreeCellSolitaire.Tests
 
         }
 
-       
+        [Test]
+        public void GameShouldMoveOnlyOne()
+        {
+            IGame game = new Game();
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            foundations.GetColumn(0).AddCards("s13");
+            foundations.GetColumn(1).AddCards("d13");
+            foundations.GetColumn(2).AddCards("h13");
+            foundations.GetColumn(3).AddCards("c13");
+            tableau.GetColumn(0).AddCards("s12");
+            tableau.GetColumn(1).AddCards("s11");
+            tableau.GetColumn(2).AddCards("s10");
+            tableau.GetColumn(3).AddCards("s9");
+            tableau.GetColumn(4).AddCards("s8");
+            tableau.GetColumn(5).AddCards("s7");
+            tableau.GetColumn(6).AddCards("s6,h5");
+            game.DebugInfo(0);
+            bool moved = game.Move("t6t7");
+            game.DebugInfo(1);
+            Assert.IsTrue(moved);
+            Assert.AreEqual(1, tableau.GetColumn(7).GetCardsCount());
+        }
+
+        [Test]
+        public void GameShouldMoveFail()
+        {
+            IGame game = new Game();
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+            foundations.GetColumn(0).AddCards("s13");
+            foundations.GetColumn(1).AddCards("d13");
+            foundations.GetColumn(2).AddCards("h13");
+            foundations.GetColumn(3).AddCards("c13");
+            tableau.GetColumn(0).AddCards("s12");
+            tableau.GetColumn(1).AddCards("s11");
+            tableau.GetColumn(2).AddCards("s10");
+            tableau.GetColumn(3).AddCards("s9");
+            tableau.GetColumn(4).AddCards("s8");
+            
+            tableau.GetColumn(6).AddCards("s6,h5,s4");
+            tableau.GetColumn(7).AddCards("h7");            
+            game.DebugInfo(0);
+            bool moved = game.Move("t6t7");
+            game.DebugInfo(1);
+            Assert.IsFalse(moved);            
+        }
+
+
         [Test]
         public void GameMoveWithAssist_01()
         {
