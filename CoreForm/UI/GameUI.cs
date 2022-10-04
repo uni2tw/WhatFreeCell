@@ -264,6 +264,11 @@ namespace CoreForm.UI
 
         private void Redraw(string columnCode = null)
         {
+            //如果遊戲還沒開始，_game資料還未初始化，此判斷避免此時重繪會有錯誤
+            if (_game.IsPlaying() == false)
+            {
+                return;
+            }
             RedrawTableau();
             RedrawHomecells();
             RedrawFoundations();
