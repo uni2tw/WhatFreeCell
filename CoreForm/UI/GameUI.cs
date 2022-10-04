@@ -30,7 +30,7 @@ namespace CoreForm.UI
         
         void StartGame();
         void PickNumberStartGame();
-        void RestartGame();        
+        void RestartGame(bool confirm);        
         void QuitGame();
         bool QuitGameConfirm();
         void AbouteGame();
@@ -191,9 +191,9 @@ namespace CoreForm.UI
                 {
                     _movedCallback();
                 }
-                Redraw();
-                CheckStatus();
+                Redraw();                
             }
+            ControlStatus();
         }
 
         public void Start(int? deckNo)
@@ -216,10 +216,10 @@ namespace CoreForm.UI
             _form.SetCaption(this.GameNumber.ToString());
         }
         
-        private void CheckStatus()
+        private void ControlStatus()
         {
-            GameStatus stats = _game.EstimateGameover(false);
-            if (stats == GameStatus.Completed)
+            GameStatus status = _game.EstimateGameover(false);
+            if (status == GameStatus.Completed)
             {
                 var choice = _dialog.ShowYouWinContinueDialog(210 * _ratio / 100);
                 if (choice.Reuslt == DialogResult.Yes)
@@ -234,6 +234,22 @@ namespace CoreForm.UI
                     }
                 }
             } 
+            else if (status == GameStatus.Checkmate)
+            {
+                MessageBox.Show("ALERT");
+            }
+            else if (status == GameStatus.DeadEnd)
+            {
+                var choice = _dialog.ShowGameoverContinueDialog(210);
+                if (choice.CheckedYes)
+                {
+                    PickNumberStartGame();
+                }
+                else
+                {
+                    this.RestartGame(false);
+                }
+            }
         }
 
         public int? GameNumber { get; set; }
@@ -336,9 +352,9 @@ namespace CoreForm.UI
             }
         }
 
-        public void RestartGame()
+        public void RestartGame(bool confirm)
         {
-            if (MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (confirm && MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 return;
             }
@@ -437,7 +453,7 @@ namespace CoreForm.UI
                 _movedCallback();
             }
             Redraw();
-            CheckStatus();
+            ControlStatus();
         }
     }
 

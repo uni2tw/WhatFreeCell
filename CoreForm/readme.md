@@ -1,5 +1,5 @@
 ﻿# TODO
-* 修正release mode 卡片移動有殘影(或資料有問題非殘影)
+* 處理遊戲 GameStatus.Checkmate 時的效果
 
 
 ## 建置指令

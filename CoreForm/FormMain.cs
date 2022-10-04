@@ -142,7 +142,7 @@ namespace CoreForm
                     Text = "重啟牌局(&R)"
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
                 {
-                    gui.RestartGame();
+                    gui.RestartGame(true);
                 })
             );
             menuItemGame.DropDownItems.Add(new ToolStripSeparator());
