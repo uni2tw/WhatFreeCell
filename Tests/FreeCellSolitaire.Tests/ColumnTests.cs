@@ -208,6 +208,37 @@ namespace FreeCellSolitaire.Tests
         }
 
 
+
+        [Test]
+        public void GetTableauLinkedCards()
+        {
+            {
+                Column col = new Column(new Tableau(null), 0, 10);
+                col.AddCards(new Card { Suit = CardSuit.Spade, Number = 8 });                
+                Assert.AreEqual(1, col.GetTableauLinkedCards(3).Count);
+            }
+            {
+                Column col = new Column(new Tableau(null), 0, 10);
+                col.AddCards(new Card { Suit = CardSuit.Spade, Number = 8 });
+                col.AddCards(new Card { Suit = CardSuit.Diamond, Number = 7 });
+                Assert.AreEqual(2, col.GetTableauLinkedCards(3).Count);
+            }
+            {
+                Column col = new Column(new Tableau(null), 0, 10);
+                col.AddCards(new Card { Suit = CardSuit.Spade, Number = 8 });
+                col.AddCards(new Card { Suit = CardSuit.Diamond, Number = 7 });
+                col.AddCards(new Card { Suit = CardSuit.Spade, Number = 6 });
+                Assert.AreEqual(2, col.GetTableauLinkedCards(2).Count);
+            }
+            {
+                Column col = new Column(new Tableau(null), 0, 10);
+                col.AddCards(new Card { Suit = CardSuit.Spade, Number = 8 });
+                col.AddCards(new Card { Suit = CardSuit.Diamond, Number = 7 });
+                col.AddCards(new Card { Suit = CardSuit.Spade, Number = 6 });
+                Assert.AreEqual(3, col.GetTableauLinkedCards(3).Count);
+            }
+        }
+
     }
    
 }

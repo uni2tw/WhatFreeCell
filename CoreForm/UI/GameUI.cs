@@ -364,7 +364,8 @@ namespace CoreForm.UI
 
         public void AbouteGame()
         {
-            MessageBox.Show("2022的計劃");
+            _dialog.ShowAboutGameDialog();
+            //MessageBox.Show("2022的計劃");
         }
 
         public int CreateScripts(out Queue<string> scripts)

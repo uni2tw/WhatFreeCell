@@ -69,7 +69,7 @@ public class DialogForms
 
             Button btn = new Button();
             btn.Text = this.YesText;
-            btn.AutoSize = true;
+            btn.AutoSize = true;            
             container.Controls.Add(btn, 0, 2);
             btn.Margin = new Padding(
                 (int)((btn.Parent.Width - btn.Width) / 2), 0, 0, 0);
@@ -84,6 +84,76 @@ public class DialogForms
             base.OnLoad(e);
         }
 
+    }
+
+    public class AboutGameDialogForm : Form
+    {
+        public AboutGameDialogForm(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+            this.ShowIcon = false;
+            this.ControlBox = true;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Padding = new Padding(0);
+            this.Font = new Font("新細明體", this.Width / 24);
+        }
+
+        public string Caption
+        {
+            set
+            {
+                this.Text = value;
+            }
+        }
+
+
+        public string MessageTopic { get; set; }
+        public string MessageBody { get; set; }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            TableLayoutPanel container = new TableLayoutPanel();
+            container.Dock = DockStyle.Fill;
+            this.Padding = new Padding(10);
+            container.ColumnCount = 1;
+            container.RowCount = 3;
+            container.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+
+            this.Controls.Add(container);
+
+            Label lbMessage = new Label { Text = MessageTopic, Margin = new Padding(0), TextAlign = ContentAlignment.TopCenter };
+            lbMessage.Dock = DockStyle.Fill;
+            lbMessage.AutoSize = true;
+            container.Controls.Add(lbMessage, 0, 0);
+
+            Label lbMessage2 = new Label { Text = MessageBody, Margin = new Padding(0), TextAlign = ContentAlignment.TopLeft };
+            lbMessage2.Dock = DockStyle.Fill;
+            lbMessage2.AutoSize = true;
+
+            container.Controls.Add(lbMessage2, 0, 1);
+
+            Button btn = new Button();
+            btn.Text = "確定";
+            btn.AutoSize = true;
+            container.Controls.Add(btn, 0, 2);
+            btn.Margin = new Padding(
+                (int)((btn.Parent.Width - btn.Width) / 2), 0, 0, 0);
+
+            btn.Click += delegate (object sender, EventArgs e)
+            {
+                this.DialogResult = DialogResult.Yes;                
+                this.Close();
+            };
+
+            base.OnLoad(e);
+        }
     }
     public class ConfirmDialogForm : Form
     {
@@ -132,8 +202,6 @@ public class DialogForms
                 ConfirmChecked = true
             };
         }
-
-
 
         public ConfirmDialogForm(int width, int height)
         {
@@ -232,7 +300,6 @@ public class DialogForms
             };
 
         }
-
 
         public string Caption { get; set; }
         public string InputText { get; set; }

@@ -54,6 +54,23 @@ public class DialogManager
         };
         return result;
     }
+
+    public FormDialogResult ShowAboutGameDialog()
+    {
+        int width = (int)(this._owner.ClientSize.Width / 2);
+        DialogForms.AboutGameDialogForm frm = new(width, (int)(width * 0.618f))
+        {
+            Caption = "關於",
+            MessageTopic = "新接龍",
+            MessageBody = "2022的練習, 提供一個像windows XP版本的新接龍，但能隨著視窗縮放調整大小. by unicorn"
+        };
+        var dialogResult = frm.ShowDialog(_owner);
+        FormDialogResult result = new FormDialogResult(dialogResult)
+        {
+           
+        };
+        return result;
+    }
 }
 
 public class FormDialogResult

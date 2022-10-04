@@ -80,33 +80,29 @@ namespace FreeCellSolitaire.Core.GameModels
             return _cards.LastOrDefault();
         }
         public List<CardView> GetTableauLinkedCards(int maxNumber)
-        {            
-            if (_cards.Count == 0)
-            {
-                return null;
-            }
-            if (_cards.Count == 1)
-            {
-                return _cards;
-            }
+        {
             List<CardView> result = new List<CardView>();
-                       
-            for (int i = _cards.Count - 1 ; i >= 1; i--)
-            {
-                var srcCard = _cards[i];
-                var prevCard = _cards[i - 1];                
-                result.Add(srcCard);                
-                if (srcCard.CheckLinkable(prevCard, typeof(Tableau)) == false)
-                {
-                    break;
-                }
-            }
 
+            for (int i = 0; i < _cards.Count; i++)
+            {
+                var theCard = _cards[i];
+                var nextCard = i == _cards.Count - 1 ? null : _cards[i + 1];
+                if (nextCard == null)
+                {
+                    result.Add(theCard);
+                }
+                else if (nextCard.CheckLinkable(theCard, typeof(Tableau)) == false)
+                {
+                    result.Clear();
+                }
+                else
+                {
+                    result.Add(theCard);
+                }
+            }            
             if (result.Count > maxNumber) {
-                result = result.Take(maxNumber).ToList();
-            }
-            result.Reverse();
-            
+                result = result.Skip(result.Count - maxNumber).Take(maxNumber).ToList();
+            }                        
             return result;
         }
 
