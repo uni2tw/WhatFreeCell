@@ -235,7 +235,7 @@ namespace CoreForm.UI
                 }
             } 
             else if (status == GameStatus.Checkmate)
-            {
+            {                
                 MessageBox.Show("ALERT");
             }
             else if (status == GameStatus.DeadEnd)

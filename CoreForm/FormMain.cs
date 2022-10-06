@@ -178,7 +178,7 @@ namespace CoreForm
                     Text = "關於新接龍"
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
                 {
-                    gui.AbouteGame();
+                    gui.AbouteGame();  
                 })
             );
 
@@ -186,7 +186,7 @@ namespace CoreForm
             {
                 _menu.Items.Find("BackToPreviousStep", true).First().Enabled = gui.SteppingNumber > 0;
             });
-
+            //_menu.Dock = DockStyle.None;
             SetControl(_menu);
         }
 
@@ -232,6 +232,7 @@ namespace CoreForm
 
         public void SetCaption(string text)
         {
+            
             if (string.IsNullOrEmpty(text))
             {
                 this.Text = _GAME_TITLE;
@@ -241,5 +242,24 @@ namespace CoreForm
                 this.Text = $"{_GAME_TITLE} #{text}";
             }
         }
+
+        public async Task TitlebarLostFocusLoop()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                SetForegroundWindow(GetDesktopWindow());
+                await Task.Delay(500);
+                SetForegroundWindow(Handle.ToInt32());
+                await Task.Delay(500);
+            }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(int hwnd);
+
+
+
+        [DllImport("user32.dll")]
+        private static extern int GetDesktopWindow();
     }
 }
