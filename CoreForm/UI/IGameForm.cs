@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CoreForm.UI
@@ -16,7 +17,7 @@ namespace CoreForm.UI
         void Close();
         void SetControl(Control control);
         void SetControlReady(Control control);
-        void RestartGame();
+        Task AlertCheckMate();
         void SetCaption(string text);
     }    
 

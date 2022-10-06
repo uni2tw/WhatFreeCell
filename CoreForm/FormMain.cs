@@ -243,7 +243,11 @@ namespace CoreForm
             }
         }
 
-        public async Task TitlebarLostFocusLoop()
+        /// <summary>
+        /// 用Titlebar 的失焦聚焦的淡出淡入效果提醒
+        /// </summary>
+        /// <returns></returns>
+        public async Task AlertCheckMate()
         {
             for (int i = 0; i < 4; i++)
             {
