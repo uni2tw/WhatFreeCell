@@ -240,7 +240,7 @@ namespace CoreForm.UI
             }
             else if (status == GameStatus.DeadEnd)
             {
-                var choice = _dialog.ShowGameoverContinueDialog(210);
+                var choice = _dialog.ShowGameoverContinueDialog(210 * _ratio/100);
                 if (choice.CheckedYes)
                 {
                     PickNumberStartGame();

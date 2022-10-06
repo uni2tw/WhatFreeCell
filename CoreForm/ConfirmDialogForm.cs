@@ -122,13 +122,13 @@ public class DialogForms
             container.RowCount = 3;
             container.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 
-            container.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            container.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
             container.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
 
             this.Controls.Add(container);
 
-            Label lbMessage = new Label { Text = MessageTopic, Margin = new Padding(0), TextAlign = ContentAlignment.TopCenter };
+            Label lbMessage = new Label { Text = MessageTopic, Margin = new Padding(0), TextAlign = ContentAlignment.MiddleCenter };
             lbMessage.Dock = DockStyle.Fill;
             lbMessage.AutoSize = true;
             container.Controls.Add(lbMessage, 0, 0);

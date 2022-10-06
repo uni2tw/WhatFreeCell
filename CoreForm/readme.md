@@ -1,8 +1,6 @@
 ﻿# TODO
-* 處理遊戲 GameStatus.Checkmate 時的效果
-TitlebarLostFocusLoop()
-https://stackoverflow.com/questions/1592876/make-a-borderless-form-movable
-https://stackoverflow.com/questions/20081621/tool-menu-strip-how-do-i-change-their-locations-in-c-sharp-winforms
+雖然有想比照AboutGameDialogForm直接從ClientSize.Width 來決定顯示視窗的大小
+來調整其它的Dialg，但先擱置。 原本用_raito，但resize也沒去更新
 
 ## 建置指令
 dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true --self-contained

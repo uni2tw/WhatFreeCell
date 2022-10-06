@@ -51,7 +51,7 @@ namespace CoreForm
             //this.DoubleBuffered = true;
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
-            this.FormClosing += Form1_FormClosing;
+            this.FormClosing += FormMain_FormClosing;
 
             this.Resize += FormMain_Resize;
 
@@ -206,7 +206,7 @@ namespace CoreForm
             //gui.CreateScripts(out scripts);
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (gui.QuitGameConfirm() == false)
             {
