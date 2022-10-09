@@ -12,6 +12,10 @@
 * 自動完成過於自動, 未考慮如果牌還被foundactions需要的情境
 * menu字太小
 
+1.2
+* 移動卡頓感太重 (待)
+
+
 ## TODO
 雖然有想比照AboutGameDialogForm直接從ClientSize.Width 來決定顯示視窗的大小
 來調整其它的Dialg，但先擱置。 原本用_raito，但resize也沒去更新
@@ -20,17 +24,16 @@
 * 記錄遊戲完成 / 賽季
 * 自動更新
 * 偵測本局是否可完成，或自動完成功能
-
+* 移動卡頓感太重
 
 ## bug
 * "推估是否完成的機制"有bug，似乎沒測到可移到homecells的
 
 ## minor
-* 移到不能移的Column，需要顯示此步犯規
+* 移到不能移的Column，需要顯示此步犯規 (不處理)
 * 點了卡片，遊標移到Foundations，Cousor會切換成ArrowUp
-* 移動卡頓感太重
 * 牌色不好看，使用者懷念舊的普克牌花色
-* A無法顯示花色
+* A無法顯示花色 (不處理)
 
 
 
