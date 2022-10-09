@@ -89,7 +89,7 @@ namespace CoreForm.UI
 
             InitControls();
         }
-        Ｓ
+
         public void ResizeScreen(int width, int height)
         {
             _cardWidth = (int)(Math.Floor((decimal)_form.ClientSize.Width / 9));
