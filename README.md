@@ -9,6 +9,8 @@
 * StripMenu顯示剩餘張數(float-right)
 * 程式放到桌面沒有icon
 * 點選取消，目前點擊間隔1秒為取消，似乎太長，改成0.8秒試試
+* 自動完成過於自動, 未考慮如果牌還被foundactions需要的情境
+* menu字太小
 
 ## TODO
 雖然有想比照AboutGameDialogForm直接從ClientSize.Width 來決定顯示視窗的大小
@@ -29,8 +31,6 @@
 * 移動卡頓感太重
 * 牌色不好看，使用者懷念舊的普克牌花色
 * A無法顯示花色
-* 自動往Homecells過於自動
-* menu字太小
 
 
 

@@ -29,5 +29,15 @@ namespace FreeCellSolitaire.Tests
             Assert.IsFalse(card3.IsBlack());
             Assert.IsFalse(card4.IsRed());
         }
+
+        [Test]
+        public void NeedByOthers()
+        {            
+            Foundations foundations = new Foundations(null);
+            Tableau tableau = new Tableau(null);
+            tableau.GetColumn(0).AddCards("h3");
+            foundations.GetColumn(0).AddCards("s2");
+            Assert.IsTrue(tableau.GetColumn(0).GetLastCard().NeededByOthers(tableau, foundations));
+        }
     }
 }

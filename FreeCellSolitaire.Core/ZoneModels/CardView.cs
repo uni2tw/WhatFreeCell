@@ -136,17 +136,29 @@ public class CardView
     }
 
     /// <summary>
-    /// 如果這張牌，還被tableu裏的牌需要，就不能被移到homecells
+    /// 如果這張牌，還被tableu裏的牌需要，就不能被移到homecells。追加考慮有沒有被foundactions需要
     /// </summary>
     /// <param name="tableau"></param>
     /// <returns></returns>
-    public bool NeededByOthers(Tableau tableau)
+    public bool NeededByOthers(Tableau tableau, Foundations foundations)
     {
         bool result = false;
         var srcCard = this;
         for (int i = 0; i < tableau.ColumnCount; i++)
         {
             var col = tableau.GetColumn(i);
+            for (int j = 0; j < col.GetCardsCount(); j++)
+            {
+                var destCard = col.GetCard(j);
+                if (destCard.Number != 1 && destCard.CheckLinkable(srcCard, typeof(Tableau)))
+                {
+                    result = true;
+                }
+            }
+        }
+        for (int i = 0; i < foundations.ColumnCount; i++)
+        {
+            var col = foundations.GetColumn(i);
             for (int j = 0; j < col.GetCardsCount(); j++)
             {
                 var destCard = col.GetCard(j);

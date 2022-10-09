@@ -117,7 +117,7 @@ public class Game : IGame
             {
                 for (int i = 0; i < this.Homecells.ColumnCount; i++)
                 {
-                    if (theCard.Moveable(Homecells.GetColumn(i)) && theCard.NeededByOthers(this.Tableau) == false)
+                    if (theCard.Moveable(Homecells.GetColumn(i)) && theCard.NeededByOthers(this.Tableau, this.Foundations) == false)
                     {
                         if (theCard.Move(Homecells.GetColumn(i)))
                         {
