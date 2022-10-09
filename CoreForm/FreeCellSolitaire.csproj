@@ -8,6 +8,7 @@
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
     <SignAssembly>False</SignAssembly>
+    <ApplicationIcon>assets\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -81,6 +82,10 @@
     <None Remove="assets\img\Spare-11.png" />
     <None Remove="assets\img\Spare-12.png" />
     <None Remove="assets\img\Spare-13.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -103,8 +103,7 @@ namespace CoreForm
             this.ClientSize = new System.Drawing.Size(916, 406);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.pictureBox2);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;            
             this.KeyPreview = true;
             this.Name = "FormMain";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
