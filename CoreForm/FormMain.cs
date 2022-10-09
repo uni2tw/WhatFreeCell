@@ -187,7 +187,7 @@ namespace CoreForm
                 })
             );
 
-            System.Windows.Forms.ToolStripLabel menuTableauInfo = new ToolStripLabel();
+            System.Windows.Forms.ToolStripLabel menuTableauInfo = new ToolStripLabel();            
             menuTableauInfo.Text = "";
             menuTableauInfo.Name = "menuTableauInfo";
             menuTableauInfo.Alignment = ToolStripItemAlignment.Right;
@@ -199,6 +199,8 @@ namespace CoreForm
                 _menu.Items.Find("menuTableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();                
             });
             //_menu.Dock = DockStyle.None;
+            _menu.Height = 36;
+            _menu.Font  = new Font("微軟正黑體", 18);
             SetControl(_menu);
         }
 

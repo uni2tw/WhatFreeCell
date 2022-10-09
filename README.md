@@ -26,6 +26,11 @@
 ## minor
 * 移到不能移的Column，需要顯示此步犯規
 * 點了卡片，遊標移到Foundations，Cousor會切換成ArrowUp
+* 移動卡頓感太重
+* 牌色不好看，使用者懷念舊的普克牌花色
+* A無法顯示花色
+* 自動往Homecells過於自動
+* menu字太小
 
 
 
@@ -36,3 +41,5 @@ deck card images from
 + https://github.com/crobertsbmw/deckofcards
 規則與參考命名
 + https://www.wikihow.com/Play-FreeCell-Solitaire
+png 轉 icon 
+https://www.icoconverter.com/

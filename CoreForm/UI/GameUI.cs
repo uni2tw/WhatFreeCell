@@ -89,7 +89,7 @@ namespace CoreForm.UI
 
             InitControls();
         }
-
+        Ｓ
         public void ResizeScreen(int width, int height)
         {
             _cardWidth = (int)(Math.Floor((decimal)_form.ClientSize.Width / 9));
@@ -103,7 +103,7 @@ namespace CoreForm.UI
             this.Redraw();
         }
 
-        private int _layoutMarginTop = 24;
+        private int _layoutMarginTop = 40;
         private int _cardWidth;
         private int _cardHeight;
         private void InitBoardScreen(int boardWidth, int boardHeight)
