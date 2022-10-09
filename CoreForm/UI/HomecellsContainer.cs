@@ -30,7 +30,7 @@ namespace FreeCellSolitaire.UI
                 var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth, $"h{i}");
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
-                    _gameUI.SelectColumn((sender as GeneralColumnPanel).Code, false);
+                    _gameUI.SelectOrMove((sender as GeneralColumnPanel).Code);
                 };
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);

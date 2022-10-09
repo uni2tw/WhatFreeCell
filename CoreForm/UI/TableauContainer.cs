@@ -35,7 +35,7 @@ namespace FreeCellSolitaire.UI
                 var panel = new TableauColumnPanel(i, _cardWidth, _cardHeight, _cardBorderWidth, _columnSpace, _rect, $"t{i}");
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
-                    _gameUI.SelectColumn((sender as GeneralColumnPanel).Code, false);
+                    _gameUI.SelectOrMove((sender as GeneralColumnPanel).Code);
                 };
                 _columnPanels.Add(panel);
                 this.Controls.Add(panel);

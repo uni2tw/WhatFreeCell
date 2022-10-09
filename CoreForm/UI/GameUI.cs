@@ -26,7 +26,7 @@ namespace CoreForm.UI
         void ResizeScreen(int width, int height);
         void Start(int? deckNo);        
         void InitEvents();
-        void Move(string notation);
+        bool Move(string notation);
         
         void StartGame();
         void PickNumberStartGame();
@@ -37,7 +37,9 @@ namespace CoreForm.UI
         int CreateScripts(out Queue<string> scripts);
         void SetMovedCallback(Action act);
         void BackToPreviousStep();
-        void SelectColumn(string code, bool forceMove);
+        void SelectOrMove(string code);
+        int? GetUnfinshedCardCount();
+        void SetStartedCallback(Action act);
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -59,6 +61,7 @@ namespace CoreForm.UI
         int _ratio;
 
         Action _movedCallback;
+        Action _startedCallback;
 
         public GameUI(IGameForm form, DialogManager dialog)
         {
@@ -132,53 +135,80 @@ namespace CoreForm.UI
             this._form.SetControlReady(this._tableauUI);
         }
 
-        string notation = "";
-        public void SelectColumn(string code, bool forceMove)
-        {
-            if (notation == "" && code[0] == 'h')
+
+
+        private string _selectedNotation;
+        private DateTime lastClickedTime;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="forceMove"></param>
+        public void SelectOrMove(string code)
+        {            
+            //_form.SetCaption(_selectedNotation + "/" + code + "/" + DateTime.Now.Ticks);
+            if (_selectedNotation == "" && code[0] == 'h')
             {
                 Select("");
                 return;
-            }                        
+            }
 
-            if (forceMove && code == notation)
-            {
-                for (int i = 0; i < _game.Foundations.ColumnCount; i++)
+            bool tryMoveToFoundations = false;
+
+            if (code == _selectedNotation)
+            {                
+                tryMoveToFoundations = (DateTime.Now - lastClickedTime).TotalSeconds <= 0.8d && code[0] == 't';
+                if (tryMoveToFoundations)
                 {
-                    if (_game.Foundations.GetColumn(i).GetCardsCount() == 0) {
-                        notation += _game.Foundations.GetColumn(i).Code;
-                        Move(notation);
-                        notation = "";
-                        return;
+                    for (int i = 0; i < _game.Foundations.ColumnCount; i++)
+                    {
+                        if (_game.Foundations.GetColumn(i).GetCardsCount() == 0)
+                        {
+                            _selectedNotation += _game.Foundations.GetColumn(i).Code;
+                            if (Move(_selectedNotation))
+                            {
+                                _selectedNotation = "";
+                                break;
+                            }
+                        }
                     }
                 }
-                
+                else
+                {
+                    _selectedNotation = "";
+                    Select("");             
+                }
             }
-
-            if (forceMove == false && code == notation)
+            else
             {
-                notation = "";
-                Select("");
-                return;
+                _selectedNotation += code;
+                if (_selectedNotation.Length == 2)
+                {
+                    Select(_selectedNotation);
+                }
+                else if (Move(_selectedNotation))
+                {
+                    this._selectedNotation = "";
+                }
+                else
+                {
+                    this._selectedNotation = "";
+                    Select("");
+                }
             }
-
-            notation += code;
-            if (notation.Length == 2)
-            {
-                Select(notation);
-                return;
-            }
-
-            Move(notation);
-            notation = "";            
+            lastClickedTime = DateTime.Now;
         }
-
+        public void Deselect(string columnCode)
+        {
+            this._selectedNotation = "";
+            Redraw("");
+        }
         public void Select(string columnCode)
         {
             Redraw(columnCode);
         }
 
-        public void Move(string notation)
+        public bool Move(string notation)
         {
             bool moved = false;
             var clone = _game.Clone();
@@ -194,6 +224,7 @@ namespace CoreForm.UI
                 Redraw();                
             }
             ControlStatus();
+            return moved;
         }
 
         public void Start(int? deckNo)
@@ -213,9 +244,19 @@ namespace CoreForm.UI
 
             this.Redraw();
 
-            _form.SetCaption(this.GameNumber.ToString());
+            this.Reset();
+
+            if (_startedCallback != null)
+            {
+                _startedCallback();
+            }            
         }
-        
+
+        private void Reset()
+        {
+            this._selectedNotation = "";
+        }
+
         private void ControlStatus()
         {
             GameStatus status = _game.EstimateGameover(false);
@@ -241,13 +282,14 @@ namespace CoreForm.UI
             else if (status == GameStatus.DeadEnd)
             {
                 var choice = _dialog.ShowGameoverContinueDialog(210 * _ratio/100);
+                //相同排局
                 if (choice.CheckedYes)
                 {
-                    PickNumberStartGame();
+                    this.RestartGame(false);                    
                 }
                 else
                 {
-                    this.RestartGame(false);
+                    PickNumberStartGame();
                 }
             }
         }
@@ -265,7 +307,7 @@ namespace CoreForm.UI
         private void Redraw(string columnCode = null)
         {
             //如果遊戲還沒開始，_game資料還未初始化，此判斷避免此時重繪會有錯誤
-            if (_game.IsPlaying() == false)
+            if (_game.Tableau == null)
             {
                 return;
             }
@@ -459,6 +501,29 @@ namespace CoreForm.UI
             }
             Redraw();
             ControlStatus();
+        }
+
+        public int? GetUnfinshedCardCount()
+        {
+            if (_game.Tableau == null)
+            {
+                return 0;
+            }
+            int count = 0;
+            for (int i = 0; i < _game.Tableau.ColumnCount; i++)
+            {
+                count += _game.Tableau.GetColumn(i).GetCardsCount();
+            }
+            for (int i = 0; i < _game.Foundations.ColumnCount; i++)
+            {
+                count += _game.Foundations.GetColumn(i).GetCardsCount();
+            }
+            return count;
+        }
+
+        public void SetStartedCallback(Action act)
+        {
+            _startedCallback = act;
         }
     }
 

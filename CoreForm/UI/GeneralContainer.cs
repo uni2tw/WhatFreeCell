@@ -88,11 +88,11 @@ namespace FreeCellSolitaire.UI
                 //cardControl.ResizeTo(_cardWidth, _cardHeight);
                 cardControl.Click += delegate (object sender, System.EventArgs e)
                 {
-                    _gameUI.SelectColumn(((CardControl)sender).Owner.Code, false);
+                    _gameUI.SelectOrMove(((CardControl)sender).Owner.Code);                 
                 };
                 cardControl.DoubleClick += delegate (object sender, System.EventArgs e)
                 {
-                    _gameUI.SelectColumn(((CardControl)sender).Owner.Code, true);
+                    _gameUI.SelectOrMove(((CardControl)sender).Owner.Code);
                 };
                 columnPanel.AddCardControl(cardControl);
                 int cardTop = columnPanel.GetCardControlCount() * _cardSpacing;

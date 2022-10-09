@@ -38,7 +38,7 @@ namespace FreeCellSolitaire.UI
                 _columnPanels.Add(panel);
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
-                    _gameUI.SelectColumn((sender as FoundationColumnPanel).Code, false);
+                    _gameUI.SelectOrMove((sender as FoundationColumnPanel).Code);
                 };
                 this.Controls.Add(panel);
             }

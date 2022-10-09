@@ -43,7 +43,12 @@ namespace CoreForm
             this._ratio = 160;
             gui = new GameUI(this, _dialog);
             gui.InitScreen(_ratio);
-            gui.InitEvents();            
+            gui.InitEvents();
+            gui.SetStartedCallback(delegate ()
+            {
+                this.SetCaption(gui.GameNumber.ToString());
+                _menu.Items.Find("menuTableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();
+            });
 
             InitializeMenu();
 
@@ -182,9 +187,16 @@ namespace CoreForm
                 })
             );
 
+            System.Windows.Forms.ToolStripLabel menuTableauInfo = new ToolStripLabel();
+            menuTableauInfo.Text = "";
+            menuTableauInfo.Name = "menuTableauInfo";
+            menuTableauInfo.Alignment = ToolStripItemAlignment.Right;
+            _menu.Items.Add(menuTableauInfo);
+
             gui.SetMovedCallback(delegate ()
             {
                 _menu.Items.Find("BackToPreviousStep", true).First().Enabled = gui.SteppingNumber > 0;
+                _menu.Items.Find("menuTableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();                
             });
             //_menu.Dock = DockStyle.None;
             SetControl(_menu);
