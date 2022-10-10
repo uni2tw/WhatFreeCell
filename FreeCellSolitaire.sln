@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCellSolitaire", "CoreFo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCellSolitaire.Tests", "Tests\FreeCellSolitaire.Tests\FreeCellSolitaire.Tests.csproj", "{3FC413A7-EDF1-404B-BA3D-0B44DA18C63F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCellSolitaire.Core", "FreeCellSolitaire.Core\FreeCellSolitaire.Core.csproj", "{AA847F7E-CC96-4517-BC26-3BD2F90563C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCellSolitaire.Core", "FreeCellSolitaire.Core\FreeCellSolitaire.Core.csproj", "{AA847F7E-CC96-4517-BC26-3BD2F90563C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項目", "{6F486832-B453-4823-9575-AC41F01EA54E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
