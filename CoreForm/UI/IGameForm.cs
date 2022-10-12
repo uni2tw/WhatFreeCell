@@ -19,6 +19,7 @@ namespace CoreForm.UI
         void SetControlReady(Control control);
         Task AlertCheckMate();
         void SetCaption(string text);
+        void LogDebug(string message);
     }    
 
 }

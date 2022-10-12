@@ -62,6 +62,7 @@ namespace CoreForm.UI
 
         Action _movedCallback;
         Action _startedCallback;
+        List<string> _debugLog = new List<string>();
 
         public GameUI(IGameForm form, DialogManager dialog)
         {
@@ -147,6 +148,11 @@ namespace CoreForm.UI
         public void SelectOrMove(string code)
         {            
             //_form.SetCaption(_selectedNotation + "/" + code + "/" + DateTime.Now.Ticks);
+            //遊戲還未初始不作用
+            if (this._game.IsPlaying() == false)
+            {
+                return;
+            }
             if (_selectedNotation == "" && code[0] == 'h')
             {
                 Select("");
@@ -311,17 +317,24 @@ namespace CoreForm.UI
             {
                 return;
             }
+            DateTime now = DateTime.Now;            
             RedrawTableau();
+            LogDebug("T:" + (DateTime.Now - now) .TotalSeconds.ToString("0.00"));
+            now = DateTime.Now;
             RedrawHomecells();
+            LogDebug("H:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"));
+            now = DateTime.Now;
             RedrawFoundations();
+            LogDebug("F:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"));
+            now = DateTime.Now;
             RedrawActivedCard(columnCode);
+            LogDebug("A:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"));
         }
 
         private void RedrawActivedCard(string activeColumnCode)
         {
             _foundationsUI.SetActiveColumn(activeColumnCode);
             _tableauUI.SetActiveColumn(activeColumnCode);
-            //throw new NotImplementedException();
         }
 
         private void RedrawTableau()
@@ -525,6 +538,11 @@ namespace CoreForm.UI
         {
             _startedCallback = act;
         }
+
+        private void LogDebug(string message)
+        {
+            _form.LogDebug(message);
+        }        
     }
 
 }

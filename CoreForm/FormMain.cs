@@ -28,7 +28,7 @@ namespace CoreForm
         Queue<string> scripts = new Queue<string>();
         private int _ratio = 100;
         MenuStrip _menu;
-
+        ViewOnlyTextBox _debugWindow = null;
         public FormMain()
         {
             InitializeComponent();
@@ -47,10 +47,11 @@ namespace CoreForm
             gui.SetStartedCallback(delegate ()
             {
                 this.SetCaption(gui.GameNumber.ToString());
-                _menu.Items.Find("menuTableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();
+                _menu.Items.Find("TableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();
             });
 
             InitializeMenu();
+            InitializeDebugWindow();
 
             //沒有覺得有不閃畫面的效果
             //this.DoubleBuffered = true;
@@ -187,16 +188,16 @@ namespace CoreForm
                 })
             );
 
-            System.Windows.Forms.ToolStripLabel menuTableauInfo = new ToolStripLabel();            
-            menuTableauInfo.Text = "";
-            menuTableauInfo.Name = "menuTableauInfo";
-            menuTableauInfo.Alignment = ToolStripItemAlignment.Right;
-            _menu.Items.Add(menuTableauInfo);
+            System.Windows.Forms.ToolStripLabel menuItemTableauInfo = new ToolStripLabel();
+            menuItemTableauInfo.Text = "";            
+            menuItemTableauInfo.Name = "TableauInfo";
+            menuItemTableauInfo.Alignment = ToolStripItemAlignment.Right;
+            _menu.Items.Add(menuItemTableauInfo);
 
             gui.SetMovedCallback(delegate ()
             {
                 _menu.Items.Find("BackToPreviousStep", true).First().Enabled = gui.SteppingNumber > 0;
-                _menu.Items.Find("menuTableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();                
+                _menu.Items.Find("TableauInfo", true).First().Text = "剩餘牌數:" + gui.GetUnfinshedCardCount();                                
             });
             //_menu.Dock = DockStyle.None;
             _menu.Height = 36;
@@ -204,6 +205,19 @@ namespace CoreForm
             SetControl(_menu);
         }
 
+        private void InitializeDebugWindow()
+        {
+            _debugWindow = new ViewOnlyTextBox();
+            _debugWindow.BackColor = this.BackColor;
+            _debugWindow.ForeColor = Color.Gold;
+
+            SetControl(_debugWindow);
+            _debugWindow.BringToFront();
+        }
+        public void LogDebug(string msg)
+        {
+            _debugWindow.Text = _debugWindow.Text.Insert(0, DateTime.Now.ToString("mm:ss") + ": "+ msg + Environment.NewLine);
+        }
 
         private void FormMain_KeyPress(object sender, KeyPressEventArgs e)
         {
