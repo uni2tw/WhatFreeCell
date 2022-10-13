@@ -317,18 +317,19 @@ namespace CoreForm.UI
             {
                 return;
             }
+            string log = "";
             DateTime now = DateTime.Now;            
             RedrawTableau();
-            LogDebug("T:" + (DateTime.Now - now) .TotalSeconds.ToString("0.00"));
-            now = DateTime.Now;
+            log += "Redraw T:" + (DateTime.Now - now).TotalSeconds.ToString("0.00");now = DateTime.Now;
             RedrawHomecells();
-            LogDebug("H:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"));
+            log += ", H:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"); now = DateTime.Now;
             now = DateTime.Now;
             RedrawFoundations();
-            LogDebug("F:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"));
+            log += ", F:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"); now = DateTime.Now;
             now = DateTime.Now;
             RedrawActivedCard(columnCode);
-            LogDebug("A:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"));
+            log += ", A:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"); now = DateTime.Now;
+            LogDebug(log);
         }
 
         private void RedrawActivedCard(string activeColumnCode)

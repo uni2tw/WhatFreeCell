@@ -20,7 +20,7 @@ namespace FreeCellSolitaire.UI
         {
             this.Multiline = true;
             this.Dock = DockStyle.Bottom;
-            this.Height = 100;
+            this.Height = 200;
             this.Margin = new Padding(3);            
             this.ReadOnly = true;
             this.BorderStyle = BorderStyle.None;            
