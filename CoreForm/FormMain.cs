@@ -145,6 +145,18 @@ namespace CoreForm
             menuItemGame.DropDownItems.Add(
                 new ToolStripMenuItem()
                 {
+                    ShortcutKeys = Keys.F4,
+                    Text = "Debug",
+                    Visible = false
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    _debugWindow.Visible = !_debugWindow.Visible;
+                })
+            );
+
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
                     Text = "重啟牌局(&R)"
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
                 {
@@ -208,6 +220,7 @@ namespace CoreForm
         private void InitializeDebugWindow()
         {
             _debugWindow = new ViewOnlyTextBox();
+            _debugWindow.Visible = false;
             _debugWindow.BackColor = this.BackColor;
             _debugWindow.ForeColor = Color.Gold;
 

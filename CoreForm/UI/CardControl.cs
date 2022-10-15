@@ -16,6 +16,7 @@ namespace FreeCellSolitaire.UI
     public class CardControl : PictureBox
     {
         Card _card;
+        IGameUI _gameUI;
         int _index;
         int _cardWidth;
         int _cardHeight;
@@ -34,21 +35,27 @@ namespace FreeCellSolitaire.UI
             _index = index;
         }
 
-        public CardControl(GeneralColumnPanel owner, int cardWidth, int cardHeight, Card card)
+        public CardControl(GeneralColumnPanel owner, int cardWidth, int cardHeight, Card card, IGameUI gameUI)
         {
             _card = card;
+            _gameUI = gameUI;
             Owner = owner;
             
             this.BorderStyle = BorderStyle.None;
             this.BackColor = Color.Black;
             this.Margin = new Padding(0);
+            this.SizeMode = PictureBoxSizeMode.StretchImage;
 
             ResizeTo(cardWidth, cardHeight);
             InitImage();            
         }
 
         public void ResizeTo(int cardWidth, int cardHeight)
-        {            
+        {
+            if (this.Width == cardWidth && this.Height == cardHeight)
+            {
+                return;
+            }
             this.Width = cardWidth;
             this.Height = cardHeight;
         }
@@ -60,16 +67,15 @@ namespace FreeCellSolitaire.UI
 
         public void Redraw(int cardTop)
         {
-            this.Location = new Point(0, cardTop);
-            this.SizeMode = PictureBoxSizeMode.StretchImage;
+            if (this.Top == cardTop) {
+                return;
+            }
+            this.Location = new Point(0, cardTop);            
         }
 
         private void InitImage()
-        {
-            var assembly = System.Reflection.Assembly.GetEntryAssembly();            
-            Stream resource = assembly
-                .GetManifestResourceStream("FreeCellSolitaire.assets.img." + GetImageFileName() + ".png");
-            Image img = Image.FromStream(resource);
+        {            
+            Image img = _gameUI.GetCardImage(_card);         
             this.Image = img;
             this.InactivedImage = img;
             if (_card.IsBlack())
@@ -83,20 +89,18 @@ namespace FreeCellSolitaire.UI
             //this.Image = ActiveImage;
         }
 
-        private string GetImageFileName()
-        {
-            return _card.Suit.ToString() + "-" + _card.Number.ToString("00");
-        }
-
-        public void SetActived(bool isActivated)
-        {
-            if (isActivated == false && this.Image != this.InactivedImage)
+        bool _selected = false;
+        public void SetActived(bool selected)
+        {            
+            if (selected == false && _selected)
             {
                 this.Image = this.InactivedImage;
+                this._selected = false;
             }
-            if (isActivated && this.Image != this.ActiveImage)
+            if (selected && _selected == false)
             {
                 this.Image = this.ActiveImage;
+                this._selected = true;
             }
         }
     }

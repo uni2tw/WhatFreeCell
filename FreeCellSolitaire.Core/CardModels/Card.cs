@@ -5,6 +5,15 @@
     /// </summary>
     public class Card
     {
+        public Card(CardSuit suit, int number)
+        {
+            this.Suit = suit;
+            this.Number = number;
+        }
+        public Card()
+        {
+
+        }
         private int _number;
         public int Number
         {
@@ -62,12 +71,18 @@
             return string.Empty;
         }
 
+        public override int GetHashCode()
+        {
+            return (int)this.Suit * 100 + this.Number;            
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
             Card castObj = obj as Card;
             if (castObj == null) return false;
-            return castObj.Number == this.Number && castObj.Suit == this.Suit;
+            return castObj.GetHashCode() == GetHashCode();
+            //return castObj.Number == this.Number && castObj.Suit == this.Suit;
         }
 
         public bool IsRed()

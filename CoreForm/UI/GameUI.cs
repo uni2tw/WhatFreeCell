@@ -1,11 +1,13 @@
 ﻿using FreeCellSolitaire.Core.CardModels;
 using FreeCellSolitaire.Core.GameModels;
 using FreeCellSolitaire.Entities.GameEntities;
+using FreeCellSolitaire.Properties;
 using FreeCellSolitaire.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Net.Http.Headers;
@@ -40,6 +42,9 @@ namespace CoreForm.UI
         void SelectOrMove(string code);
         int? GetUnfinshedCardCount();
         void SetStartedCallback(Action act);
+        Image GetCardImage(Card card);
+
+        void PrintDebug(string message);
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -69,6 +74,8 @@ namespace CoreForm.UI
             this._form = form;
             this._dialog = dialog;
             this._game = new Game { EnableAssist = true };
+
+            InitImages();
         }
 
         public void InitEvents()
@@ -543,7 +550,37 @@ namespace CoreForm.UI
         private void LogDebug(string message)
         {
             _form.LogDebug(message);
-        }        
+        }
+
+        Dictionary<Card, Image> _cardImages = new Dictionary<Card, Image>();
+        private void InitImages()
+        {
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
+            {                
+                for (int number = 1; number <= 13; number++)
+                {
+                    Card card = new Card(suit, number);
+                    string cardResourceName = suit.ToString() + "-" + number.ToString("00");
+                    Stream resource = assembly
+                        .GetManifestResourceStream("FreeCellSolitaire.assets.img." + cardResourceName + ".png");
+                    Image img = Image.FromStream(resource);
+                    _cardImages.Add(card, img);
+                }                
+            }
+        }
+
+        public Image GetCardImage(Card card)
+        {
+            Image img;
+            _cardImages.TryGetValue(card, out img);
+            return img;
+        }
+
+        public void PrintDebug(string message)
+        {
+            _form.LogDebug(message);
+        }
     }
 
 }

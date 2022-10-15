@@ -84,7 +84,7 @@ namespace FreeCellSolitaire.UI
             for (int i = 0; i < newCards.Count; i++)
             {
                 var card = newCards[i];
-                var cardControl = new CardControl(columnPanel, _cardWidth, _cardHeight, card);
+                var cardControl = new CardControl(columnPanel, _cardWidth, _cardHeight, card, _gameUI);
                 //cardControl.ResizeTo(_cardWidth, _cardHeight);
                 cardControl.Click += delegate (object sender, System.EventArgs e)
                 {
@@ -107,6 +107,7 @@ namespace FreeCellSolitaire.UI
                 columnPanel.GetCardControl(i).SetActived(false);
                 columnPanel.GetCardControl(i).Refresh();
             }
+            
         }
 
         public void SetActiveColumn(string activeColumnCode)
@@ -126,7 +127,7 @@ namespace FreeCellSolitaire.UI
         public string Code { get; private set; }
         public List<CardControl> CardControls { get; set; }
         public GeneralColumnPanel(string code)
-        {
+        {            
             Code = code;
             CardControls = new List<CardControl>();
         }        
