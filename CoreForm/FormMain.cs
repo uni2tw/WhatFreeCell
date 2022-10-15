@@ -53,8 +53,9 @@ namespace CoreForm
             InitializeMenu();
             InitializeDebugWindow();
 
-            //沒有覺得有不閃畫面的效果
-            //this.DoubleBuffered = true;
+            //沒有覺得有不閃畫面的效果            
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
             this.FormClosing += FormMain_FormClosing;
@@ -145,7 +146,7 @@ namespace CoreForm
             menuItemGame.DropDownItems.Add(
                 new ToolStripMenuItem()
                 {
-                    ShortcutKeys = Keys.F4,
+                    ShortcutKeys = Keys.F12,
                     Text = "Debug",
                     Visible = false
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
@@ -223,7 +224,7 @@ namespace CoreForm
             _debugWindow.Visible = false;
             _debugWindow.BackColor = this.BackColor;
             _debugWindow.ForeColor = Color.Gold;
-
+            
             SetControl(_debugWindow);
             _debugWindow.BringToFront();
         }

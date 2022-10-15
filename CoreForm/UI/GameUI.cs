@@ -170,7 +170,7 @@ namespace CoreForm.UI
 
             if (code == _selectedNotation)
             {                
-                tryMoveToFoundations = (DateTime.Now - lastClickedTime).TotalSeconds <= 0.8d && code[0] == 't';
+                tryMoveToFoundations = (DateTime.Now - lastClickedTime).TotalSeconds <= 0.7d && code[0] == 't';
                 if (tryMoveToFoundations)
                 {
                     for (int i = 0; i < _game.Foundations.ColumnCount; i++)

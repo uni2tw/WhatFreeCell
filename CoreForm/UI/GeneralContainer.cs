@@ -105,7 +105,8 @@ namespace FreeCellSolitaire.UI
                 columnPanel.GetCardControl(i).Redraw(cardTop);
                 columnPanel.GetCardControl(i).ResizeTo(_cardWidth, _cardHeight);
                 columnPanel.GetCardControl(i).SetActived(false);
-                columnPanel.GetCardControl(i).Refresh();
+                columnPanel.GetCardControl(i).Invalidate();
+                //columnPanel.GetCardControl(i).Refresh();
             }
             
         }
@@ -130,6 +131,8 @@ namespace FreeCellSolitaire.UI
         {            
             Code = code;
             CardControls = new List<CardControl>();
+
+            this.DoubleBuffered = true;            
         }        
         public void AddCardControl(CardControl cardControl)
         {

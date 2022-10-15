@@ -46,4 +46,7 @@ deck card images from
 規則與參考命名
 + https://www.wikihow.com/Play-FreeCell-Solitaire
 png 轉 icon 
-https://www.icoconverter.com/
++ https://www.icoconverter.com/
+
+關於 refresh 不要亂用
++ http://www.vb-helper.com/tip_refresh_versus_invalidate.html

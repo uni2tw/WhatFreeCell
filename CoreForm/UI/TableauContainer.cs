@@ -83,7 +83,8 @@ namespace FreeCellSolitaire.UI
                 this.Margin = new Padding(columnSpace / 2, 0, columnSpace / 2, 0);
             }
             Dock = DockStyle.None;
-            this.Refresh();
+            //this.Refresh();
+            this.Invalidate();
         }
     }
 
