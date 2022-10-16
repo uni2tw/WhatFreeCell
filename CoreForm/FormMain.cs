@@ -32,7 +32,7 @@ namespace CoreForm
         public FormMain()
         {
             InitializeComponent();
-
+            
             this.Text = _GAME_TITLE;
 
             Bitmap bmp = (Bitmap)ImageHelper.LoadFromResource("Icon.png");
@@ -54,8 +54,8 @@ namespace CoreForm
             InitializeDebugWindow();
 
             //沒有覺得有不閃畫面的效果            
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.DoubleBuffered = true;
+            //this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
             this.KeyPress += FormMain_KeyPress;
             this.Load += FormMain_Load;
             this.FormClosing += FormMain_FormClosing;

@@ -24,7 +24,10 @@ namespace FreeCellSolitaire.UI
         {
             _gameUI = gameUI;
             _columnPanels = new List<GeneralColumnPanel>(columnNumber);
-            _columnNumber = columnNumber;            
+            _columnNumber = columnNumber;
+
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         public abstract int GetCardSpacing();
@@ -106,7 +109,6 @@ namespace FreeCellSolitaire.UI
                 columnPanel.GetCardControl(i).ResizeTo(_cardWidth, _cardHeight);
                 columnPanel.GetCardControl(i).SetActived(false);
                 columnPanel.GetCardControl(i).Invalidate();
-                //columnPanel.GetCardControl(i).Refresh();
             }
             
         }
@@ -132,7 +134,8 @@ namespace FreeCellSolitaire.UI
             Code = code;
             CardControls = new List<CardControl>();
 
-            this.DoubleBuffered = true;            
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer , true);
         }        
         public void AddCardControl(CardControl cardControl)
         {

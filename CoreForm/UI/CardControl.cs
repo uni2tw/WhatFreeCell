@@ -45,7 +45,9 @@ namespace FreeCellSolitaire.UI
             this.BackColor = Color.Black;
             this.Margin = new Padding(0);
             this.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+            this.DoubleBuffered = true;
+            this.SetStyle( ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
 
             ResizeTo(cardWidth, cardHeight);
             InitImage();            

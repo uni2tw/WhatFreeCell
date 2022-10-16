@@ -71,7 +71,6 @@ namespace FreeCellSolitaire.UI
         {
             Width = cardWidth;
             Height = cardHeight;
-            //this.Refresh();
             this.Invalidate();
         }
     }

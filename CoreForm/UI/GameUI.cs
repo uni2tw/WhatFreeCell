@@ -10,8 +10,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms;
 
 namespace CoreForm.UI

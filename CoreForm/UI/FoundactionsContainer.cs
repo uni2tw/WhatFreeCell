@@ -13,18 +13,18 @@ namespace FreeCellSolitaire.UI
     public class FoundationsContainer : GeneralContainer
     {
         //max number of columns
-        int _columnNumber;         
+        int _columnNumber;
         int _cardBorderWidth = 1;
-        int _ratio = 100;        
+        int _ratio = 100;
         public FoundationsContainer(IGameUI gameUI, int columnNumber,
             Rectangle rect, int dock, int cardWidth, int cardHeight)
-            :base(gameUI, columnNumber)
+            : base(gameUI, columnNumber)
         {
             _columnNumber = columnNumber;
 
-            this.BorderStyle = BorderStyle.None;                        
-            this.Name = nameof(FoundationsContainer);            
-                       
+            this.BorderStyle = BorderStyle.None;
+            this.Name = nameof(FoundationsContainer);
+
             ResizeTo(rect, dock, cardWidth, cardHeight);
             SetControls();
         }
@@ -33,8 +33,8 @@ namespace FreeCellSolitaire.UI
         public void SetControls()
         {
             for (int i = 0; i < _columnNumber; i++)
-            {                
-                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth,$"f{i}");
+            {
+                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth, $"f{i}");
                 _columnPanels.Add(panel);
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
@@ -60,16 +60,16 @@ namespace FreeCellSolitaire.UI
     public class FoundationColumnPanel : GeneralColumnPanel
     {
         public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code)
-            :base(code)
+            : base(code)
         {
             BorderStyle = BorderStyle.None;
             this.Margin = new Padding(0);
-            
+
             this.Paint += delegate (object sender, PaintEventArgs e)
             {
                 var self = sender as Panel;
                 ControlPaint.DrawBorder(e.Graphics, self.ClientRectangle, Color.Green, ButtonBorderStyle.Inset);
-            };            
+            };
 
             ResizeTo(cardWidth, cardHeight, cardBorderWidth);
         }
@@ -78,7 +78,6 @@ namespace FreeCellSolitaire.UI
         {
             Width = cardWidth;
             Height = cardHeight;
-            //this.Refresh();
             this.Invalidate();
         }
     }
