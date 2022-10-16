@@ -323,6 +323,7 @@ namespace CoreForm.UI
                 return;
             }
             string log = "";
+            DateTime now0 = DateTime.Now;
             DateTime now = DateTime.Now;            
             RedrawTableau();
             log += "Redraw T:" + (DateTime.Now - now).TotalSeconds.ToString("0.00");now = DateTime.Now;
@@ -334,6 +335,7 @@ namespace CoreForm.UI
             now = DateTime.Now;
             RedrawActivedCard(columnCode);
             log += ", A:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"); now = DateTime.Now;
+            log += ", Total:" + (DateTime.Now - now0).TotalSeconds.ToString("0.0000"); now = DateTime.Now;
             LogDebug(log);
         }
 
