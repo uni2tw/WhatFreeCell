@@ -1,8 +1,11 @@
 ﻿using CoreForm.UI;
+using CoreForm.Utilities;
 using FreeCellSolitaire.Core.CardModels;
+using FreeCellSolitaire.Core.GameModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +23,20 @@ namespace FreeCellSolitaire.UI
         protected int _columnSpace;
         protected int _cardSpacing;
         protected IGameUI _gameUI;
+
+        public IGameUI GameUI
+        {
+            get
+            {
+                return _gameUI;
+            }
+        }
+
+        public List<GeneralColumnPanel> GetColumnPanels()
+        {
+            return _columnPanels;
+        }
+
         public GeneralContainer(IGameUI gameUI, int columnNumber)
         {
             _gameUI = gameUI;
@@ -126,17 +143,68 @@ namespace FreeCellSolitaire.UI
     }
 
     public class GeneralColumnPanel : Panel
-    {
+    {        
         public string Code { get; private set; }
+        private GeneralContainer _owner;
         public List<CardControl> CardControls { get; set; }
-        public GeneralColumnPanel(string code)
+        public GeneralColumnPanel(string code, GeneralContainer owner)
         {            
             Code = code;
+            _owner = owner;
             CardControls = new List<CardControl>();
 
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer , true);
-        }        
+
+            this.MouseEnter += GeneralColumnPanel_MouseEnter;
+            this.MouseLeave += GeneralColumnPanel_MouseLeave;
+        }
+
+        public void GeneralColumnPanel_MouseLeave(object sender, EventArgs e)
+        {
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+            //System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
+        }
+
+        private Cursor _downArrorCurosr = null;
+        public void GeneralColumnPanel_MouseEnter(object sender, EventArgs e)
+        {
+            if (_owner.GameUI.GetSelectedColumn() != null)
+            {
+
+                CardControl selectedCard = _owner.GameUI.GetSelectedColumn().GetCardControl(_owner.GameUI.GetSelectedColumn().GetCardControlCount() - 1);
+
+                _owner.GameUI.LogDebug("Enter " + this.Code + ", selected column " + _owner.GameUI.GetSelectedColumn().Code + " " + selectedCard.Card.ToNotation());
+
+
+                //_owner.GameUI.GetSelectedColumn().getcad
+
+                //new CardView(selectedCard.Card, selectedCard).CheckLinkable()
+                
+
+                if (this._owner.GetType() == typeof(TableauContainer))
+                {
+                    if (_downArrorCurosr == null)
+                    {
+                        string resourceName = "freecell_DOWNARROW.cur";
+                        Stream resource = GetType().Assembly
+                            .GetManifestResourceStream($"FreeCellSolitaire.assets.{resourceName}");
+                        _downArrorCurosr = new Cursor(resource);
+                    }
+                    this.Cursor = _downArrorCurosr;
+                }
+                else
+                {
+                    this.Cursor = System.Windows.Forms.Cursors.UpArrow;
+                }
+            }
+            else
+            {
+                //Arrow is default
+                this.Cursor = System.Windows.Forms.Cursors.Arrow;
+            }
+        }
+
         public void AddCardControl(CardControl cardControl)
         {
             cardControl.SetIndex(CardControls.Count);

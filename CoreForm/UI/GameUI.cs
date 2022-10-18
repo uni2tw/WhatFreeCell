@@ -42,7 +42,8 @@ namespace CoreForm.UI
         void SetStartedCallback(Action act);
         Image GetCardImage(Card card);
 
-        void PrintDebug(string message);
+        void LogDebug(string message);
+        GeneralColumnPanel GetSelectedColumn();
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -216,6 +217,20 @@ namespace CoreForm.UI
         }
         public void Select(string columnCode)
         {
+            _selectedColumn = null;
+
+            List<GeneralColumnPanel> columnPanels = new List<GeneralColumnPanel>();
+            columnPanels.AddRange(_tableauUI.GetColumnPanels());
+            columnPanels.AddRange(_foundationsUI.GetColumnPanels());            
+            foreach (var columnPanel in columnPanels)
+            {
+                if (columnPanel.Code == columnCode && columnPanel.GetCardControlCount() > 0)
+                {
+                    _selectedColumn = columnPanel;
+                    break;
+                }
+            }
+            //TODO 之後會調整傳入參數型別， 改為GeneralColumnPanel 
             Redraw(columnCode);
         }
 
@@ -232,7 +247,8 @@ namespace CoreForm.UI
                 {
                     _movedCallback();
                 }
-                Redraw();                
+                Redraw();
+                _selectedColumn = null;
             }
             ControlStatus();
             return moved;
@@ -333,7 +349,7 @@ namespace CoreForm.UI
             RedrawFoundations();
             log += ", F:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"); now = DateTime.Now;
             now = DateTime.Now;
-            RedrawActivedCard(columnCode);
+            RedrawActivedCard(columnCode);            
             log += ", A:" + (DateTime.Now - now).TotalSeconds.ToString("0.00"); now = DateTime.Now;
             log += ", Total:" + (DateTime.Now - now0).TotalSeconds.ToString("0.0000"); now = DateTime.Now;
             LogDebug(log);
@@ -449,7 +465,6 @@ namespace CoreForm.UI
         public void AbouteGame()
         {
             _dialog.ShowAboutGameDialog();
-            //MessageBox.Show("2022的計劃");
         }
 
         public int CreateScripts(out Queue<string> scripts)
@@ -547,7 +562,7 @@ namespace CoreForm.UI
             _startedCallback = act;
         }
 
-        private void LogDebug(string message)
+        public void LogDebug(string message)
         {
             _form.LogDebug(message);
         }
@@ -567,9 +582,9 @@ namespace CoreForm.UI
                     Image img = Image.FromStream(resource);
                     _cardImages.Add(card, img);
                 }                
-            }
+            }            
         }
-
+        
         public Image GetCardImage(Card card)
         {
             Image img;
@@ -577,9 +592,10 @@ namespace CoreForm.UI
             return img;
         }
 
-        public void PrintDebug(string message)
+        private GeneralColumnPanel _selectedColumn = null;
+        public GeneralColumnPanel GetSelectedColumn()
         {
-            _form.LogDebug(message);
+            return _selectedColumn;
         }
     }
 

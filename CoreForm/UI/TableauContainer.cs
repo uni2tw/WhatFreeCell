@@ -32,7 +32,7 @@ namespace FreeCellSolitaire.UI
         {
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new TableauColumnPanel(i, _cardWidth, _cardHeight, _cardBorderWidth, _columnSpace, _rect, $"t{i}");
+                var panel = new TableauColumnPanel(i, _cardWidth, _cardHeight, _cardBorderWidth, _columnSpace, _rect, $"t{i}", this);
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
                     _gameUI.SelectOrMove((sender as GeneralColumnPanel).Code);
@@ -56,7 +56,7 @@ namespace FreeCellSolitaire.UI
     {
         public TableauColumnPanel(int index, int cardWidth, int cardHeight,
             int cardBorderWidth, int columnSpace,
-            Rectangle rectParent, string code) : base(code)
+            Rectangle rectParent, string code, GeneralContainer owner) : base(code, owner)
         {            
             BorderStyle = BorderStyle.None;
             this.Paint += delegate (object sender, PaintEventArgs e)

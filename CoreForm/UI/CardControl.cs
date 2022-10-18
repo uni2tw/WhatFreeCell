@@ -24,10 +24,12 @@ namespace FreeCellSolitaire.UI
         public Image ActiveImage { get; private set; }
         public Image InactivedImage { get; private set; }
 
-        public Card Card { get
+        public Card Card
+        {
+            get
             {
                 return _card;
-            } 
+            }
         }
 
         public void SetIndex(int index)
@@ -40,18 +42,31 @@ namespace FreeCellSolitaire.UI
             _card = card;
             _gameUI = gameUI;
             Owner = owner;
-            
+
             this.BorderStyle = BorderStyle.None;
             this.BackColor = Color.Black;
             this.Margin = new Padding(0);
             this.SizeMode = PictureBoxSizeMode.StretchImage;
 
             this.DoubleBuffered = true;
-            this.SetStyle( ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+
+            this.MouseEnter += CardControl_MouseEnter;
+            this.MouseLeave += CardControl_MouseLeave;
 
             ResizeTo(cardWidth, cardHeight);
-            InitImage();            
+            InitImage();
         }
+
+        private void CardControl_MouseEnter(object sender, EventArgs e)
+        {
+            Owner.GeneralColumnPanel_MouseEnter(sender, e);
+        }
+
+        private void CardControl_MouseLeave(object sender, EventArgs e)
+        {
+            Owner.GeneralColumnPanel_MouseLeave(sender, e);
+        }        
 
         public void ResizeTo(int cardWidth, int cardHeight)
         {
@@ -70,15 +85,16 @@ namespace FreeCellSolitaire.UI
 
         public void Redraw(int cardTop)
         {
-            if (this.Top == cardTop) {
+            if (this.Top == cardTop)
+            {
                 return;
             }
-            this.Location = new Point(0, cardTop);            
+            this.Location = new Point(0, cardTop);
         }
 
         private void InitImage()
-        {            
-            Image img = _gameUI.GetCardImage(_card);         
+        {
+            Image img = _gameUI.GetCardImage(_card);
             this.Image = img;
             this.InactivedImage = img;
             if (_card.IsBlack())
@@ -88,13 +104,13 @@ namespace FreeCellSolitaire.UI
             else
             {
                 this.ActiveImage = img.DrawAsNegative();
-            }            
+            }
             //this.Image = ActiveImage;
         }
 
         bool _selected = false;
         public void SetActived(bool selected)
-        {            
+        {
             if (selected == false && _selected)
             {
                 this.Image = this.InactivedImage;

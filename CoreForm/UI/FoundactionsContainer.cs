@@ -34,7 +34,7 @@ namespace FreeCellSolitaire.UI
         {
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth, $"f{i}");
+                var panel = new FoundationColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth, $"f{i}", this);
                 _columnPanels.Add(panel);
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
@@ -59,8 +59,8 @@ namespace FreeCellSolitaire.UI
 
     public class FoundationColumnPanel : GeneralColumnPanel
     {
-        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code)
-            : base(code)
+        public FoundationColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code, GeneralContainer owner)
+            : base(code, owner)
         {
             BorderStyle = BorderStyle.None;
             this.Margin = new Padding(0);
