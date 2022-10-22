@@ -17,8 +17,10 @@ public class CardView
         this.Owner = owner;
         _card = card;
     }
-    [Obsolete]
-    public bool IsSelected { get; set; }
+    public Card GetCard()
+    {
+        return _card;
+    }
     public Column Owner { get; private set; }
     public void SetOwner(Column column)
     {
@@ -237,4 +239,5 @@ public class CardView
     {
         return this._card.IsBlack();
     }
+    
 }

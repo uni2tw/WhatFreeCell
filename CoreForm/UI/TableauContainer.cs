@@ -56,7 +56,7 @@ namespace FreeCellSolitaire.UI
     {
         public TableauColumnPanel(int index, int cardWidth, int cardHeight,
             int cardBorderWidth, int columnSpace,
-            Rectangle rectParent, string code, GeneralContainer owner) : base(code, owner)
+            Rectangle rectParent, string code, GeneralContainer owner) : base(code, owner, index)
         {            
             BorderStyle = BorderStyle.None;
             this.Paint += delegate (object sender, PaintEventArgs e)

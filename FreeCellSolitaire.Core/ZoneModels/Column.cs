@@ -195,7 +195,6 @@ namespace FreeCellSolitaire.Core.GameModels
                 }
                 this.AddCards(card);
             }
-        }
-
+        }        
     }
 }

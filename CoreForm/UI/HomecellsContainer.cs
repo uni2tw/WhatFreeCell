@@ -27,7 +27,7 @@ namespace FreeCellSolitaire.UI
         {            
             for (int i = 0; i < _columnNumber; i++)
             {
-                var panel = new HomecellColumnPanel(_cardWidth, _cardHeight, _cardBorderWidth, $"h{i}", this);
+                var panel = new HomecellColumnPanel(i, _cardWidth, _cardHeight, _cardBorderWidth, $"h{i}", this);
                 panel.Click += delegate (object sender, System.EventArgs e)
                 {
                     _gameUI.SelectOrMove((sender as GeneralColumnPanel).Code);
@@ -52,8 +52,8 @@ namespace FreeCellSolitaire.UI
 
     public class HomecellColumnPanel : GeneralColumnPanel
     {
-        public HomecellColumnPanel(int cardWidth, int cardHeight, int cardBorderWidth, string code, GeneralContainer owner)
-            :base(code, owner)
+        public HomecellColumnPanel(int index, int cardWidth, int cardHeight, int cardBorderWidth, string code, GeneralContainer owner)
+            :base(code, owner, index)
         {
             BorderStyle = BorderStyle.None;
             this.Margin = new Padding(0);

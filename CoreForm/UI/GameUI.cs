@@ -44,6 +44,7 @@ namespace CoreForm.UI
 
         void LogDebug(string message);
         GeneralColumnPanel GetSelectedColumn();
+        Column GetColumn(Type type, int index);
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -366,14 +367,10 @@ namespace CoreForm.UI
             var _tableau = _game.Tableau;
             for (int columnIndex = 0; columnIndex < _tableau.ColumnCount; columnIndex++)
             {
-                List<Card> cards = new List<Card>();
+                List<CardView> cards = new List<CardView>();
                 for (int cardIndex = 0; cardIndex < _tableau.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
                 {
-                    cards.Add(new Card
-                    {
-                        Number = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Number,
-                        Suit = _tableau.GetColumn(columnIndex).GetCard(cardIndex).Suit
-                    });
+                    cards.Add(_tableau.GetColumn(columnIndex).GetCard(cardIndex));
                 }
                 _tableauUI.RedrawCards(columnIndex, cards);
             }
@@ -384,14 +381,10 @@ namespace CoreForm.UI
             var _foundations = _game.Foundations;
             for (int columnIndex = 0; columnIndex < _foundations.ColumnCount; columnIndex++)
             {
-                List<Card> cards = new List<Card>();
+                List<CardView> cards = new List<CardView>();
                 for (int cardIndex = 0; cardIndex < _foundations.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
                 {
-                    cards.Add(new Card
-                    {
-                        Number = _foundations.GetColumn(columnIndex).GetCard(cardIndex).Number,
-                        Suit = _foundations.GetColumn(columnIndex).GetCard(cardIndex).Suit
-                    });
+                    cards.Add(_foundations.GetColumn(columnIndex).GetCard(cardIndex));
                 }
                 _foundationsUI.RedrawCards(columnIndex, cards);
             }
@@ -402,14 +395,10 @@ namespace CoreForm.UI
             var _homecells = _game.Homecells;
             for (int columnIndex = 0; columnIndex < _homecells.ColumnCount; columnIndex++)
             {
-                List<Card> cards = new List<Card>();
+                List<CardView> cards = new List<CardView>();
                 for (int cardIndex = 0; cardIndex < _homecells.GetColumn(columnIndex).GetCardsCount(); cardIndex++)
                 {
-                    cards.Add(new Card
-                    {
-                        Number = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Number,
-                        Suit = _homecells.GetColumn(columnIndex).GetCard(cardIndex).Suit
-                    });
+                    cards.Add(_homecells.GetColumn(columnIndex).GetCard(cardIndex));
                 }
                 _homecellsUI.RedrawCards(columnIndex, cards);
             }
@@ -596,6 +585,27 @@ namespace CoreForm.UI
         public GeneralColumnPanel GetSelectedColumn()
         {
             return _selectedColumn;
+        }
+
+        public Column GetColumn(Type type, int index)
+        {
+            if (this._game.IsPlaying() == false)
+            {
+                return null;
+            }
+            if (type == typeof(FoundationColumnPanel))
+            {
+                return _game.Foundations.GetColumn(index);
+            }
+            if (type == typeof(HomecellColumnPanel))
+            {
+                return _game.Homecells.GetColumn(index);
+            }
+            if (type == typeof(TableauColumnPanel))
+            {
+                return _game.Tableau.GetColumn(index);
+            }
+            return null;
         }
     }
 

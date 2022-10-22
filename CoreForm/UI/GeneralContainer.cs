@@ -86,20 +86,20 @@ namespace FreeCellSolitaire.UI
             _columnPanels.ForEach(x => x.CardControls.Clear());
         }
 
-        public void RedrawCards(int index, List<Card> cards)
+        public void RedrawCards(int index, List<CardView> cardViews)
         {
             var columnPanel = _columnPanels[index];
-            List<Card> newCards = new List<Card>();
-            for (int i = 0; i < cards.Count; i++)
+            List<CardView> newCards = new List<CardView>();
+            for (int i = 0; i < cardViews.Count; i++)
             {
                 var cardControl = columnPanel.GetCardControl(i);
-                if (cardControl == null || cardControl.IsAssignedCard(cards[i]) == false)
+                if (cardControl == null || cardControl.IsAssignedCard(cardViews[i]) == false)
                 {
-                    newCards = cards.Skip(i).ToList();
+                    newCards = cardViews.Skip(i).ToList();
                     break;
                 }
             }
-            columnPanel.RemoveCardControlsAfter(cards.Count);
+            columnPanel.RemoveCardControlsAfter(cardViews.Count);
 
             for (int i = 0; i < newCards.Count; i++)
             {
@@ -145,11 +145,13 @@ namespace FreeCellSolitaire.UI
     public class GeneralColumnPanel : Panel
     {        
         public string Code { get; private set; }
-        private GeneralContainer _owner;
+        private GeneralContainer _owner;        
         public List<CardControl> CardControls { get; set; }
-        public GeneralColumnPanel(string code, GeneralContainer owner)
+        public int Index { get; private set; }
+        public GeneralColumnPanel(string code, GeneralContainer owner, int index)
         {            
             Code = code;
+            Index = index;
             _owner = owner;
             CardControls = new List<CardControl>();
 
@@ -174,28 +176,49 @@ namespace FreeCellSolitaire.UI
 
                 CardControl selectedCard = _owner.GameUI.GetSelectedColumn().GetCardControl(_owner.GameUI.GetSelectedColumn().GetCardControlCount() - 1);
 
-                _owner.GameUI.LogDebug("Enter " + this.Code + ", selected column " + _owner.GameUI.GetSelectedColumn().Code + " " + selectedCard.Card.ToNotation());
-
-
-                //_owner.GameUI.GetSelectedColumn().getcad
+                _owner.GameUI.LogDebug("Enter " + this.Code + ", selected column " + _owner.GameUI.GetSelectedColumn().Code + " " + selectedCard.CardView.ToNotation());
+                //TODO Curosr 在 HomeCell 無作用
+                Column theCardColumn = null;
+                
+                if (sender is CardControl)
+                {
+                    theCardColumn = ((CardControl)sender).CardView.Owner;
+                } 
+                else if (sender is GeneralColumnPanel)
+                {
+                    theCardColumn = this._owner.GameUI.GetColumn(sender.GetType(), ((GeneralColumnPanel)sender).Index);
+                }
+                if (theCardColumn == null)
+                {
+                    return;
+                }                
+                bool accept = selectedCard.CardView.Moveable(theCardColumn);
+                //bool accept = selectedCard.CardView.CheckLinkable(theCard, theCard.Owner.Owner.GetType());
 
                 //new CardView(selectedCard.Card, selectedCard).CheckLinkable()
-                
-
-                if (this._owner.GetType() == typeof(TableauContainer))
+                if (accept)
                 {
-                    if (_downArrorCurosr == null)
+
+                    if (this._owner.GetType() == typeof(TableauContainer))
                     {
-                        string resourceName = "freecell_DOWNARROW.cur";
-                        Stream resource = GetType().Assembly
-                            .GetManifestResourceStream($"FreeCellSolitaire.assets.{resourceName}");
-                        _downArrorCurosr = new Cursor(resource);
+                        if (_downArrorCurosr == null)
+                        {
+                            string resourceName = "freecell_DOWNARROW.cur";
+                            Stream resource = GetType().Assembly
+                                .GetManifestResourceStream($"FreeCellSolitaire.assets.{resourceName}");
+                            _downArrorCurosr = new Cursor(resource);
+                        }
+                        this.Cursor = _downArrorCurosr;
                     }
-                    this.Cursor = _downArrorCurosr;
-                }
+                    else
+                    {
+                        this.Cursor = System.Windows.Forms.Cursors.UpArrow;
+                    }
+                } 
                 else
                 {
-                    this.Cursor = System.Windows.Forms.Cursors.UpArrow;
+                    //Arrow is default
+                    this.Cursor = System.Windows.Forms.Cursors.Arrow;
                 }
             }
             else

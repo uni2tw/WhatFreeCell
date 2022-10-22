@@ -15,7 +15,7 @@ namespace FreeCellSolitaire.UI
 {
     public class CardControl : PictureBox
     {
-        Card _card;
+        CardView _cardView;
         IGameUI _gameUI;
         int _index;
         int _cardWidth;
@@ -24,11 +24,11 @@ namespace FreeCellSolitaire.UI
         public Image ActiveImage { get; private set; }
         public Image InactivedImage { get; private set; }
 
-        public Card Card
+        public CardView CardView
         {
             get
             {
-                return _card;
+                return _cardView;
             }
         }
 
@@ -37,9 +37,9 @@ namespace FreeCellSolitaire.UI
             _index = index;
         }
 
-        public CardControl(GeneralColumnPanel owner, int cardWidth, int cardHeight, Card card, IGameUI gameUI)
+        public CardControl(GeneralColumnPanel owner, int cardWidth, int cardHeight, CardView card, IGameUI gameUI)
         {
-            _card = card;
+            _cardView = card;
             _gameUI = gameUI;
             Owner = owner;
 
@@ -78,9 +78,9 @@ namespace FreeCellSolitaire.UI
             this.Height = cardHeight;
         }
 
-        public bool IsAssignedCard(Card card)
+        public bool IsAssignedCard(CardView cardView)
         {
-            return _card.Equals(card);
+            return _cardView.Equals(cardView);
         }
 
         public void Redraw(int cardTop)
@@ -94,10 +94,10 @@ namespace FreeCellSolitaire.UI
 
         private void InitImage()
         {
-            Image img = _gameUI.GetCardImage(_card);
+            Image img = _gameUI.GetCardImage(_cardView.GetCard());
             this.Image = img;
             this.InactivedImage = img;
-            if (_card.IsBlack())
+            if (_cardView.IsBlack())
             {
                 this.ActiveImage = img.DrawAsBlueLight();
             }

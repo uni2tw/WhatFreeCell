@@ -18,11 +18,11 @@
 ### Improvement
 * 移動卡頓感太重
 
-### Improvement (todo)
-* 點了卡片，遊標移到Foundations，Cousor會切換成ArrowUp  (low)
+### Improvement
+* 點選牌，遊標移到其它Column，滑鼠游標要變更，以提示可移動
 
-### Bug (todo)
-* "推估是否完成的機制"有bug，似乎沒測到可移到homecells的
+### Bug
+* "推估是否可完成的機制"有bug，似乎沒測到可移到homecells的
 * 移動失敗的應該要取消選取
 
 
