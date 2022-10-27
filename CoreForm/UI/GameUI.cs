@@ -285,6 +285,9 @@ namespace CoreForm.UI
             this._selectedNotation = "";
         }
 
+        /// <summary>
+        /// 檢查遊戲狀態(完成，快死，死了)，並進行接續動作
+        /// </summary>
         private void ControlStatus()
         {
             GameStatus status = _game.EstimateGameover(false);
@@ -458,6 +461,7 @@ namespace CoreForm.UI
 
         public int CreateScripts(out Queue<string> scripts)
         {
+            this.ControlStatus
             scripts = new Queue<string>();
             scripts.Enqueue("t1h0");
             scripts.Enqueue("t2t0");

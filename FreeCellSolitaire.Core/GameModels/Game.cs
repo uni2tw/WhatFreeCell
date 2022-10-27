@@ -265,6 +265,8 @@ public class Game : IGame
         }
         else if (samples.Count <= 2)
         {
+            //牌搬過去，通常可以搬回來，
+            //那通常至少有2步，但這樣的來回，是無法再繼續下去的
             return GameStatus.Checkmate;
         }
         return GameStatus.Playable;
