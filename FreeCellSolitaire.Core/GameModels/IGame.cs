@@ -22,5 +22,6 @@ public interface IGame
     bool EnableAssist { get; set; }
     void TryAssistMove();
     IGame Clone();
+    bool FindTheEnd();
 }
 

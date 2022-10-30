@@ -45,6 +45,7 @@ namespace CoreForm.UI
         void LogDebug(string message);
         GeneralColumnPanel GetSelectedColumn();
         Column GetColumn(Type type, int index);
+        void FindTheEnd();
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
@@ -461,7 +462,6 @@ namespace CoreForm.UI
 
         public int CreateScripts(out Queue<string> scripts)
         {
-            this.ControlStatus
             scripts = new Queue<string>();
             scripts.Enqueue("t1h0");
             scripts.Enqueue("t2t0");
@@ -610,6 +610,11 @@ namespace CoreForm.UI
                 return _game.Tableau.GetColumn(index);
             }
             return null;
+        }
+
+        public void FindTheEnd()
+        {
+            _game.FindTheEnd();
         }
     }
 

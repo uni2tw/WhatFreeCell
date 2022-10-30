@@ -228,6 +228,74 @@ public class Game : IGame
         return clone;
     }
 
+    #region Find the end
+
+    public bool FindTheEnd()
+    {
+        Stack<IGame> stack = new Stack<IGame>();
+        stack.Push(this.Clone());                
+        FindNext(stack);
+        return true;
+    }
+
+    public bool FindNext(Stack<IGame> stack)
+    {
+        IGame node = stack.Peek();
+        var nextNodes = GetPossibleSituationsSimply(node);
+
+        foreach(var nextNode in nextNodes) 
+        {            
+            stack.Push(nextNode);            
+            FindNext(stack);               
+        }
+
+        stack.Pop();
+        return true;
+    }
+
+    private List<IGame> GetPossibleSituationsSimply(IGame game)
+    {        
+        List<IGame> samples = new List<IGame>();
+        Action<IZone,IZone> moveZoneToZone = delegate (IZone src, IZone dest)
+        {
+            for (int i = 0; i < src.ColumnCount; i++)
+            {
+                for (int j = 0; j < dest.ColumnCount; j++)
+                {
+                    var clone = game.Clone();
+
+                    Column srcColumn = src.GetColumn(i);
+                    var srcCard = srcColumn.GetLastCard();
+                    if (srcCard == null)
+                    {
+                        continue;
+                    }
+                    Column destColumn = dest.GetColumn(j);
+
+                    if (srcCard.Move(destColumn))
+                    {
+                        if (EnableAssist)
+                        {
+                            clone.TryAssistMove();
+                        }
+                        samples.Add(clone);
+                        continue;
+                    }
+                }
+            }        
+        };
+        moveZoneToZone(game.Tableau, game.Foundations);
+        moveZoneToZone(game.Tableau, game.Tableau);
+        moveZoneToZone(game.Tableau, game.Homecells);
+        moveZoneToZone(game.Foundations, game.Tableau);
+
+        
+        return samples;
+    }
+
+    #endregion
+
+
     public GameStatus EstimateGameover(bool debug = false)
     {
         if (IsCompleted())
@@ -350,4 +418,5 @@ public enum GameStatus
 {
     Playable, Completed, Checkmate, DeadEnd
 }
+
 

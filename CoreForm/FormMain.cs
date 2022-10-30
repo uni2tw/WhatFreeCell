@@ -154,6 +154,17 @@ namespace CoreForm
                     _debugWindow.Visible = !_debugWindow.Visible;
                 })
             );
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
+                    ShortcutKeys = Keys.F9,
+                    Text = "Debug",
+                    Visible = false
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.FindTheEnd();
+                })
+            );
 
             menuItemGame.DropDownItems.Add(
                 new ToolStripMenuItem()
