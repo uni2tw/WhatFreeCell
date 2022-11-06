@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Xml.Linq;
 using FreeCellSolitaire.Core.CardModels;
 using FreeCellSolitaire.Core.GameModels;
 using FreeCellSolitaire.Entities.GameEntities;
@@ -658,6 +659,74 @@ namespace FreeCellSolitaire.Tests
 
             game.DebugInfo(0);
             Assert.AreEqual(GameStatus.Checkmate, game.EstimateGameover(debug: true));
+        }
+
+        /// <summary>
+        /// 指定牌局1，
+        /// 修正因為沒有判斷可以移到 Homecells ，而導致遊戲仍可進行，卻被判為gameover
+        /// </summary>
+        [Test]
+        public void EstimateGameover3()
+        {
+            var game = new Game { EnableAssist = true };
+            var tableau = new Tableau(game);
+            var homecells = new Homecells(game);
+            var foundations = new Foundations(game);
+
+            var deck = game.Deck.Shuffle(1);
+            tableau.Init(deck);
+
+            game.Move("t0f0");
+            game.Move("t0f1");
+            game.Move("t0f2");
+            game.Move("t0f3");
+            game.Move("t1t6");
+            game.Move("t3t7");
+            game.Move("t3t4");
+            game.Move("f1t4");
+            game.Move("t1f1");
+            game.Move("t1t0");
+            game.Move("f3t2");
+            game.Move("t1f3");
+            game.Move("t5t1");
+            game.Move("t5f0");
+            game.Move("t4h2");
+            game.Move("t7h1");
+            game.Move("f0t5");
+            game.Move("t4f0");
+            game.Move("t2t5");
+            game.Move("t3t5");
+            game.Move("f0t3");
+            game.Move("t2f0");
+            game.Move("t2t1");
+            game.Move("t7t1");
+            game.Move("t7t5");
+            game.Move("t3t4");
+            game.Move("t3t7");
+            game.Move("f1t2");
+            game.Move("t0f1");
+            game.Move("t0h2");
+            game.Move("f2t5");
+            game.Move("t0f2");
+            game.Move("t4t7");
+            game.Move("t6t0");
+            game.Move("t0t5");
+            game.Move("t4t0");
+            game.Move("t0h2");
+            game.Move("t5t6");
+            game.Move("t3t0");
+            game.Move("t6t5");
+            game.Move("t0t4");
+            game.Move("t3t0");
+            game.Move("t0h1");
+            game.Move("t6t0");
+            game.Move("t6h2");
+            game.Move("t6t0");
+            game.Move("t6t7");
+
+            Console.WriteLine(game.GetDebugInfo());
+
+            Assert.IsTrue(game.EstimateGameover() == GameStatus.Playable, "(Description = \"修正因為沒有判斷可以移到 Homecells ，而導致遊戲仍可進行，卻被判為gameover\")");
         }
     }
 }
