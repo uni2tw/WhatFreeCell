@@ -273,10 +273,10 @@ public class Game : IGame
     public List<IGame> GetPossibleSituations(IGame game, ref int depth)
     {
         depth++;
-        List<IGame> samples = new List<IGame>();        
+        List<IGame> samples = new List<IGame>();
         for (int i = 0; i < game.Tableau.ColumnCount + game.Foundations.ColumnCount; i++)
         {
-            for (int j = 0; j < game.Tableau.ColumnCount + game.Foundations.ColumnCount; j++)
+            for (int j = 0; j < game.Tableau.ColumnCount + game.Foundations.ColumnCount + game.Homecells.ColumnCount; j++)
             {
                 var clone = game.Clone();
 
@@ -300,11 +300,15 @@ public class Game : IGame
                 {
                     destColumn = clone.Tableau.GetColumn(j);
                 }
-                else
+                else if (j < game.Tableau.ColumnCount + game.Foundations.ColumnCount)
                 {
                     destColumn = clone.Foundations.GetColumn(j - clone.Tableau.ColumnCount);
                 }
-                
+                else
+                {
+                    destColumn = clone.Homecells.GetColumn(j - game.Tableau.ColumnCount - game.Foundations.ColumnCount);
+                }
+
                 if (srcCard.Move(destColumn))
                 {
                     if (EnableAssist)
@@ -316,7 +320,7 @@ public class Game : IGame
                 }
             }
         }
-        return samples;        
+        return samples;
     }
 
     public override bool Equals(object? obj)

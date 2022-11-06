@@ -244,6 +244,10 @@ namespace CoreForm
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                AllocConsole();
+            }
             //gui.Start(26458);
             //gui.CreateScripts(out scripts);
         }
@@ -303,9 +307,13 @@ namespace CoreForm
         [DllImport("user32.dll")]
         private static extern bool SetForegroundWindow(int hwnd);
 
-
-
         [DllImport("user32.dll")]
         private static extern int GetDesktopWindow();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+        [DllImport("kernel32.dll")]
+        static extern int FreeConsole();
     }
 }
