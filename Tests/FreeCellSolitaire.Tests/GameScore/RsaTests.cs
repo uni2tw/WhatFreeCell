@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreeCellSolitaire.Tests.GameRecord
+namespace FreeCellSolitaire.Tests.GameScore
 {
     public class EncryptorTests
     {
@@ -13,11 +13,11 @@ namespace FreeCellSolitaire.Tests.GameRecord
         public void EncryptAndDecrypt()
         {
             var rsa = new Encryptor();
-            var encryptStr = rsa.Encrypt("習包子死一死");
-            Assert.AreNotEqual("習包子死一死", encryptStr);
+            var encryptStr = rsa.Encrypt("昔日吃包子噎死");
+            Assert.AreNotEqual("昔日吃包子噎死", encryptStr);
 
             var decryptStr = rsa.Decrypt(encryptStr);
-            Assert.AreEqual("習包子死一死", decryptStr);
+            Assert.AreEqual("昔日吃包子噎死", decryptStr);
         }
     }
 }

@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項�
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCellSolitaire.Data", "FreeCellSolitaire.Data\FreeCellSolitaire.Data.csproj", "{2CAA1CB9-DA8D-432A-8EEE-132FC8CFA50D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCellSolitaire.GameScore", "FreeCellSolitaire.GameScore\FreeCellSolitaire.GameScore.csproj", "{AA3AFC32-CDB3-4D4D-AD34-C51EB330514F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +34,10 @@ Global
 		{AA847F7E-CC96-4517-BC26-3BD2F90563C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA847F7E-CC96-4517-BC26-3BD2F90563C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA847F7E-CC96-4517-BC26-3BD2F90563C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CAA1CB9-DA8D-432A-8EEE-132FC8CFA50D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CAA1CB9-DA8D-432A-8EEE-132FC8CFA50D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CAA1CB9-DA8D-432A-8EEE-132FC8CFA50D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CAA1CB9-DA8D-432A-8EEE-132FC8CFA50D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3AFC32-CDB3-4D4D-AD34-C51EB330514F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3AFC32-CDB3-4D4D-AD34-C51EB330514F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA3AFC32-CDB3-4D4D-AD34-C51EB330514F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3AFC32-CDB3-4D4D-AD34-C51EB330514F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

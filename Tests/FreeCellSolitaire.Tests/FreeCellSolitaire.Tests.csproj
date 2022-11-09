@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FreeCellSolitaire.Core\FreeCellSolitaire.Core.csproj" />
-    <ProjectReference Include="..\..\FreeCellSolitaire.Data\FreeCellSolitaire.Data.csproj" />
+    <ProjectReference Include="..\..\FreeCellSolitaire.GameScore\FreeCellSolitaire.GameScore.csproj" />
   </ItemGroup>
 
 </Project>
