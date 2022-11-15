@@ -4,16 +4,40 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FreeCellSolitaire.Data
 {
-    public class GameRoundDao
+    public class GameRecordService
+    {
+        public void Add(GameRecord record)
+        {
+
+        }
+        public GameRecordStats GetStats(Guid playedId, int gameNumber)
+        {
+            return new GameRecordStats();
+
+        }
+        public class GameRecordStats
+        {
+            public int GameRoundWin { get; set; }
+            public int GameRoundLost { get; set; }
+            public int TotalGameWin { get; set; }
+            public int TotalGameLost { get; set; }
+            public int WinInRow { get; set; }
+            public int LostInRow { get; set; }
+
+        }
+    }
+    public class GameRecordDao
     {
         public string DataFolder { get; private set; }
-        public GameRoundDao()
+        public GameRecordDao()
         {
             this.DataFolder = Helper.MapPath("data");
             if (System.IO.Directory.Exists(this.DataFolder) == false)
@@ -21,24 +45,8 @@ namespace FreeCellSolitaire.Data
                 System.IO.Directory.CreateDirectory(this.DataFolder);
             }
         }
-        /*
-    public class GameRecord
-    {
-        public int Id { get; set; }
-        public int Number { get; set; }        
-        public string PlayerId { get; set; }
-        public string PlayerName { get; set; }
-        public DateTime StarTime { get; set; }
-        public double ElapsedSecs { get; set; }
-        public int MovementAmount { get; set; }
-        public string Tracks { get; set; }
-        public bool Success { get; set; }
-        public int? Score { get; set; }
-        public string Comment { get; set; }        
-        public bool Sync { get; set; }
-    }
-         */
-        public bool Save(GameRecord model)
+
+        public bool WriteTo(List<GameRecord> records, Stream stream, bool skipHeader)
         {
             try
             {
@@ -54,22 +62,12 @@ namespace FreeCellSolitaire.Data
                     nameof(GameRecord.Comment),
                     nameof(GameRecord.Sync),
                 };
-                var rows = new []
-                {
-                    model.ToArray()
-                };
+                var rows = records.Select(x => x.ToArray());
 
-                string csv;
-                if (System.IO.File.Exists("record.csv") == false)
-                {
-                    csv = CsvWriter.WriteToText(columnNames, rows, ',', true);
-                }
-                else
-                {
-                    csv = CsvWriter.WriteToText(columnNames, rows, ',', false);
-                }
-                File.AppendAllText("record.csv", csv);
-
+                
+                string csv = CsvWriter.WriteToText(columnNames, rows, ',', skipHeader);
+                byte[] csvBytes = Encoding.UTF8.GetBytes(csv);
+                stream.WriteAsync(csvBytes, 0, csvBytes.Length);
                 return true;
             }
             catch
@@ -78,7 +76,7 @@ namespace FreeCellSolitaire.Data
             }
         }
 
-        public List<GameRecord> List()
+        public List<GameRecord> ReadFrom(Stream stream)
         {
             List<GameRecord> records = new List<GameRecord>();
             var columnNames = new[] {
@@ -93,9 +91,8 @@ namespace FreeCellSolitaire.Data
                     nameof(GameRecord.Comment),
                     nameof(GameRecord.Sync),
                 };
-
-            
-            string csv = File.ReadAllText("record.csv");
+            StreamReader sr = new StreamReader(stream, Encoding.UTF8);
+            string csv = sr.ReadToEnd();
 
             var csvLines = CsvReader.ReadFromText(csv, new CsvOptions { Separator = ',' });
             foreach(var lines in csvLines)
@@ -105,15 +102,15 @@ namespace FreeCellSolitaire.Data
                     GameRecord record = new GameRecord
                     {
                         Number = int.Parse(lines[nameof(GameRecord.Number)]),
-                        PlayerId = nameof(GameRecord.PlayerId),
+                        PlayerId = lines[nameof(GameRecord.PlayerId)],
                         PlayerName = lines[nameof(GameRecord.PlayerName)],
                         StarTime = DateTime.Parse(lines[nameof(GameRecord.StarTime)]),
-                        ElapsedSecs = double.Parse(lines[nameof(GameRecord.StarTime)]),
-                        MovementAmount = int.Parse(lines[nameof(GameRecord.StarTime)]),
-                        Tracks = lines[nameof(GameRecord.StarTime)],
-                        Success = bool.Parse(lines[nameof(GameRecord.StarTime)]),
-                        Comment = lines[nameof(GameRecord.StarTime)],
-                        Sync = bool.Parse(lines[nameof(GameRecord.StarTime)]),
+                        ElapsedSecs = double.Parse(lines[nameof(GameRecord.ElapsedSecs)]),
+                        MovementAmount = int.Parse(lines[nameof(GameRecord.MovementAmount)]),
+                        Tracks = lines[nameof(GameRecord.Tracks)],
+                        Success = bool.Parse(lines[nameof(GameRecord.Success)]),
+                        Comment = lines[nameof(GameRecord.Comment)],
+                        Sync = bool.Parse(lines[nameof(GameRecord.Sync)]),
                     };
                     records.Add(record);
                 } 
