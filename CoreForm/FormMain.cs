@@ -43,7 +43,6 @@ namespace CoreForm
             this._ratio = 160;
             gui = new GameUI(this, _dialog);
             gui.InitScreen(_ratio);
-            gui.InitEvents();
             gui.SetStartedCallback(delegate ()
             {
                 this.SetCaption(gui.GameNumber.ToString());

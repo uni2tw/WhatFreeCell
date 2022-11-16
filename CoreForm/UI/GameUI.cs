@@ -1,5 +1,6 @@
 ﻿using FreeCellSolitaire.Core.CardModels;
 using FreeCellSolitaire.Core.GameModels;
+using FreeCellSolitaire.Data;
 using FreeCellSolitaire.Entities.GameEntities;
 using FreeCellSolitaire.Properties;
 using FreeCellSolitaire.UI;
@@ -15,7 +16,11 @@ using System.Windows.Forms;
 namespace CoreForm.UI
 {
 
-    public delegate void GameEventHandler();
+    public enum GameEventType
+    {
+        Start, Moved, End
+    }
+    public delegate void GameEventHandler(GameEventType eventType, string note);
 
     /// <summary>
     /// UI抽象層，邏輯,事件與互動
@@ -24,8 +29,7 @@ namespace CoreForm.UI
     {
         void InitScreen(int ratio);
         void ResizeScreen(int width, int height);
-        void Start(int? deckNo);        
-        void InitEvents();
+        void Start(int? deckNo); 
         bool Move(string notation);
         
         void StartGame();
@@ -48,6 +52,10 @@ namespace CoreForm.UI
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
+
+        event GameEventHandler OnGameStarted;
+        event GameEventHandler OnGameMoved;
+        event GameEventHandler OnGameEnded;
     }
 
 
@@ -56,6 +64,7 @@ namespace CoreForm.UI
         IGameForm _form;
         DialogManager _dialog;
         IGame _game;
+        IGameRecordService _record;
         Stack<IGame> _archives = new Stack<IGame>();
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
@@ -69,19 +78,36 @@ namespace CoreForm.UI
         Action _startedCallback;
         List<string> _debugLog = new List<string>();
 
+        public event GameEventHandler OnGameStarted;
+        public event GameEventHandler OnGameMoved;
+        public event GameEventHandler OnGameEnded;
+
         public GameUI(IGameForm form, DialogManager dialog)
         {
             this._form = form;
             this._dialog = dialog;
             this._game = new Game { EnableAssist = true };
-
+            this._record = new GameRecordService();
             InitImages();
+            InitEvents();
         }
 
-        public void InitEvents()
+        private void InitEvents()
         {
-           
+            this.OnGameStarted += delegate(GameEventType eventType, string note)
+            {
+                throw new NotImplementedException();
+            };
+            this.OnGameMoved += delegate (GameEventType eventType, string note)
+            {
+                throw new NotImplementedException();
+            };
+            this.OnGameEnded += delegate (GameEventType eventType, string note)
+            {
+                throw new NotImplementedException();
+            };
         }
+
 
         /// <summary>
         /// 初始空畫面
@@ -582,6 +608,7 @@ namespace CoreForm.UI
         }
 
         private GeneralColumnPanel _selectedColumn = null;
+
         public GeneralColumnPanel GetSelectedColumn()
         {
             return _selectedColumn;

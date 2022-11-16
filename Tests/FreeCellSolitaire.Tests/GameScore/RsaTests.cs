@@ -13,11 +13,13 @@ namespace FreeCellSolitaire.Tests.GameScore
         public void EncryptAndDecrypt()
         {
             var rsa = new Encryptor();
-            var encryptStr = rsa.Encrypt("昔日吃包子噎死");
-            Assert.AreNotEqual("昔日吃包子噎死", encryptStr);
+            var encryptStr = rsa.Encrypt("我沒上車");
+            Console.WriteLine($"encrypted: {encryptStr}");
+            Assert.AreNotEqual("我沒上車", encryptStr);
 
             var decryptStr = rsa.Decrypt(encryptStr);
-            Assert.AreEqual("昔日吃包子噎死", decryptStr);
+            Console.WriteLine($"decrypted: {decryptStr}");
+            Assert.AreEqual("我沒上車", decryptStr);
         }
     }
 }

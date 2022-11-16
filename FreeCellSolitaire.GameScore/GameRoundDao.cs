@@ -12,7 +12,13 @@ using System.Threading.Tasks;
 
 namespace FreeCellSolitaire.Data
 {
-    public class GameRecordService
+    public interface IGameRecordService
+    {
+        void Add(GameRecord record);
+        GameRecordService.GameRecordStats GetStats(Guid playedId, int gameNumber);
+    }
+
+    public class GameRecordService : IGameRecordService
     {
         public void Add(GameRecord record)
         {
