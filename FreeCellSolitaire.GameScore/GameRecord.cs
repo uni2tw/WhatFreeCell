@@ -22,16 +22,6 @@ namespace FreeCellSolitaire.Data
         public string Comment { get; set; }        
         public bool Sync { get; set; }
 
-        //public void SetComment(string comment)
-        //{
-        //    this.Comment = Convert.ToBase64String(Encoding.UTF8.GetBytes(comment));
-        //}
-
-        //public string GetComment()
-        //{
-        //    return Encoding.UTF8.GetString(Convert.FromBase64String(Comment));
-        //}
-
         public string[] ToArray()
         {
             return new string[]
