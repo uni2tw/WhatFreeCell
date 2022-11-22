@@ -147,6 +147,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FreeCellSolitaire.Core\FreeCellSolitaire.Core.csproj" />
     <ProjectReference Include="..\FreeCellSolitaire.GameScore\FreeCellSolitaire.GameScore.csproj" />
   </ItemGroup>

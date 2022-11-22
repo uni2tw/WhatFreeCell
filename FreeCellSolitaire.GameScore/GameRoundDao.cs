@@ -12,22 +12,39 @@ using System.Threading.Tasks;
 
 namespace FreeCellSolitaire.Data
 {
-    public interface IGameRecordService
+    public class GameRecordService
     {
-        void Add(GameRecord record);
-        GameRecordService.GameRecordStats GetStats(Guid playedId, int gameNumber);
-    }
-
-    public class GameRecordService : IGameRecordService
-    {
-        public void Add(GameRecord record)
+        GameRecordDao _dao;
+        string _file;
+        public GameRecordService(string file)
         {
+            _file = file;
+            _dao = new GameRecordDao();
 
+            Init();
+        }
+
+        private void Init()
+        {
+            using (FileStream fs = new FileStream(_file, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                if (fs.Length == 0)
+                {
+                    _dao.Init(fs);
+                }
+            }
+        }
+
+        public void Save(GameRecord record)
+        {
+            using (FileStream fs = new FileStream(_file, FileMode.Open, FileAccess.ReadWrite))
+            {
+                _dao.Save(record, fs);
+            }
         }
         public GameRecordStats GetStats(Guid playedId, int gameNumber)
         {
             return new GameRecordStats();
-
         }
         public class GameRecordStats
         {
@@ -43,20 +60,8 @@ namespace FreeCellSolitaire.Data
     public class GameRecordDao
     {
         public string DataFolder { get; private set; }
-        public GameRecordDao()
-        {
-            this.DataFolder = Helper.MapPath("data");
-            if (System.IO.Directory.Exists(this.DataFolder) == false)
-            {
-                System.IO.Directory.CreateDirectory(this.DataFolder);
-            }
-        }
 
-        public bool WriteTo(List<GameRecord> records, Stream stream, bool skipHeader)
-        {
-            try
-            {
-                var columnNames = new[] {
+        string[] columnNames = new[] {
                     nameof(GameRecord.Number),
                     nameof(GameRecord.PlayerId),
                     nameof(GameRecord.PlayerName),
@@ -68,10 +73,41 @@ namespace FreeCellSolitaire.Data
                     nameof(GameRecord.Comment),
                     nameof(GameRecord.Sync),
                 };
-                var rows = records.Select(x => x.ToArray());
 
-                
-                string csv = CsvWriter.WriteToText(columnNames, rows, ',', skipHeader);
+        public GameRecordDao()
+        {
+            this.DataFolder = Helper.MapPath("data");
+            if (System.IO.Directory.Exists(this.DataFolder) == false)
+            {
+                System.IO.Directory.CreateDirectory(this.DataFolder);
+            }
+        }
+
+        public bool Save(GameRecord record, Stream stream)
+        {
+            try
+            {                
+                List<string[]> rows = new List<string[]>();
+                rows.Add(record.ToArray());             
+                stream.Seek(0, SeekOrigin.End);
+             
+                string csv = CsvWriter.WriteToText(columnNames, rows, ',', true);
+                byte[] csvBytes = Encoding.UTF8.GetBytes(csv);
+                stream.WriteAsync(csvBytes, 0, csvBytes.Length);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }            
+        }
+
+        public bool Init(Stream stream)
+        {
+            try
+            {
+                List<string[]> rows = new List<string[]>();
+                string csv = CsvWriter.WriteToText(columnNames,  rows, ',', false);
                 byte[] csvBytes = Encoding.UTF8.GetBytes(csv);
                 stream.WriteAsync(csvBytes, 0, csvBytes.Length);
                 return true;
@@ -82,21 +118,11 @@ namespace FreeCellSolitaire.Data
             }
         }
 
-        public List<GameRecord> ReadFrom(Stream stream)
+        public List<GameRecord> GetAll(Stream stream)
         {
             List<GameRecord> records = new List<GameRecord>();
-            var columnNames = new[] {
-                    nameof(GameRecord.Number),
-                    nameof(GameRecord.PlayerId),
-                    nameof(GameRecord.PlayerName),
-                    nameof(GameRecord.StarTime),
-                    nameof(GameRecord.ElapsedSecs),
-                    nameof(GameRecord.MovementAmount),
-                    nameof(GameRecord.Tracks),
-                    nameof(GameRecord.Success),
-                    nameof(GameRecord.Comment),
-                    nameof(GameRecord.Sync),
-                };
+
+            stream.Seek(0, SeekOrigin.Begin);
             StreamReader sr = new StreamReader(stream, Encoding.UTF8);
             string csv = sr.ReadToEnd();
 

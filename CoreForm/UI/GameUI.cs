@@ -33,11 +33,9 @@ namespace CoreForm.UI
         bool QuitGameConfirm();
         void AbouteGame();
         int CreateScripts(out Queue<string> scripts);
-        void SetMovedCallback(Action act);
         void BackToPreviousStep();
         void SelectOrMove(string code);
-        int? GetUnfinshedCardCount();
-        void SetStartedCallback(Action act);
+        int? GetUnfinshedCardCount();        
         Image GetCardImage(Card card);
 
         void LogDebug(string message);
@@ -46,6 +44,8 @@ namespace CoreForm.UI
 
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
+        void SetStartedCallback(Action act);
+        void SetMovedCallback(Action act);
     }
 
 
@@ -256,7 +256,7 @@ namespace CoreForm.UI
         {            
             if (_game != null && _game.IsPlaying())
             {
-                this.End();
+                this.SaveRecord();
             }
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
@@ -282,17 +282,26 @@ namespace CoreForm.UI
             this.startTime = DateTime.Now;
         }
 
-        private void End()
+        private void SaveRecord()
         {
             int elapsedSecs = (int)(DateTime.Now - this.startTime).TotalSeconds;
-            GameRecord record = new GameRecord();
-            record.StarTime = startTime;
-            record.ElapsedSecs = elapsedSecs;
-    
+            GameRecord record = new GameRecord
+            {
+                Number = GameNumber.GetValueOrDefault(),
+                StarTime = startTime,
+                ElapsedSecs = elapsedSecs,
+                PlayerId = "61ebd39acb6144be95c57175a9f7609d",
+                PlayerName = "tester",
+                Success = this._game.EstimateGameover(false) == GameStatus.Completed,
+                Sync = false,
+                Comment = ""
+            };
             string json = System.Text.Json.JsonSerializer.Serialize(record, new JsonSerializerOptions
                 { WriteIndented = true });
             Console.WriteLine(json);
-//            record.MovementAmount = this._game.get
+            var recordFilePath = Helper.MapPath("record.csv");
+            new GameRecordService(recordFilePath).Save(record);            
+
         }
 
         private void Reset()
@@ -463,7 +472,7 @@ namespace CoreForm.UI
 
         public void QuitGame()
         {
-            this.End();
+            this.SaveRecord();
             _form.Close();
         }
 

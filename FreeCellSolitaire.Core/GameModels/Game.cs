@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace FreeCellSolitaire.Core.GameModels;
 
 public class Game : IGame
-{        
+{
     public Homecells Homecells { get; set; }
 
     public Foundations Foundations { get; set; }
@@ -16,10 +16,12 @@ public class Game : IGame
     public Deck Deck { get; private set; }
 
     public bool EnableAssist { get; set; }
+    public List<TrackInfo> Tracks { get; set; }
 
     public Game()
     {
         Deck = Deck.Create();
+        Tracks = new List<TrackInfo>();
     }
 
     public int GetExtraMobility()
@@ -233,8 +235,7 @@ public class Game : IGame
         if (IsCompleted())
         {
             return GameStatus.Completed;
-        }
-        bool gameove = false;
+        }        
         Queue<IGame> queueItems = new Queue<IGame>();
         HashSet<IGame> samples = new HashSet<IGame>();
         queueItems.Enqueue(this.Clone());
