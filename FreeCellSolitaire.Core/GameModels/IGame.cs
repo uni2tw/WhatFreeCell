@@ -9,9 +9,9 @@ public interface IGame
     int GetExtraMobility();
     Homecells Homecells { get; set; }
     Foundations Foundations { get; set; }
-    Tableau Tableau { get; set; }
-
+    Tableau Tableau { get; set; }    
     Deck Deck { get; }
+    List<Track> Tracks { get; set; }
     bool Move(string notation);
     void DebugInfo(string stepNum = "", bool enabled = true);
     void DebugInfo(int stepNum, bool enabled = true);

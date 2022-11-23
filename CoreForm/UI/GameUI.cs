@@ -293,6 +293,7 @@ namespace CoreForm.UI
                 PlayerId = "61ebd39acb6144be95c57175a9f7609d",
                 PlayerName = "tester",
                 Success = this._game.EstimateGameover(false) == GameStatus.Completed,
+                Tracks = string.Join(',', this._game.Tracks),
                 Sync = false,
                 Comment = ""
             };

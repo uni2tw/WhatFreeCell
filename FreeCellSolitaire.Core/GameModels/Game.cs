@@ -16,12 +16,12 @@ public class Game : IGame
     public Deck Deck { get; private set; }
 
     public bool EnableAssist { get; set; }
-    public List<TrackInfo> Tracks { get; set; }
+    public List<Track> Tracks { get; set; }
 
     public Game()
     {
         Deck = Deck.Create();
-        Tracks = new List<TrackInfo>();
+        Tracks = new List<Track>();
     }
 
     public int GetExtraMobility()
@@ -227,6 +227,7 @@ public class Game : IGame
         clone.Tableau = this.Tableau.Clone() as Tableau;
         clone.Homecells = this.Homecells.Clone() as Homecells;
         clone.Foundations = this.Foundations.Clone() as Foundations;
+        clone.Tracks = this.Tracks.Select(x => x.Clone()).ToList();                
         return clone;
     }
 

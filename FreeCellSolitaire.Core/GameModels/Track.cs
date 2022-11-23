@@ -1,11 +1,10 @@
 ﻿namespace FreeCellSolitaire.Core.GameModels;
 
-public class TrackInfo
+public class Track 
 {
-    public TrackInfo(string notation, int hash)
+    public Track(string notation)
     {
         this.Notation = notation;
-        this.Hash = hash;
     }
 
     public override string ToString()
@@ -13,7 +12,10 @@ public class TrackInfo
         return this.Notation;
     }
 
-    public int Hash { get; set; }
+    public Track Clone()
+    {
+        return new Track(this.Notation);
+    }
+
     public string Notation { get; set; }
 }
-
