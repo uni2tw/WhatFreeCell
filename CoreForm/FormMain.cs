@@ -150,6 +150,7 @@ namespace CoreForm
                     Visible = false
                 }.AddEvent("Click", delegate (object sender, EventArgs e)
                 {
+                    AllocConsole();
                     _debugWindow.Visible = !_debugWindow.Visible;
                 })
             );
@@ -256,7 +257,7 @@ namespace CoreForm
             if (gui.QuitGameConfirm() == false)
             {
                 e.Cancel = true;
-            }            
+            }              
         }
 
         public void SetControlReady(Control control)

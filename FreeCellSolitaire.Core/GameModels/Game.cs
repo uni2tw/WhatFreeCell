@@ -105,6 +105,9 @@ public class Game : IGame
             TryAssistMove();
         }
 
+        this.Tracks.Add(new Track(notation));
+        Console.WriteLine($"{this.Tracks.Count}.{notation}");
+
         return result;
     }
     public void TryAssistMove()

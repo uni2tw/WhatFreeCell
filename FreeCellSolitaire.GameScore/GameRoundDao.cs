@@ -12,51 +12,6 @@ using System.Threading.Tasks;
 
 namespace FreeCellSolitaire.Data
 {
-    public class GameRecordService
-    {
-        GameRecordDao _dao;
-        string _file;
-        public GameRecordService(string file)
-        {
-            _file = file;
-            _dao = new GameRecordDao();
-
-            Init();
-        }
-
-        private void Init()
-        {
-            using (FileStream fs = new FileStream(_file, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                if (fs.Length == 0)
-                {
-                    _dao.Init(fs);
-                }
-            }
-        }
-
-        public void Save(GameRecord record)
-        {
-            using (FileStream fs = new FileStream(_file, FileMode.Open, FileAccess.ReadWrite))
-            {
-                _dao.Save(record, fs);
-            }
-        }
-        public GameRecordStats GetStats(Guid playedId, int gameNumber)
-        {
-            return new GameRecordStats();
-        }
-        public class GameRecordStats
-        {
-            public int GameRoundWin { get; set; }
-            public int GameRoundLost { get; set; }
-            public int TotalGameWin { get; set; }
-            public int TotalGameLost { get; set; }
-            public int WinInRow { get; set; }
-            public int LostInRow { get; set; }
-
-        }
-    }
     public class GameRecordDao
     {
         public string DataFolder { get; private set; }

@@ -254,10 +254,6 @@ namespace CoreForm.UI
         /// <param name="deckNo"></param>
         private void Start(int? deckNo)
         {            
-            if (_game != null && _game.IsPlaying())
-            {
-                this.SaveRecord();
-            }
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
             var homecells = new Homecells(_game);
@@ -281,6 +277,14 @@ namespace CoreForm.UI
             }
             this.startTime = DateTime.Now;
         }
+        private void Stop()
+        {
+            if (_game != null && _game.IsPlaying())
+            {
+                this.SaveRecord();
+                this._game = null;
+            }
+        }
 
         private void SaveRecord()
         {
@@ -301,7 +305,7 @@ namespace CoreForm.UI
                 { WriteIndented = true });
             Console.WriteLine(json);
             var recordFilePath = Helper.MapPath("record.csv");
-            new GameRecordService(recordFilePath).Save(record);            
+            new GameUser(recordFilePath).AddRecord(record);            
 
         }
 
@@ -436,7 +440,8 @@ namespace CoreForm.UI
             {
                 return;
             }
-            this.Start(null);            
+            Stop();
+            Start(null);            
         }
 
         public void PickNumberStartGame()
@@ -445,6 +450,7 @@ namespace CoreForm.UI
             var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100, gameNumber);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
+                Stop();
                 Start(int.Parse(dialogResult.ReturnText));
                 Redraw();
             }
@@ -456,6 +462,7 @@ namespace CoreForm.UI
             {
                 return;
             }
+            Stop();
             Start(GameNumber);
         }
 
@@ -467,13 +474,14 @@ namespace CoreForm.UI
             {
                 return false;
             }
+            Stop();
             return true;
         }
 
 
         public void QuitGame()
         {
-            this.SaveRecord();
+            this.Stop();
             _form.Close();
         }
 
