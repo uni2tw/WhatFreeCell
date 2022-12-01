@@ -480,7 +480,7 @@ namespace FreeCellSolitaire.Tests
             tableau.GetColumn(0).AddCards("s1");
             Assert.IsTrue(game.IsPlaying());
             game.Move("t0h0");
-            Assert.IsFalse(game.IsPlaying());
+            Assert.IsTrue(game.IsPlaying());
         }
 
         [Test]

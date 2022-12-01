@@ -32,6 +32,7 @@ namespace CoreForm.UI
         void QuitGame();
         bool QuitGameConfirm();
         void AbouteGame();
+        void StatisticalResult();
         int CreateScripts(out Queue<string> scripts);
         void BackToPreviousStep();
         void SelectOrMove(string code);
@@ -54,7 +55,7 @@ namespace CoreForm.UI
         IGameForm _form;
         DialogManager _dialog;
         IGame _game;
-        DateTime startTime;
+        DateTime _startTime;
         Stack<IGame> _archives = new Stack<IGame>();
         private TableauContainer _tableauUI;
         private HomecellsContainer _homecellsUI;
@@ -245,7 +246,7 @@ namespace CoreForm.UI
                 Redraw();
                 _selectedColumn = null;
             }
-            ControlStatus();
+            ControlFlow();
             return moved;
         }
         /// <summary>
@@ -253,7 +254,9 @@ namespace CoreForm.UI
         /// </summary>
         /// <param name="deckNo"></param>
         private void Start(int? deckNo)
-        {            
+        {
+            Stop();
+
             _game = new Game { EnableAssist = true };
             var tableau = new Tableau(_game);
             var homecells = new Homecells(_game);
@@ -273,9 +276,10 @@ namespace CoreForm.UI
 
             if (_startedCallback != null)
             {
+                Console.WriteLine($"start game: {this._game.Deck.Number}");
                 _startedCallback();
             }
-            this.startTime = DateTime.Now;
+            this._startTime = DateTime.Now;
         }
         private void Stop()
         {
@@ -288,37 +292,32 @@ namespace CoreForm.UI
 
         private void SaveRecord()
         {
-            int elapsedSecs = (int)(DateTime.Now - this.startTime).TotalSeconds;
-            GameRecord record = new GameRecord
-            {
-                Number = GameNumber.GetValueOrDefault(),
-                StarTime = startTime,
-                ElapsedSecs = elapsedSecs,
-                PlayerId = "61ebd39acb6144be95c57175a9f7609d",
-                PlayerName = "tester",
-                Success = this._game.EstimateGameover(false) == GameStatus.Completed,
-                Tracks = string.Join(',', this._game.Tracks),
-                Sync = false,
-                Comment = ""
-            };
+            string recordFilePath = Helper.MapPath("record.csv");
+            var gameUser = new PersonalRecord(recordFilePath);
+            bool success = this._game.EstimateGameover(false) == GameStatus.Completed;
+            string track = string.Join(',', this._game.Tracks.Select(x => x.Notation).ToArray());
+            int elapsedSecs = (int)(DateTime.Now - this._startTime).TotalSeconds;
+            GameRecord record = gameUser.AddRecord(_game.Deck.Number,_startTime, elapsedSecs, this._game.Tracks.Count, 
+                success, track, "");
+            gameUser.Save();
+
             string json = System.Text.Json.JsonSerializer.Serialize(record, new JsonSerializerOptions
                 { WriteIndented = true });
             Console.WriteLine(json);
-            var recordFilePath = Helper.MapPath("record.csv");
-            new GameUser(recordFilePath).AddRecord(record);            
-
         }
 
         private void Reset()
         {
+            this._startTime = DateTime.Now;
             this._selectedNotation = "";
         }
 
-        private void ControlStatus()
+        private void ControlFlow()
         {
             GameStatus status = _game.EstimateGameover(false);
             if (status == GameStatus.Completed)
             {
+                Stop();
                 var choice = _dialog.ShowYouWinContinueDialog(210 * _ratio / 100);
                 if (choice.Reuslt == DialogResult.Yes)
                 {
@@ -440,7 +439,6 @@ namespace CoreForm.UI
             {
                 return;
             }
-            Stop();
             Start(null);            
         }
 
@@ -450,7 +448,6 @@ namespace CoreForm.UI
             var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100, gameNumber);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
-                Stop();
                 Start(int.Parse(dialogResult.ReturnText));
                 Redraw();
             }
@@ -462,14 +459,13 @@ namespace CoreForm.UI
             {
                 return;
             }
-            Stop();
             Start(GameNumber);
         }
 
 
         public bool QuitGameConfirm()
         {
-            if (_game.IsPlaying() &&
+            if (_game != null && _game.IsPlaying() &&
                 MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 return false;
@@ -481,13 +477,24 @@ namespace CoreForm.UI
 
         public void QuitGame()
         {
-            this.Stop();
+            // 會呼叫到 QuitGameConfirm，裏面會執行Stop，這邊就不要需要
             _form.Close();
         }
 
         public void AbouteGame()
         {
             _dialog.ShowAboutGameDialog();
+        }
+
+        public void StatisticalResult()
+        {
+            string recordFilePath = Helper.MapPath("record.csv");
+            var summary = new PersonalRecord(recordFilePath).GetSummary(this.GameNumber.GetValueOrDefault());
+            _dialog.ShowStatisticalResultDialog(summary
+                , delegate()
+                {
+                    new PersonalRecord(recordFilePath).DeleteAll();
+                });
         }
 
         public int CreateScripts(out Queue<string> scripts)
@@ -559,7 +566,7 @@ namespace CoreForm.UI
                 _movedCallback();
             }
             Redraw();
-            ControlStatus();
+            ControlFlow();
         }
 
         public int? GetUnfinshedCardCount()

@@ -13,7 +13,6 @@ namespace FreeCellSolitaire.Data
     {
         public int Number { get; set; }        
         public string PlayerId { get; set; }
-        public string PlayerName { get; set; }
         public DateTime StarTime { get; set; }
         public double ElapsedSecs { get; set; }
         public int MovementAmount { get; set; }
@@ -28,7 +27,6 @@ namespace FreeCellSolitaire.Data
             {                
                 Number.ToString(),
                 PlayerId,
-                PlayerName,
                 StarTime.ToString("o"),
                 ElapsedSecs.ToString(),
                 MovementAmount.ToString(),

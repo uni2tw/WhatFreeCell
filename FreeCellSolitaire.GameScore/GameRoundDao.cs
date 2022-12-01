@@ -19,7 +19,6 @@ namespace FreeCellSolitaire.Data
         string[] columnNames = new[] {
                     nameof(GameRecord.Number),
                     nameof(GameRecord.PlayerId),
-                    nameof(GameRecord.PlayerName),
                     nameof(GameRecord.StarTime),
                     nameof(GameRecord.ElapsedSecs),
                     nameof(GameRecord.MovementAmount),
@@ -90,7 +89,6 @@ namespace FreeCellSolitaire.Data
                     {
                         Number = int.Parse(lines[nameof(GameRecord.Number)]),
                         PlayerId = lines[nameof(GameRecord.PlayerId)],
-                        PlayerName = lines[nameof(GameRecord.PlayerName)],
                         StarTime = DateTime.Parse(lines[nameof(GameRecord.StarTime)]),
                         ElapsedSecs = double.Parse(lines[nameof(GameRecord.ElapsedSecs)]),
                         MovementAmount = int.Parse(lines[nameof(GameRecord.MovementAmount)]),

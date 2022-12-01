@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using FreeCellSolitaire.Data;
+using System;
+using System.Windows.Forms;
 
 public class DialogManager
 {
@@ -69,6 +71,23 @@ public class DialogManager
         FormDialogResult result = new FormDialogResult(dialogResult)
         {
            
+        };
+        return result;
+    }
+
+    public FormDialogResult ShowStatisticalResultDialog(GameRecordSummary gameRecordStats, Action clearStatCallback)
+    {
+        int width = (int)(this._owner.ClientSize.Width / 2);
+        DialogForms.StatisticalResultDiualogForm frm = new((int)(width * 0.618f), (int)(width * 0.618f))
+        {
+            Caption = "新接龍統計記錄",
+            Summary = gameRecordStats,
+            ClearRecordsCallback = clearStatCallback
+        };
+        var dialogResult = frm.ShowDialog(_owner);
+        FormDialogResult result = new FormDialogResult(dialogResult)
+        {
+
         };
         return result;
     }

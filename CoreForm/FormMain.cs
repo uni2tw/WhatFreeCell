@@ -168,6 +168,16 @@ namespace CoreForm
             menuItemGame.DropDownItems.Add(
                 new ToolStripMenuItem()
                 {
+                    ShortcutKeys = Keys.F4,
+                    Text = "統計(&T)"
+                }.AddEvent("Click", delegate (object sender, EventArgs e)
+                {
+                    gui.StatisticalResult();
+                })
+            );
+            menuItemGame.DropDownItems.Add(
+                new ToolStripMenuItem()
+                {
                     Name = "BackToPreviousStep",
                     ShortcutKeys = Keys.F10,
                     Enabled = false,

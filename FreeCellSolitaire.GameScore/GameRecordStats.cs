@@ -1,13 +1,18 @@
-﻿namespace FreeCellSolitaire.Data
+﻿using System;
+using System.Text;
+using System.Threading;
+
+namespace FreeCellSolitaire.Data
 {
-    public class GameRecordStats
+    public class GameRecordSummary
     {
-        public int GameRoundWin { get; set; }
-        public int GameRoundLost { get; set; }
-        public int TotalGameWin { get; set; }
-        public int TotalGameLost { get; set; }
-        public int WinInRow { get; set; }
-        public int LostInRow { get; set; }
+        public int TimesWonThisGame { get; set; }
+        public int TimesLostThisGame { get; set; }
+        public int TotalTimesWon { get; set; }
+        public int TotalTimesLost { get; set; }
+        public int WinningStreak { get; set; }
+        public int LosingStreak { get; set; }
+        public int RecentWinningOrLosingStreak { get; set; }
     }
 }
 

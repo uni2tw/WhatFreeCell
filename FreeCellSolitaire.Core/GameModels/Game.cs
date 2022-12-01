@@ -53,7 +53,7 @@ public class Game : IGame
         string destZone = match.Groups[3].Value;
         int srcColumn = int.Parse(match.Groups[2].Value);
         int destColumn = int.Parse(match.Groups[4].Value);
-            
+
         CardView card = null;
         if (srcZone == "t" && destZone == "t")
         {
@@ -116,7 +116,7 @@ public class Game : IGame
         do
         {
             anything = false;
-     
+
 
             Func<CardView, bool> TryMoveToHomecells = delegate (CardView theCard)
             {
@@ -167,7 +167,7 @@ public class Game : IGame
     {
         Console.Write(GetDebugInfo(stepNum.ToString(), enabled));
     }
-    public void DebugInfo(string stepNum = "", bool enabled=true)
+    public void DebugInfo(string stepNum = "", bool enabled = true)
     {
         Console.Write(GetDebugInfo(stepNum, enabled));
     }
@@ -198,18 +198,27 @@ public class Game : IGame
         return sb.ToString();
     }
 
+    /// <summary>
+    /// 調整成表示 WasStarted ，就算完成也會回傳  true
+    /// </summary>
+    /// <returns></returns>
     public bool IsPlaying()
     {
-        if (Tableau == null)
+        if (Tableau == null || Homecells == null)
         {
             return false;
         }
         int unfinish = 0;
-        for(int i = 0; i < Tableau.ColumnCount; i++)
+        int finish = 0;
+        for (int i = 0; i < Tableau.ColumnCount; i++)
         {
             unfinish += Tableau.GetColumn(i).GetCardsCount();
         }
-        return unfinish > 0;
+        for (int i = 0; i < Homecells.ColumnCount; i++)
+        {
+            finish += Homecells.GetColumn(i).GetCardsCount();
+        }
+        return unfinish + finish > 0;
     }
 
     public bool IsCompleted()
@@ -230,7 +239,7 @@ public class Game : IGame
         clone.Tableau = this.Tableau.Clone() as Tableau;
         clone.Homecells = this.Homecells.Clone() as Homecells;
         clone.Foundations = this.Foundations.Clone() as Foundations;
-        clone.Tracks = this.Tracks.Select(x => x.Clone()).ToList();                
+        clone.Tracks = this.Tracks.Select(x => x.Clone()).ToList();
         return clone;
     }
 
@@ -239,7 +248,7 @@ public class Game : IGame
         if (IsCompleted())
         {
             return GameStatus.Completed;
-        }        
+        }
         Queue<IGame> queueItems = new Queue<IGame>();
         HashSet<IGame> samples = new HashSet<IGame>();
         queueItems.Enqueue(this.Clone());

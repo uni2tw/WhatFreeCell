@@ -1,9 +1,93 @@
 ﻿using FreeCellSolitaire.Data;
+using Microsoft.VisualBasic;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace FreeCellSolitaire.Tests.GameScore
 {
+    public class GameUserTests
+    {
+        string playerId;
+        [SetUp]
+        public void Setup()
+        {
+            playerId = Guid.NewGuid().ToString();
+        }
+
+        [Test]
+        public void Test()
+        {
+            PersonalRecord pr = new PersonalRecord(null);
+
+
+            pr.AddRecord(
+                number: 1,
+                startTime: DateTime.Now,
+                elapsedSecs: 60,
+                movementAmount: 60,
+                success: false,
+                track: "",
+                comment: "");
+
+            pr.AddRecord(
+                number: 1,
+                startTime: DateTime.Now,
+                elapsedSecs: 60,
+                movementAmount: 60,
+                success: true,
+                track: "",
+                comment: "");
+
+            pr.AddRecord(
+                number: 1,
+                startTime: DateTime.Now,
+                elapsedSecs: 60,
+                movementAmount: 60,
+                success: true,
+                track: "",
+                comment: "");
+
+            pr.AddRecord(
+                number: 1,
+                startTime: DateTime.Now,
+                elapsedSecs: 60,
+                movementAmount: 60,
+                success: true,
+                track: "",
+                comment: "");
+
+
+            pr.AddRecord(
+                number: 2,
+                startTime: DateTime.Now,
+                elapsedSecs: 60,
+                movementAmount: 60,
+                success: false,
+                track: "",
+                comment: "");
+
+            pr.AddRecord(
+                number: 1,
+                startTime: DateTime.Now,
+                elapsedSecs: 60,
+                movementAmount: 60,
+                success: false,
+                track: "",
+                comment: "");
+
+
+            var summary = pr.GetSummary(1);
+            Assert.AreEqual(3, summary.WinningStreak);
+            Assert.AreEqual(2, summary.LosingStreak);
+            Assert.AreEqual(3, summary.TimesWonThisGame);
+            Assert.AreEqual(2, summary.TimesLostThisGame);
+            Assert.AreEqual(3, summary.TotalTimesWon);
+            Assert.AreEqual(3, summary.TotalTimesLost);
+            Assert.AreEqual(-2, summary.RecentWinningOrLosingStreak);
+        }
+
+    }
     public class GameRecordDaoTests
     {
         GameRecord rec1;
@@ -17,7 +101,6 @@ namespace FreeCellSolitaire.Tests.GameScore
                 Comment = "也\"沒\"什麼'想'說的",
                 ElapsedSecs = 60.5,
                 PlayerId = Guid.NewGuid().ToString(),
-                PlayerName = "測試員",
                 StarTime = new DateTime(2022, 11, 10, 0, 0, 0),
                 MovementAmount = 60,
                 Success = false,
@@ -30,7 +113,6 @@ namespace FreeCellSolitaire.Tests.GameScore
                 Comment = "說不完的,不說",
                 ElapsedSecs = 40.5,
                 PlayerId = Guid.NewGuid().ToString(),
-                PlayerName = "測試員2",
                 StarTime = new DateTime(2022, 11, 11, 11, 11, 11),
                 MovementAmount = 70,
                 Success = false,
@@ -68,7 +150,6 @@ namespace FreeCellSolitaire.Tests.GameScore
                 Comment = "test append",
                 ElapsedSecs = 50,
                 PlayerId = Guid.NewGuid().ToString(),
-                PlayerName = "測試員3",
                 StarTime = new DateTime(2022, 12, 12, 0, 0, 0),
                 MovementAmount = 70,
                 Success = false,

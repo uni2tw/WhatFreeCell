@@ -1,5 +1,7 @@
-﻿using System;
+﻿using FreeCellSolitaire.Data;
+using System;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 public class DialogForms
@@ -310,5 +312,142 @@ public class DialogForms
         public string YesText { get; set; }
         public string NoText { get; set; }
         public bool ConfirmResult { get; set; }
+    }
+
+    public class StatisticalResultDiualogForm : Form
+    {
+        public StatisticalResultDiualogForm(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+            this.ShowIcon = false;
+            this.ControlBox = true;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Padding = new Padding(0);
+            this.Font = new Font("新細明體", this.Height / 32);
+        }
+
+        public string Caption
+        {
+            set
+            {
+                this.Text = value;
+            }
+        }
+        public GameRecordSummary Summary { get; set; }
+        public Delegate ClearRecordsCallback { get; set; }
+
+        protected override void OnLoad(EventArgs e)
+        {            
+
+            TableLayoutPanel container = new TableLayoutPanel();
+            container.Dock = DockStyle.Fill;
+            this.Padding = new Padding(10);
+            container.ColumnCount = 1;
+            container.RowCount = 3;
+            container.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));            
+            container.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+
+            this.Controls.Add(container);
+
+            TableLayoutPanel tablePanel = new TableLayoutPanel
+            {
+                 AutoSize = true,
+                 Dock =  DockStyle.Fill,
+                 Margin = new Padding(0),                 
+            };
+            tablePanel.ColumnCount = 4;
+            tablePanel.ColumnStyles.Add(new ColumnStyle { Width = 25, SizeType = SizeType.Percent });
+            tablePanel.ColumnStyles.Add(new ColumnStyle { Width = 25, SizeType = SizeType.Percent });
+            tablePanel.ColumnStyles.Add(new ColumnStyle { Width = 25, SizeType = SizeType.Percent });
+            tablePanel.ColumnStyles.Add(new ColumnStyle { Width = 25, SizeType = SizeType.Percent });
+            tablePanel.RowCount = 12;
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+            tablePanel.RowStyles.Add(new RowStyle { Height = 8, SizeType = SizeType.Percent });
+
+            tablePanel.Controls.Add(new Label { Text = "本局:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 0, 0);
+            tablePanel.Controls.Add(new Label { Text = "贏:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 1);
+            tablePanel.Controls.Add(new Label { Text = Summary.TimesWonThisGame.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 1);
+            tablePanel.Controls.Add(new Label { Text = "輸:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 2);            
+            tablePanel.Controls.Add(new Label { Text =  Summary.TimesLostThisGame.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 2);
+
+            tablePanel.Controls.Add(new Label { Text = "總計:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 0, 4);
+            tablePanel.Controls.Add(new Label { Text = "贏:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 5);
+            tablePanel.Controls.Add(new Label { Text = Summary.TotalTimesWon.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 5);
+            tablePanel.Controls.Add(new Label { Text = "輸:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 6);
+            tablePanel.Controls.Add(new Label { Text = Summary.TotalTimesLost.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 6);
+
+            tablePanel.Controls.Add(new Label { Text = "連勝/連敗:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 0, 8);
+            tablePanel.Controls.Add(new Label { Text = "贏:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 9);
+            tablePanel.Controls.Add(new Label { Text = Summary.WinningStreak.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 9);
+            tablePanel.Controls.Add(new Label { Text = "輸:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 10);
+            tablePanel.Controls.Add(new Label { Text = Summary.LosingStreak.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 10);
+            tablePanel.Controls.Add(new Label { Text = "目前:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 11);
+            string recentWinningOrLosingStreakDisplay = string.Format("{0}{1} 次",
+                Summary.RecentWinningOrLosingStreak > 0 ? "贏 " : "輸 ", Math.Abs(Summary.RecentWinningOrLosingStreak));
+            tablePanel.Controls.Add(new Label { Text = recentWinningOrLosingStreakDisplay, AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 11);           
+
+            container.Controls.Add(tablePanel, 0, 0);
+
+
+            TableLayoutPanel panel = new TableLayoutPanel();
+            panel.Dock = DockStyle.Fill;
+            panel.ColumnCount = 5;
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 60));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            panel.RowCount = 3;
+
+            container.Controls.Add(panel, 0, 1);
+
+            {
+                Button btn = new Button();
+                btn.Text = "確定";
+                btn.Dock = DockStyle.Fill;
+                panel.Controls.Add(btn, 1, 1);
+
+                btn.Click += delegate (object sender, EventArgs e)
+                {
+                    this.DialogResult = DialogResult.Yes;
+                    this.Close();
+                };
+            }
+
+            {
+                Button btn = new Button();
+                btn.Text = "清除";
+                btn.Dock = DockStyle.Fill;
+                panel.Controls.Add(btn, 3, 1);
+                btn.Click += delegate (object sender, EventArgs e)
+                {
+                    this.DialogResult = DialogResult.Yes;                   
+                    ClearRecordsCallback.DynamicInvoke();
+                    Console.WriteLine("清除個人記錄");
+                    this.Close();
+                };
+            }
+
+            base.OnLoad(e);
+        }
     }
 }
