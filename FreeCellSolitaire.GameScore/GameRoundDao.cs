@@ -39,6 +39,10 @@ namespace FreeCellSolitaire.Data
 
         public bool Save(GameRecord record, Stream stream)
         {
+            if (record.IsNewRecord == false)
+            {
+                return true;
+            }
             try
             {                
                 List<string[]> rows = new List<string[]>();

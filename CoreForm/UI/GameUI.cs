@@ -47,6 +47,7 @@ namespace CoreForm.UI
         int SteppingNumber { get; }
         void SetStartedCallback(Action act);
         void SetMovedCallback(Action act);
+        bool IsPlaying();
     }
 
 
@@ -280,10 +281,11 @@ namespace CoreForm.UI
                 _startedCallback();
             }
             this._startTime = DateTime.Now;
+            this.lastClickedTime = default(DateTime);
         }
         private void Stop()
         {
-            if (_game != null && _game.IsPlaying())
+            if (_game != null && _game.IsPlaying() && this.IsPlaying())
             {
                 this.SaveRecord();
                 this._game = null;
@@ -296,7 +298,7 @@ namespace CoreForm.UI
             var gameUser = new PersonalRecord(recordFilePath);
             bool success = this._game.EstimateGameover(false) == GameStatus.Completed;
             string track = string.Join(',', this._game.Tracks.Select(x => x.Notation).ToArray());
-            int elapsedSecs = (int)(DateTime.Now - this._startTime).TotalSeconds;
+            double elapsedSecs = Math.Round((DateTime.Now - this._startTime).TotalSeconds, 2);
             GameRecord record = gameUser.AddRecord(_game.Deck.Number,_startTime, elapsedSecs, this._game.Tracks.Count, 
                 success, track, "");
             gameUser.Save();
@@ -648,6 +650,11 @@ namespace CoreForm.UI
                 return _game.Tableau.GetColumn(index);
             }
             return null;
+        }
+
+        public bool IsPlaying()
+        {
+            return lastClickedTime != default(DateTime);
         }
     }
 

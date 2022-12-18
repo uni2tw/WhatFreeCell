@@ -385,6 +385,9 @@ public class DialogForms
             tablePanel.Controls.Add(new Label { Text = Summary.TimesWonThisGame.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 1);
             tablePanel.Controls.Add(new Label { Text = "輸:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 2);            
             tablePanel.Controls.Add(new Label { Text =  Summary.TimesLostThisGame.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 2);
+            tablePanel.Controls.Add(new Label { Text = "最佳記錄:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 3);
+            tablePanel.Controls.Add(new Label { Text = Summary.BestRecordOfTheGame?.ToString("s") ?? "無", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 3);
+            
 
             tablePanel.Controls.Add(new Label { Text = "總計:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 0, 4);
             tablePanel.Controls.Add(new Label { Text = "贏:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 5);

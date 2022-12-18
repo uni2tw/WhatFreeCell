@@ -198,6 +198,9 @@ public class Game : IGame
         return sb.ToString();
     }
 
+
+
+
     /// <summary>
     /// 調整成表示 WasStarted ，就算完成也會回傳  true
     /// </summary>

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace FreeCellSolitaire.Tests.GameScore
 {
-    public class GameUserTests
+    public class PersonalRecordTests
     {
         string playerId;
         [SetUp]
@@ -52,7 +52,7 @@ namespace FreeCellSolitaire.Tests.GameScore
                 number: 1,
                 startTime: DateTime.Now,
                 elapsedSecs: 60,
-                movementAmount: 60,
+                movementAmount: 55,
                 success: true,
                 track: "",
                 comment: "");
@@ -71,7 +71,7 @@ namespace FreeCellSolitaire.Tests.GameScore
                 number: 1,
                 startTime: DateTime.Now,
                 elapsedSecs: 60,
-                movementAmount: 60,
+                movementAmount: 50,
                 success: false,
                 track: "",
                 comment: "");
@@ -85,8 +85,50 @@ namespace FreeCellSolitaire.Tests.GameScore
             Assert.AreEqual(3, summary.TotalTimesWon);
             Assert.AreEqual(3, summary.TotalTimesLost);
             Assert.AreEqual(-2, summary.RecentWinningOrLosingStreak);
+
+            Assert.AreEqual(55, summary.BestRecordOfTheGame.MovementAmount);
         }
 
+        [Test]
+        public void DuplicatedTest()
+        {
+            MemoryStream stream = new MemoryStream();
+            string file = System.IO.Path.GetTempFileName();
+
+            {
+                PersonalRecord pr = new PersonalRecord(file);
+
+                pr.AddRecord(
+                    number: 1,
+                    startTime: DateTime.Now,
+                    elapsedSecs: 60,
+                    movementAmount: 50,
+                    success: true,
+                    track: "",
+                    comment: "");
+
+                pr.Save();
+            }
+            {
+                PersonalRecord pr = new PersonalRecord(file);
+
+                pr.AddRecord(
+                    number: 2,
+                    startTime: DateTime.Now,
+                    elapsedSecs: 60,
+                    movementAmount: 60,
+                    success: true,
+                    track: "",
+                    comment: "");
+
+                pr.Save();
+            }
+
+            {
+                PersonalRecord pr = new PersonalRecord(file);
+                Assert.AreEqual(2, pr.GetSummary(1).TotalTimesWon);
+            }
+        }
     }
     public class GameRecordDaoTests
     {

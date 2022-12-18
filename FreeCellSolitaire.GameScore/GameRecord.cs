@@ -20,6 +20,8 @@ namespace FreeCellSolitaire.Data
         public bool Success { get; set; }
         public string Comment { get; set; }        
         public bool Sync { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool IsNewRecord { get; set; }
 
         public string[] ToArray()
         {
@@ -35,6 +37,19 @@ namespace FreeCellSolitaire.Data
                 Comment ,
                 Sync.ToString()
             };            
+        }
+
+        public string ToString(string format)
+        {
+            if (format == "s")
+            {
+                return $"{this.MovementAmount}步,{this.ElapsedSecs}秒";
+            }
+            return ToString();
+        }
+        public override string ToString()
+        {            
+            return $"{this.Number} 使用 {this.MovementAmount}步，費時 {Math.Round(this.ElapsedSecs,0)}秒";
         }
     }
 }

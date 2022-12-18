@@ -1,5 +1,32 @@
-﻿#XFreeCell
+#XFreeCell
 新接龍, X是指仿XP樣式，因為XP版的無法很好的隨著螢幕大小縮放，所以試著寫看看。
+
+## 1.3.1
+* 增加顯示本局最佳時間/手順
+* replay?
+
+增加顯示本局最佳時間/手順
+記錄時間要從開始玩才記 (修正)
+bug:檢查記錄檔 贏1場卻看到贏2場 (修正)
+
+## 1.3
+* 會記錄遊戲記錄 (錄遊戲完成/時間/花費手續)
+
+### bug
+* 修正GetPossibleSituationsg，沒有計算移到 homecells, 造成判斷遊戲結束的邏輯有錯誤
+
+--
+
+## 1.2
+### Improvement
+* 移動卡頓感太重
+* 點選牌，遊標移到其它Column，滑鼠游標要變更，以提示可移動
+
+### Bug
+* "推估是否可完成的機制"有bug，似乎沒測到可移到homecells的
+* 移動失敗的應該要取消選取
+
+---
 
 ## 1.1
 ### 修正
@@ -14,34 +41,15 @@
 
 ---
 
-## 1.2
-### Improvement
-* 移動卡頓感太重
-* 點選牌，遊標移到其它Column，滑鼠游標要變更，以提示可移動
-
-### Bug
-* "推估是否可完成的機制"有bug，似乎沒測到可移到homecells的
-* 移動失敗的應該要取消選取
-
----
-
-## 1.3
-
-### bug
-* 修正GetPossibleSituationsg，沒有計算移到 homecells, 造成判斷遊戲結束的邏輯有錯誤
-
-
 
 # Future
 
 
 
 ## Task
-* 錄遊戲完成/時間/花費手續
 * 賽季
 * 自動更新
 * 需偵測本局是否可完成，或自動完成功能
-* 錄遊戲完成/時間/花費手續
 
 # Minor
 * 移到不能移的Column，需要顯示此步犯規 (low)
@@ -66,7 +74,8 @@ RSA
 -- https://www.c-sharpcorner.com/UploadFile/75a48f/rsa-algorithm-with-C-Sharp2/
 
 ## 建置指令
-dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true --self-contained
+- dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true --self-contained
+ - -p:PublishTrimmed=true 上次用會失敗
 
 deck card images from 
 + https://github.com/crobertsbmw/deckofcards
