@@ -1,4 +1,4 @@
-﻿#XFreeCell
+#XFreeCell
 新接龍, X是指仿XP樣式，因為XP版的無法很好的隨著螢幕大小縮放，所以試著寫看看。
 
 ## 1.1
@@ -26,6 +26,7 @@
 ---
 
 ## 1.3
+* 會記錄遊戲記錄
 
 ### bug
 * 修正GetPossibleSituationsg，沒有計算移到 homecells, 造成判斷遊戲結束的邏輯有錯誤
@@ -66,7 +67,8 @@ RSA
 -- https://www.c-sharpcorner.com/UploadFile/75a48f/rsa-algorithm-with-C-Sharp2/
 
 ## 建置指令
-dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true --self-contained
+- dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true --self-contained
+ - -p:PublishTrimmed=true 上次用會失敗
 
 deck card images from 
 + https://github.com/crobertsbmw/deckofcards
