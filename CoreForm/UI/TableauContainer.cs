@@ -67,11 +67,14 @@ namespace FreeCellSolitaire.UI
             };
 
             ResizeTo(index, cardWidth, cardHeight, cardBorderWidth, columnSpace, rectParent.Height);
+            this.AutoSize = true;            
+            this.AutoSizeMode = AutoSizeMode.GrowOnly;
         }
 
         public void ResizeTo(int index, int cardWidth, int cardHeight, int cardBorderWidth, int columnSpace,
             int height)
         {
+            this.MinimumSize = new Size(cardWidth, (int)(cardHeight * 2));
             this.Width = cardWidth;
             this.Height = height;                  
             if (index == 0)
