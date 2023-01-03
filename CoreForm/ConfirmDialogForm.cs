@@ -53,7 +53,8 @@ public class DialogForms
             lbMessage.Dock = DockStyle.Fill;
             lbMessage.AutoSize = true;
             container.Controls.Add(lbMessage, 0, 0);
-            
+
+            Button btn = null;
             TextBox tbNumber = new TextBox();
             tbNumber.Text = this.InputText;
             tbNumber.MaxLength = 4;
@@ -63,13 +64,18 @@ public class DialogForms
                 {
                     e.Handled = true;
                 }
+                if (e.KeyChar == 13)
+                {                    
+                    e.Handled = true;
+                    btn?.PerformClick();
+                }
             };
             container.Controls.Add(tbNumber, 0, 1);            
             tbNumber.Margin = new Padding(
                 (int)((tbNumber.Parent.Width - tbNumber.Width) / 2), 0, 0, 0);
             tbNumber.TextAlign = HorizontalAlignment.Center;
 
-            Button btn = new Button();
+            btn = new Button();
             btn.Text = this.YesText;
             btn.AutoSize = true;            
             container.Controls.Add(btn, 0, 2);

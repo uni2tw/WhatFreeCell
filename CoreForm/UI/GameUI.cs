@@ -42,7 +42,7 @@ namespace CoreForm.UI
         void LogDebug(string message);
         GeneralColumnPanel GetSelectedColumn();
         Column GetColumn(Type type, int index);
-
+        IGame GetGame();
         public int? GameNumber { get; set; }
         int SteppingNumber { get; }
         void SetStartedCallback(Action act);
@@ -652,6 +652,10 @@ namespace CoreForm.UI
             return null;
         }
 
+        public IGame GetGame()
+        {
+            return _game;
+        }
         public bool IsPlaying()
         {
             return lastClickedTime != default(DateTime);
