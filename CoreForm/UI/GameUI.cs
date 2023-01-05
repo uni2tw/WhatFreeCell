@@ -74,7 +74,7 @@ namespace CoreForm.UI
         {
             this._form = form;
             this._dialog = dialog;
-            this._game = new Game { EnableAssist = true };
+            this._game = null;;
 
             InitImages();
         }
@@ -436,7 +436,7 @@ namespace CoreForm.UI
 
         public void StartGame()
         {
-            if (_game.IsPlaying() &&
+            if (_game != null && _game.IsPlaying() &&
                 MessageBox.Show("是否放棄這一局", "新接龍", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 return;
@@ -445,8 +445,8 @@ namespace CoreForm.UI
         }
 
         public void PickNumberStartGame()
-        {
-            var gameNumber = _game.Deck.GetRandom();
+        {            
+            var gameNumber = Deck.GetRandom();
             var dialogResult = _dialog.ShowSelectGameNumberDialog(210 * _ratio / 100, gameNumber);
             if (dialogResult.Reuslt == DialogResult.Yes)
             {
