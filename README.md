@@ -2,7 +2,7 @@
 新接龍, X是指仿XP樣式，因為XP版的無法很好的隨著螢幕大小縮放，所以試著寫看看。
 
 ## 1.3.2
-* replay?
+* 最近完成與 replay
 
 ## 1.3.1
 修正牌移動時，游標沒有先變化效果(包括多張牌移動)
@@ -48,16 +48,11 @@
 
 ## Task
 * 賽季
-* 自動更新
 * 需偵測本局是否可完成，或自動完成功能
 
 # Minor
 * 移到不能移的Column，需要顯示此步犯規 (low)
 * 牌色不好看，使用者懷念舊的普克牌花色  (low)
-* A無法顯示花色 (low)
-* 雖然有想比照AboutGameDialogForm直接從ClientSize.Width 來決定顯示視窗的大小來調整其它的Dialg，但先擱置。 原本用_raito，但resize也沒去更新  (low)
-TODO
-收攏 move 並記錄 tracks
 
 
 
