@@ -43,9 +43,20 @@ namespace FreeCellSolitaire.Data
                     _playerId = _records.First().PlayerId;
                 }
             }
+            //HashSet<string> recordHash = new HashSet<string>();
+            //List<GameRecord> distinctRecords = new List<GameRecord>();
+            //foreach(var rec in _records)
+            //{
+            //    if (recordHash.Add(rec.ToString()))
+            //    {
+            //        distinctRecords.Add(rec);
+            //    }
+            //}
+            //_records = distinctRecords;
+            //_records.ForEach(x => x.IsNewRecord = true);
         }
 
-        public GameRecord AddRecord(int number, DateTime startTime, int elapsedSecs, int movementAmount, bool success, string track, string comment)
+        public GameRecord AddRecord(int number, DateTime startTime, double elapsedSecs, int movementAmount, bool success, string track, string comment)
         {
             var record = new GameRecord
             {
@@ -58,6 +69,7 @@ namespace FreeCellSolitaire.Data
                 Success = success,
                 Sync = false,
                 Tracks = track,
+                IsNewRecord = true
             };
             _records.Add(record);
             return record;
@@ -116,7 +128,9 @@ namespace FreeCellSolitaire.Data
                 }                
             }
             lastStreak = sessionWinInRow > 0 ? sessionWinInRow : sessionLostInRow > 0 ? (-1 * sessionLostInRow) : 0;
-
+            
+            var bestRecordTheGame = _records.Where(x => x.Number == gameNumber && x.Success)
+                .OrderBy(x => x.MovementAmount).FirstOrDefault();
 
             return new GameRecordSummary
             {
@@ -126,7 +140,8 @@ namespace FreeCellSolitaire.Data
                 TimesLostThisGame = theGameLost,
                 TotalTimesLost = totalGameLost,
                 TotalTimesWon = totalGameWin,
-                RecentWinningOrLosingStreak = lastStreak
+                RecentWinningOrLosingStreak = lastStreak,
+                BestRecordOfTheGame = bestRecordTheGame
             };
             
         }

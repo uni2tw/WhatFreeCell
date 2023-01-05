@@ -6,7 +6,7 @@ namespace FreeCellSolitaire.Core.GameModels;
 
 public interface IGame
 {
-    int GetExtraMobility();
+    int GetExtraMobility(Column destColumn);
     Homecells Homecells { get; set; }
     Foundations Foundations { get; set; }
     Tableau Tableau { get; set; }    

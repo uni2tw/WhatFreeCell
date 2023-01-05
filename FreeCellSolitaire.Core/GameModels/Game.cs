@@ -24,9 +24,11 @@ public class Game : IGame
         Tracks = new List<Track>();
     }
 
-    public int GetExtraMobility()
+    public int GetExtraMobility(Column destColumn)
     {
-        int result = 0;
+        Debug.Assert(destColumn.Owner is Tableau);
+
+        int result = 1;
         for (int i = 0; i < Tableau.ColumnCount; i++)
         {
             if (Tableau.GetColumn(i).Empty())
@@ -40,6 +42,11 @@ public class Game : IGame
             {
                 result++;
             }
+        }
+        //移到空的column，那可騰挪用的column會少1
+        if (destColumn.GetCardsCount() == 0)
+        {
+            result = result - 1;
         }
         return result;
     }
@@ -57,12 +64,8 @@ public class Game : IGame
         CardView card = null;
         if (srcZone == "t" && destZone == "t")
         {
-            int mobility = this.GetExtraMobility() + 1;
-            //移到空的column，那可騰挪用的column會少1
-            if (Tableau.GetColumn(destColumn).GetCardsCount() == 0)
-            {
-                mobility--;
-            }
+            int mobility = this.GetExtraMobility(Tableau.GetColumn(destColumn));
+
             var cards = this.Tableau.GetColumn(srcColumn).GetTableauLinkedCards(mobility);
             var destCard = Tableau.GetColumn(destColumn).GetLastCard();
             if (destCard == null)
@@ -197,6 +200,9 @@ public class Game : IGame
         }
         return sb.ToString();
     }
+
+
+
 
     /// <summary>
     /// 調整成表示 WasStarted ，就算完成也會回傳  true

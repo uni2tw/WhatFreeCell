@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace FreeCellSolitaire.UI
 {
@@ -173,29 +174,47 @@ namespace FreeCellSolitaire.UI
         {
             if (_owner.GameUI.GetSelectedColumn() != null)
             {
-
                 CardControl selectedCard = _owner.GameUI.GetSelectedColumn().GetCardControl(_owner.GameUI.GetSelectedColumn().GetCardControlCount() - 1);
 
-                _owner.GameUI.LogDebug("Enter " + this.Code + ", selected column " + _owner.GameUI.GetSelectedColumn().Code + " " + selectedCard.CardView.ToNotation());
-                //TODO Curosr 在 HomeCell 無作用
-                Column theCardColumn = null;
+                Column srcColumn = _owner.GameUI.GetSelectedColumn().GetColumn();
+                Column destColumn = null;
                 
                 if (sender is CardControl)
                 {
-                    theCardColumn = ((CardControl)sender).CardView.Owner;
+                    destColumn = ((CardControl)sender).Owner.GetColumn();
                 } 
-                else if (sender is GeneralColumnPanel)
+                else 
                 {
-                    theCardColumn = this._owner.GameUI.GetColumn(sender.GetType(), ((GeneralColumnPanel)sender).Index);
+                    destColumn = _owner.GameUI.GetColumn(this.GetType(), this.Index);                    
                 }
-                if (theCardColumn == null)
+                if (destColumn == null)
                 {
                     return;
-                }                
-                bool accept = selectedCard.CardView.Moveable(theCardColumn);
-                //bool accept = selectedCard.CardView.CheckLinkable(theCard, theCard.Owner.Owner.GetType());
+                }
 
-                //new CardView(selectedCard.Card, selectedCard).CheckLinkable()
+                bool accept = false;
+                if (srcColumn.Owner is Tableau && destColumn.Owner is Tableau)
+                {
+                    int mobility = _owner.GameUI.GetGame().GetExtraMobility(destColumn);
+                    var srcCards = srcColumn.GetTableauLinkedCards(mobility);
+                    var destCard = destColumn.GetLastCard();
+                    var moveableCard = srcCards.FirstOrDefault(x => x.CheckLinkable(destCard, typeof(Tableau)));
+                    accept = moveableCard != null;
+
+                    Console.WriteLine(string.Format("{0}{1}-{2}",
+                        destColumn.Code, srcColumn.Code, accept ? "was accepted" : "was rejected"));
+                }                
+                else
+                {                    
+                    accept = selectedCard.CardView.Moveable(destColumn);
+                }
+
+                Console.WriteLine("Moving {0}@{1} to {2} - {3}",
+                    selectedCard.CardView.ToNotation(),
+                    selectedCard.CardView.Owner.Code,
+                    this.Code,
+                    Convert.ToInt32(accept));
+
                 if (accept)
                 {
 
@@ -248,6 +267,12 @@ namespace FreeCellSolitaire.UI
         public int GetCardControlCount()
         {
             return CardControls.Count;
+        }
+
+        public Column GetColumn()
+        {
+            if (CardControls.Count == 0) return null;
+            return CardControls[0].CardView.Owner;
         }
 
         public CardControl GetCardControl(int i)

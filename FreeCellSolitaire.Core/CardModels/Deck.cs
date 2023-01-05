@@ -188,10 +188,10 @@ namespace FreeCellSolitaire.Core.CardModels
             return false;
         }
 
-        public int GetRandom()
+        public static int GetRandom()
         {
             Random seedRand = new Random();
-            return seedRand.Next(10000) + 1;
+            return seedRand.Next(MaxNumber) + 1;
         }
     }
 

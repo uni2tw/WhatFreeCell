@@ -53,7 +53,8 @@ public class DialogForms
             lbMessage.Dock = DockStyle.Fill;
             lbMessage.AutoSize = true;
             container.Controls.Add(lbMessage, 0, 0);
-            
+
+            Button btn = null;
             TextBox tbNumber = new TextBox();
             tbNumber.Text = this.InputText;
             tbNumber.MaxLength = 4;
@@ -63,13 +64,18 @@ public class DialogForms
                 {
                     e.Handled = true;
                 }
+                if (e.KeyChar == 13)
+                {                    
+                    e.Handled = true;
+                    btn?.PerformClick();
+                }
             };
             container.Controls.Add(tbNumber, 0, 1);            
             tbNumber.Margin = new Padding(
                 (int)((tbNumber.Parent.Width - tbNumber.Width) / 2), 0, 0, 0);
             tbNumber.TextAlign = HorizontalAlignment.Center;
 
-            Button btn = new Button();
+            btn = new Button();
             btn.Text = this.YesText;
             btn.AutoSize = true;            
             container.Controls.Add(btn, 0, 2);
@@ -385,6 +391,9 @@ public class DialogForms
             tablePanel.Controls.Add(new Label { Text = Summary.TimesWonThisGame.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 1);
             tablePanel.Controls.Add(new Label { Text = "輸:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 2);            
             tablePanel.Controls.Add(new Label { Text =  Summary.TimesLostThisGame.ToString(), AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 2);
+            tablePanel.Controls.Add(new Label { Text = "最佳記錄:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 3);
+            tablePanel.Controls.Add(new Label { Text = Summary.BestRecordOfTheGame?.ToString("s") ?? "無", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 2, 3);
+            
 
             tablePanel.Controls.Add(new Label { Text = "總計:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 0, 4);
             tablePanel.Controls.Add(new Label { Text = "贏:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight }, 1, 5);

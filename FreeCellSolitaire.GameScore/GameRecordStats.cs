@@ -13,6 +13,7 @@ namespace FreeCellSolitaire.Data
         public int WinningStreak { get; set; }
         public int LosingStreak { get; set; }
         public int RecentWinningOrLosingStreak { get; set; }
+        public GameRecord BestRecordOfTheGame { get; set; }
     }
 }
 
