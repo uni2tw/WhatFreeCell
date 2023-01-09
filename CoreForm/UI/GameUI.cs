@@ -152,7 +152,7 @@ namespace CoreForm.UI
         {            
             //_form.SetCaption(_selectedNotation + "/" + code + "/" + DateTime.Now.Ticks);
             //遊戲還未初始不作用
-            if (this._game.IsPlaying() == false)
+            if (this._game == null || this._game.IsPlaying() == false)
             {
                 return;
             }
